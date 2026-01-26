@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('m_travel_order_participans', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('travel_order_id');
+            $table->uuid('employee_id');
+            $table->uuid('follower_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('travel_order_id')->references('id')->on('official_travel_orders');
+            $table->foreign('employee_id')->references('id')->on('core_employees');
+            $table->foreign('follower_id')->references('id')->on('core_employees');
         });
     }
 
