@@ -12,8 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('m_official_travel_orders', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('headmaster_id');
+            $table->string('letter_number');
+            $table->string('purpose')->nullable();
+            $table->string('departure_from')->nullable();
+            $table->date('departure_date')->nullable();
+            $table->string('departure_place')->nullable();
+            $table->date('return_date')->nullable();
+            $table->string('duration_days')->nullable();
+            $table->date('issue_date')->nullable();
+            $table->string('budget_resource')->nullable();
+            $table->string('code')->nullable();
+            $table->string('acc')->nullable();
+            $table->uuid('created_by');
             $table->timestamps();
+
+            $table->foreign('headmaster_id')->references('id')->on('core_users');
+            $table->foreign('created_by')->references('id')->on('core_users');
         });
     }
 
