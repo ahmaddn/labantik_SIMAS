@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zxx">
 
-@include(view: 'layouts.head')
+@include('layouts.head')
 
 <body>
     <div class="preloader" id="preloader">
