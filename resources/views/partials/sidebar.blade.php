@@ -6,7 +6,7 @@
              <span class="logo-text text-secondary fw-semibold">StarCode</span>
          </a>
          <button
-             class="sidebar-burger-menu-close bg-transparent py-3 border-0 opacity-0 z-n1 position-absolute top-50 end-0 translate-middle-y"
+             class="sidebar-burger-menu-close z-n1 position-absolute top-50 translate-middle-y end-0 border-0 bg-transparent py-3 opacity-0"
              id="sidebar-burger-menu-close">
              <span class="border-1 d-block for-dark-burger"
                  style="border-bottom: 1px solid #475569; height: 1px; width: 25px; transform: rotate(45deg);">
@@ -15,7 +15,7 @@
                  style="border-bottom: 1px solid #475569; height: 1px; width: 25px; transform: rotate(-45deg);">
              </span>
          </button>
-         <button class="sidebar-burger-menu bg-transparent p-0 border-0" id="sidebar-burger-menu">
+         <button class="sidebar-burger-menu border-0 bg-transparent p-0" id="sidebar-burger-menu">
              <span class="border-1 d-block for-dark-burger"
                  style="border-bottom: 1px solid #475569; height: 1px; width: 25px;">
              </span>
@@ -51,8 +51,8 @@
                  </span>
              </li>
              <li class="menu-item open">
-                 <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                     href="{{ route('dashboard') }}">
+                 <a class="menu-link {{ request()->routeIs('sp.travelOrders.index') ? 'active' : '' }}"
+                     href="{{ route('sp.travelOrders.index') }}">
                      <span class="material-symbols-outlined menu-icon">
                          quick_reorder
                      </span>
@@ -67,10 +67,10 @@
                  </span>
              </li>
              <li class="menu-item open">
-                 <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                     href="{{ route('dashboard') }}">
+                 <a class="menu-link {{ request()->routeIs('su.parentInvitations.index') ? 'active' : '' }}"
+                     href="{{ route('su.parentInvitations.index') }}">
                      <span class="material-symbols-outlined menu-icon">
-                         contact_mail
+                         account_child_invert
                      </span>
                      <span class="title">
                          Orang Tua
@@ -83,10 +83,10 @@
                  </span>
              </li>
              <li class="menu-item open">
-                 <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                     href="{{ route('dashboard') }}">
+                 <a class="menu-link {{ request()->routeIs('s_peng.coverLetters.index') ? 'active' : '' }}"
+                     href="{{ route('s_peng.coverLetters.index') }}">
                      <span class="material-symbols-outlined menu-icon">
-                         contact_mail
+                         full_coverage
                      </span>
                      <span class="title">
                          Pengantar
@@ -94,10 +94,10 @@
                  </a>
              </li>
              <li class="menu-item open">
-                 <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                     href="{{ route('dashboard') }}">
+                 <a class="menu-link {{ request()->routeIs('s_peng.schoolTransfers.index') ? 'active' : '' }}"
+                     href="{{ route('s_peng.schoolTransfers.index') }}">
                      <span class="material-symbols-outlined menu-icon">
-                         contact_mail
+                         move_location
                      </span>
                      <span class="title">
                          Pengantar Pindah
@@ -110,9 +110,10 @@
                  </span>
              </li>
              <li class="menu-item open">
-                 <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="javascript:void(0);">
+                 <a class="menu-link {{ request()->routeIs('sk.goodConducts.index') ? 'active' : '' }}"
+                     href="{{ route('sk.goodConducts.index') }}">
                      <span class="material-symbols-outlined menu-icon">
-                         stacked_email
+                         person_check
                      </span>
                      <span class="title">
                          Kelakuan Baik
@@ -120,9 +121,10 @@
                  </a>
              </li>
              <li class="menu-item open">
-                 <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="javascript:void(0);">
+                 <a class="menu-link {{ request()->routeIs('sk.admissionLetters.index') ? 'active' : '' }}"
+                     href="{{ route('sk.admissionLetters.index') }}">
                      <span class="material-symbols-outlined menu-icon">
-                         stacked_email
+                         assignment_turned_in
                      </span>
                      <span class="title">
                          Penerimaan Siswa
@@ -130,16 +132,17 @@
                  </a>
              </li>
              <li class="menu-item open">
-                 <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="javascript:void(0);">
+                 <a class="menu-link {{ request()->routeIs('sk.dataCorrections.index') ? 'active' : '' }}"
+                     href="{{ route('sk.dataCorrections.index') }};">
                      <span class="material-symbols-outlined menu-icon">
-                         stacked_email
+                         scan_delete
                      </span>
                      <span class="title">
                          Kesalahan Penulisan Ijazah
                      </span>
                  </a>
              </li>
-             <li class="menu-item open">
+             {{-- <li class="menu-item open">
                  <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="javascript:void(0);">
                      <span class="material-symbols-outlined menu-icon">
                          stacked_email
@@ -148,11 +151,12 @@
                          Kehilangan Ijazah
                      </span>
                  </a>
-             </li>
+             </li> --}}
              <li class="menu-item open">
-                 <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="javascript:void(0);">
+                 <a class="menu-link {{ request()->routeIs('sk.generalLetters.index') ? 'active' : '' }}"
+                     href="{{ route('sk.generalLetters.index') }}">
                      <span class="material-symbols-outlined menu-icon">
-                         stacked_email
+                         user_attributes
                      </span>
                      <span class="title">
                          Siswa
@@ -165,10 +169,10 @@
                  </span>
              </li>
              <li class="menu-item open">
-                 <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                     href="{{ route('dashboard') }}">
+                 <a class="menu-link {{ request()->routeIs('others.studentReturns.index') ? 'active' : '' }}"
+                     href="{{ route('others.studentReturns.index') }}">
                      <span class="material-symbols-outlined menu-icon">
-                         contact_mail
+                         assignment_return
                      </span>
                      <span class="title">
                          Pengembalian Siswa

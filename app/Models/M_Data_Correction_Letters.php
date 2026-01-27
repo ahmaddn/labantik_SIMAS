@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class M_Student_Return_Letters extends Model
+class M_Data_Correction_Letters extends Model
 {
-    protected $table = 'm_student_return_letters';
+    protected $table = 'm_data_correction_letters';
 
     protected $keyType = 'string';
 
@@ -18,8 +18,15 @@ class M_Student_Return_Letters extends Model
         'headmaster_id',
         'student_id',
         'letter_number',
-        'return_date',
-        'created_by'
+        'graduation_year',
+        'correction_type',
+        'field_name',
+        'incorrect_data',
+        'correct_data',
+        'reference_document',
+        'comparison_note',
+        'issue_date',
+        'created_by',
     ];
 
     protected static function boot()
