@@ -14,4 +14,4 @@ Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 // dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->name('dashboard');
+})->name('dashboard')->middleware('auth');
