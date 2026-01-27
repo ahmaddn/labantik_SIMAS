@@ -11,20 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('m_school_transfer_letters', function (Blueprint $table) {
+        Schema::create('m_data_correction_letters', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('headmaster_id');
             $table->uuid('student_id');
             $table->string('letter_number');
-            $table->string('destination_school');
-            $table->text('reason')->nullable();
+            $table->string('graduation_year');
+            $table->enum('correction_type', ['parent_name', 'student_name', 'birth_date', 'birth_place', 'other']);
+            $table->string('field_name')->nullable();
+            $table->string('incorrect_data');
+            $table->string('correct_data');
+            $table->string('reference_document');
+            $table->text('comparison_note');
             $table->date('issue_date');
             $table->uuid('created_by');
             $table->timestamps();
 
             $table->foreign('headmaster_id')->references('id')->on('core_users');
             $table->foreign('student_id')->references('id')->on('ref_student_academic_years');
-            $table->foreign('student_by')->references('id')->on('core_users');
+            $table->foreign('created_by')->references('id')->on('core_users');
+
         });
     }
 
@@ -33,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('m_school_transfer_letters');
+        Schema::dropIfExists('m_data_correction_letters');
     }
 };

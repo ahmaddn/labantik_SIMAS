@@ -23,6 +23,8 @@ return new class extends Migration
 
             $table->foreign('headmaster_id')->references('id')->on('core_users');
             $table->foreign('student_id')->references('id')->on('ref_student_academic_years');
+            $table->foreign('student_by')->references('id')->on('core_users');
+
         });
     }
 
