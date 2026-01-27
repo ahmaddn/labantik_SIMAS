@@ -75,15 +75,17 @@
                                 <ul class="admin-link mb-0 list-unstyled">
 
                                     <li>
-                                        <a class="dropdown-item admin-item-link d-flex align-items-center text-body"
-                                            href="logout.html">
-                                            <i class="material-symbols-outlined">
-                                                logout
-                                            </i>
-                                            <span class="ms-2">
-                                                Logout
-                                            </span>
-                                        </a>
+                                        <form action="{{ route('logout') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item admin-item-link d-flex align-items-center text-body">
+                                                <i class="material-symbols-outlined">
+                                                    logout
+                                                </i>
+                                                <span class="ms-2">
+                                                    Logout
+                                                </span>
+                                            </button>
+                                        </form>
                                     </li>
                                 </ul>
                             </div>
