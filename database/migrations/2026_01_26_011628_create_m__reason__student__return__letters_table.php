@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('reason');
             $table->timestamps();
 
-            $table->foreign('cover_letter_id')->references('id')->on('m_cover_letters');
+            $table->foreign('student_return_letter_id')->references('id')->on('m_cover_letters');
         });
     }
 
