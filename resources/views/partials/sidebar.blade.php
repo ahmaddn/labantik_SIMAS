@@ -2,8 +2,8 @@
  <div class="sidebar-area" id="sidebar-area">
      <div class="logo position-relative d-flex align-items-center justify-content-between">
          <a class="d-block text-decoration-none position-relative" href="#">
-             <img alt="logo-icon" src="assets/images/logo-icon.png" />
-             <span class="logo-text text-secondary fw-semibold">StarCode</span>
+             <img alt="logo-icon" src="{{ asset('assets/images/logo-icon.png') }}" />
+             <span class="logo-text text-secondary fw-semibold">SIMAS</span>
          </a>
          <button
              class="sidebar-burger-menu-close z-n1 position-absolute top-50 translate-middle-y end-0 border-0 bg-transparent py-3 opacity-0"
