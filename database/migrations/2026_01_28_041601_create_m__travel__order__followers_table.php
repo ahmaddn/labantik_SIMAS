@@ -17,9 +17,8 @@ return new class extends Migration
             $table->uuid('follower_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('travel_order_id')->references('id')->on('official_travel_orders');
+            $table->foreign('travel_order_id')->references('id')->on('m_official_travel_orders');
             $table->foreign('follower_id')->references('id')->on('core_employees');
-
         });
     }
 
