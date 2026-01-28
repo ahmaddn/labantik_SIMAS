@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('m_parent_invitation_letters', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('headmaster_id');
+            $table->uuid('headmaster_id')->nullable();
             $table->uuid('student_id')->nullable();
             $table->string('to')->nullable();
             $table->string('letter_number');
