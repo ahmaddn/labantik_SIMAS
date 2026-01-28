@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('m_reason_student_return_letters', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('student_return_letters_id');
+            $table->uuid('student_return_letter_id');
             $table->text('reason');
             $table->timestamps();
 
