@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('m_admission_letters', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('headmaster_id');
+            $table->uuid('headmaster_id')->nullable();
             $table->uuid('student_id');
             $table->string('letter_number');
             $table->date('admission_date');
