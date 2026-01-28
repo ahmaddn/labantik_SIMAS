@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('comparison_note');
             $table->date('issue_date');
             $table->uuid('created_by');
+            $table->integer('download_count')->default(0);
             $table->timestamps();
 
             $table->foreign('headmaster_id')->references('id')->on('core_users');

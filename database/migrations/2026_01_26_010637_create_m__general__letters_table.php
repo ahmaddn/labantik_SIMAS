@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('content');
             $table->date('issue_date');
             $table->uuid('created_by');
+            $table->integer('download_count')->default(0);
             $table->timestamps();
 
             $table->foreign('headmaster_id')->references('id')->on('core_users');
