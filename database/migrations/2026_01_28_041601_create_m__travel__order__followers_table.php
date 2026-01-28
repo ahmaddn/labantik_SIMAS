@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('m_travel_order_participans', function (Blueprint $table) {
+        Schema::create('m_travel_order_followers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('travel_order_id');
-            $table->uuid('employee_id');
+            $table->uuid('travel_order_id')->nullable();
+            $table->uuid('follower_id')->nullable();
             $table->timestamps();
 
             $table->foreign('travel_order_id')->references('id')->on('official_travel_orders');
-            $table->foreign('employee_id')->references('id')->on('core_employees');
+            $table->foreign('follower_id')->references('id')->on('core_employees');
+
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('m_travel_order_participans');
+        Schema::dropIfExists('m_travel_order_followers');
     }
 };
