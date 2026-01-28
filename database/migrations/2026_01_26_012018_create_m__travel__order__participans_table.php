@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('employee_id');
             $table->timestamps();
 
-            $table->foreign('travel_order_id')->references('id')->on('official_travel_orders');
+            $table->foreign('travel_order_id')->references('id')->on('m_official_travel_orders');
             $table->foreign('employee_id')->references('id')->on('core_employees');
         });
     }
