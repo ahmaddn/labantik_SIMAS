@@ -2,7 +2,7 @@
  <div class="sidebar-area" id="sidebar-area">
      <div class="logo position-relative d-flex align-items-center justify-content-between">
          <a class="d-block text-decoration-none position-relative" href="#">
-             <img alt="logo-icon" src="{{ asset('assets/images/logo-icon.png') }}" />
+             <img alt="logo-icon" src="{{ asset('assets/images/simas.jpeg') }}" style="width: 60px;" />
              <span class="logo-text text-secondary fw-semibold">SIMAS</span>
          </a>
          <button

@@ -16,7 +16,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Autentikasi 
+// Autentikasi
 Route::get('/login', [LoginController::class, 'create'])->name('login');
 Route::post('/login', [LoginController::class, 'store']);
 Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
@@ -34,6 +34,10 @@ Route::middleware(['auth'])->group(function () {
 
         // Perjalanan Dinas
         Route::resource('travelOrders', TravelOrdersController::class);
+        // routes/web.php atau api.php
+        // routes/web.php
+        Route::get('/travelOrders/employees/search', [TravelOrdersController::class, 'search'])
+            ->name('employees.search');
     });
 
     // Surat Undangan
@@ -60,13 +64,13 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('goodConducts', GoodConductsController::class);
 
         // Penerimaan Siswa
-        Route::resource('admissionLetters',AdmissionLettersController::class);
+        Route::resource('admissionLetters', AdmissionLettersController::class);
 
         // Kesalahan Penulisan Ijazah
-        Route::resource('dataCorrections',DataCorrectionsController::class);
+        Route::resource('dataCorrections', DataCorrectionsController::class);
 
         // Umum (Siswa)
-        Route::resource('generalLetters',GeneralLettersController::class);
+        Route::resource('generalLetters', GeneralLettersController::class);
     });
 
     // Surat Lain
@@ -75,6 +79,4 @@ Route::middleware(['auth'])->group(function () {
         // Pengembalian Ke orang Tua
         Route::resource('studentReturns', StudentReturnsController::class);
     });
-
-
 });

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('m_cover_letters', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('headmaster_id');
+            $table->uuid('headmaster_id')->nullable();
             $table->string('letter_number');
             $table->date('issue_date');
             $table->uuid('created_by');
