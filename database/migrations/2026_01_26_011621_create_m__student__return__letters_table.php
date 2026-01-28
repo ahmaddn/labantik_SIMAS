@@ -21,9 +21,10 @@ return new class extends Migration
             $table->integer('download_count')->default(0);
             $table->timestamps();
 
-            $table->foreign('headmaster_id')->references('id')->on(' core_users');
+            $table->foreign('headmaster_id')->references('id')->on('core_users');
             $table->foreign('student_id')->references('id')->on(' ref_student_academic_years');
-            $table->foreign('created_by')->references('id')->on(' core_users');        });
+            $table->foreign('created_by')->references('id')->on('core_users');
+        });
     }
 
     /**
