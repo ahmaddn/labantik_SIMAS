@@ -57,10 +57,10 @@
                                             </span>
                                             <div class="text-start ms-3 d-none d-lg-block">
                                                 <h4 class="fs-18 fw-semibold">
-                                                    Informasi Umum
+                                                    Info Personal
                                                 </h4>
                                                 <p class="text-gray-light mb-0">
-                                                    Isi informasi dibawah ini
+                                                    Isi info dibawah ini
                                                 </p>
                                             </div>
                                         </button>
@@ -75,10 +75,10 @@
                                             </span>
                                             <div class="text-start ms-3 d-none d-lg-block">
                                                 <h4 class="fs-18 fw-semibold">
-                                                    Personal Info
+                                                    Detail Perjalanan
                                                 </h4>
                                                 <p class="text-gray-light mb-0">
-                                                    Setup Information
+                                                    Atur Informasi Perjalanan Dinas
                                                 </p>
                                             </div>
                                         </button>
@@ -139,6 +139,22 @@
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
+                                                        <label class="label fs-16"> Tujuan</label>
+
+                                                        <div class="position-relative">
+                                                            <input name="purpose"
+                                                                class="form-control ps-5 text-gray-light h-55"
+                                                                placeholder="Isi Tujuan">
+                                                            </input>
+
+                                                            <i
+                                                                class="ri-todo-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
                                                         <label class="label fs-16">
                                                             Ditugaskan kepada :
                                                         </label>
@@ -171,10 +187,6 @@
                                                         <button
                                                             class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
                                                             Back
-                                                        </button>
-                                                        <button class="btn btn-primary py-3 px-5 fw-semibold text-white">
-                                                            Next
-                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -193,24 +205,13 @@
                                                 <div class="col-lg-12">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Country
+                                                            Keberangkatan dari :
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <select aria-label="Default select example"
-                                                                class="form-select form-control ps-5 h-55">
-                                                                <option class="text-dark" selected="">
-                                                                    United Kingdom
-                                                                </option>
-                                                                <option class="text-dark" value="1">
-                                                                    United States
-                                                                </option>
-                                                                <option class="text-dark" value="2">
-                                                                    Canada
-                                                                </option>
-                                                                <option class="text-dark" value="3">
-                                                                    France
-                                                                </option>
-                                                            </select>
+                                                            <input name="departure_from"
+                                                                class="form-control ps-5 text-gray-light h-55"
+                                                                placeholder="Isi Keberangkatan dari">
+                                                            </input>
                                                             <i
                                                                 class="ri-map-2-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
@@ -220,24 +221,13 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Town/City
+                                                            Tempat Keberangkatan :
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <select aria-label="Default select example"
-                                                                class="form-select form-control ps-5 h-55">
-                                                                <option class="text-dark" selected="">
-                                                                    California
-                                                                </option>
-                                                                <option class="text-dark" value="1">
-                                                                    United States
-                                                                </option>
-                                                                <option class="text-dark" value="2">
-                                                                    Canada
-                                                                </option>
-                                                                <option class="text-dark" value="3">
-                                                                    France
-                                                                </option>
-                                                            </select>
+                                                            <input name="departure_place"
+                                                                class="form-control ps-5 text-gray-light h-55"
+                                                                placeholder="Isi Tempat Keberangkatan">
+                                                            </input>
                                                             <i
                                                                 class="ri-list-ordered position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
@@ -247,24 +237,12 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            State
+                                                            Tanggal Keberangkatan
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <select aria-label="Default select example"
-                                                                class="form-select form-control ps-5 h-55">
-                                                                <option class="text-dark" selected="">
-                                                                    South poal evenue state 4C
-                                                                </option>
-                                                                <option class="text-dark" value="1">
-                                                                    United States
-                                                                </option>
-                                                                <option class="text-dark" value="2">
-                                                                    Canada
-                                                                </option>
-                                                                <option class="text-dark" value="3">
-                                                                    France
-                                                                </option>
-                                                            </select>
+                                                            <input name="departure_date" type="date"
+                                                                class="form-control ps-5 text-gray-light h-55">
+                                                            </input>
                                                             <i
                                                                 class="ri-font-size position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
@@ -274,11 +252,12 @@
                                                 <div class="col-lg-4">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Zip Code
+                                                            Tanggal Kembali
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <input class="form-control ps-5 text-gray-light h-55"
-                                                                placeholder="Enter number" type="number" />
+                                                            <input name="return_date" type="date"
+                                                                class="form-control ps-5 text-gray-light h-55">
+                                                            </input>
                                                             <i
                                                                 class="ri-hashtag position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
@@ -288,12 +267,15 @@
                                                 <div class="col-lg-12">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Order Notes :
+                                                            Lama Perjalanan Dinas
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <textarea class="form-control ps-5 text-dark" cols="30" placeholder="Some demo text ... " rows="5"></textarea>
+                                                            <input name="departure_date"
+                                                                class="form-control ps-5 text-gray-light h-55"
+                                                                placeholder="Isi Lama Perjalanan Dinas. Contoh : 5 Hari">
+                                                            </input>
                                                             <i
-                                                                class="ri-information-line position-absolute top-0 start-0 fs-20 text-gray-light ps-20 pt-2">
+                                                                class="ri-hashtag position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
                                                         </div>
                                                     </div>
