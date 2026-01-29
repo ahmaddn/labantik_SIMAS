@@ -5,6 +5,8 @@ namespace App\Http\Controllers\SK;
 use App\Http\Controllers\Controller;
 use App\Models\M_General_Letters;
 use App\Models\RefStudentAcademicYear;
+use App\Models\RefStudent;
+use App\Models\RefClass;
 use App\Models\CoreEmployee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -17,70 +19,92 @@ class GeneralLettersController extends Controller
             'student',
             'headmaster',
             'creator'
-            ])->latest()->get();
+        ])->latest()->get();
 
         return view('pages.SK.generalLetters.index', compact('letters'));
     }
 
-      /**
-     * Show the form for creating a new resource.
-     */
+
+    public function search(Request $request)
+    {
+        $search = $request->q;
+        $classId = $request->class_id;
+
+
+        $refstudents = RefStudentAcademicYear::query()
+            ->when($classId, function ($query) use ($classId) {
+                $query->where('class_id', $classId);
+            })
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('student', function ($q) use ($search) {
+                    $q->where('full_name', 'like', "%{$search}%")
+                        ->orWhere('student_number', 'like', "%{$search}%");
+                });
+            })
+            ->with('student')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return response()->json([
+            'results' => $refstudents->map(function ($academicYear) {
+                return [
+                    'id'   => $academicYear->id,
+                    'text' => trim($academicYear->student->full_name) . ' (' . $academicYear->student->student_number . ')',
+                ];
+            }),
+            'pagination' => [
+                'more' => $refstudents->hasMorePages()
+            ]
+        ]);
+    }
+
 
     public function create()
     {
-    // Data kepala sekolah statis
-    $headmaster = [
-        'id' => 'static-headmaster-id', // ID statis atau ambil dari database
-        'name' => 'MUCHAMAD EKI S.A., S.Kom',
-        'nip' => '197610012006041011',
-        'position' => 'Kepala Sekolah'
-    ];
+        // Data kepala sekolah statis
+        $headmaster = [
+            'id' => 'static-headmaster-id',
+            'name' => 'MUCHAMAD EKI S.A., S.Kom',
+            'nip' => '197610012006041011',
+            'position' => 'Kepala Sekolah'
+        ];
 
-    // Ambil data kelas (karena kepala sekolah sudah statis, kita bisa ambil semua kelas)
-    $classes = \DB::table('ref_classes')
-        ->orderBy('name')
-        ->get(['id', 'name', 'academic_level']);  // danti syintax nya !!
+        $classes = RefClass::orderBy('academic_level', 'asc')
+                            ->orderBy('name', 'asc')
+                            ->get(['id', 'name', 'academic_level']);
 
-    return view('pages.SK.generalLetters.create', compact('headmaster', 'classes'));
+        return view('pages.SK.generalLetters.create', compact('headmaster', 'classes'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-   public function store(Request $request)
-{
-    $validated = $request->validate([
-        'student_id' => 'required|uuid|exists:ref_student_academic_years,id',
-        'letter_number' => 'nullable|string|max:100|unique:m_general_letters,letter_number',
-        'content' => 'required|string',
-        'issue_date' => 'required|date',
-    ]);
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'student_id' => 'required|uuid|exists:ref_student_academic_years,id',
+            'letter_number' => 'nullable|string|max:100|unique:m_general_letters,letter_number',
+            'content' => 'required|string',
+            'issue_date' => 'required|date',
+        ]);
 
-    // Tambahkan kepala sekolah statis
-    $validated['headmaster_id'] = 'e8d5b988-5c06-11f0-87ba-c3c79bb1a62b'; // ID kepala sekolah dari database
-    // Atau jika tidak ada di database, gunakan nilai statis:
-    // $validated['headmaster_name'] = 'MUCHAMAD EKI S.A., S.Kom';
-    // $validated['headmaster_nip'] = '197610012006041011';
+        $validated['headmaster_id'] = 'e8d5b988-5c06-11f0-87ba-c3c79bb1a62b'; // ID kepala sekolah, saya ambil dari database
+        $validated['id'] = Str::uuid()->toString();
 
-    // Generate UUID
-    $validated['id'] = Str::uuid()->toString();
+        if (empty($validated['letter_number'])) {
+            $year = date('Y');
+            $count = M_General_Letters::whereYear('created_at', $year)->count() + 1;
+            $validated['letter_number'] = sprintf('%03d/TU.01.02/SMK-Tlg.CADISWIL.IX/%d', $count, $year);
+        }
 
-    // Generate nomor surat otomatis
-    if (empty($validated['letter_number'])) {
-        $year = date('Y');
-        $count = M_General_Letters::whereYear('created_at', $year)->count() + 1;
-        $validated['letter_number'] = sprintf('%03d/TU.01.02/SMK-Tlg.CADISWIL.IX/%d', $count, $year);
+        $validated['created_by'] = auth()->id();
+
+        // Simpan
+        $letter = M_General_Letters::create($validated);
+
+        return redirect()->route('sk.generalLetters.index')
+            ->with('success', 'Surat Keterangan berhasil dibuat.');
     }
-
-    // Set created_by
-    $validated['created_by'] = auth()->id();
-
-    // Simpan
-    $letter = M_General_Letters::create($validated);
-
-    return redirect()->route('sk.generalLetters.index')
-        ->with('success', 'Surat Keterangan berhasil dibuat.');
-}
 
     /**
      * Display the specified resource.
@@ -105,11 +129,11 @@ class GeneralLettersController extends Controller
         $letter = M_General_Letters::findOrFail($id);
 
         // Ambil data kepala sekolah
-        $headmasters = CoreEmployee::whereHas('roles', function($query) {
+        $headmasters = CoreEmployee::whereHas('roles', function ($query) {
             $query->whereIn('name', ['kepala_sekolah', 'headmaster', 'admin']);
         })->orWhere('position', 'like', '%kepala%sekolah%')
-          ->orderBy('name')
-          ->get();
+            ->orderBy('name')
+            ->get();
 
         // Ambil data siswa
         $students = RefStudent::with('student')

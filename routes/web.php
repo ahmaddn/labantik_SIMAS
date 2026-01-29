@@ -71,6 +71,9 @@ Route::middleware(['auth'])->group(function () {
 
         // Umum (Siswa)
         Route::resource('generalLetters', GeneralLettersController::class);
+        Route::get('/generalLetters/refstudents/search', [GeneralLettersController::class, 'search'])
+        ->name('students.search');
+
     });
 
     // Surat Lain
@@ -79,4 +82,5 @@ Route::middleware(['auth'])->group(function () {
         // Pengembalian Ke orang Tua
         Route::resource('studentReturns', StudentReturnsController::class);
     });
+
 });

@@ -22,16 +22,49 @@
     </title>
 
     <style>
-        /* =================================================
-   SELECT2 CUSTOM STYLING
-   Single & Multiple TEXT UNIFIED
-   ================================================= */
-
         /* Wrapper */
         .select2-container {
             width: 100% !important;
             box-sizing: border-box;
         }
+
+        /* =================================================
+   SINGLE SELECT
+   ================================================= */
+        .select2-container--default .select2-selection--single {
+            height: 55px;
+            border-radius: 0.375rem;
+            border: 1px solid #ced4da;
+            padding-left: 2.5rem;
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 55px;
+            padding-left: 0.70rem;
+            padding-right: 40px;
+            font-size: 0.875rem;
+            color: #212529;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 55px;
+            right: 10px;
+        }
+
+        /* Focus */
+        .select2-container--default.select2-container--focus .select2-selection--single,
+        .select2-container--default.select2-container--open .select2-selection--single {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+        }
+
+        /* =================================================
+   SELECT2 CUSTOM STYLING
+   Single & Multiple TEXT UNIFIED
+   ================================================= */
 
         /* =================================================
 /* Geser select2 karena icon */

@@ -37,7 +37,7 @@
                 </h3>
                 <div class="dropdown select-dropdown without-border">
                     <a href="{{ route('sk.generalLetters.create') }}">
-                    <button type="button" class="btn bg-primary bg-opacity-10 fw-normal fs-16 text-primary">Tambah Data</button>
+                    <button type="button" class="btn bg-primary bg-opacity-10 fw-normal fs-16 text-primary">+ Tambah Surat</button>
                     </a>
                 </div>
             </div>
