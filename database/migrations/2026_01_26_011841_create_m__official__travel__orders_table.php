@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('letter_number');
             $table->string('purpose')->nullable();
             $table->string('departure_from')->nullable();
+            $table->string('departure_to')->nullable();
             $table->date('departure_date')->nullable();
             $table->string('departure_place')->nullable();
             $table->date('return_date')->nullable();
