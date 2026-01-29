@@ -17,7 +17,6 @@ class M_Travel_Order_Participans extends Model
         'id',
         'travel_order_id',
         'employee_id',
-        'follower_id',
     ];
 
     protected static function boot()
@@ -39,10 +38,5 @@ class M_Travel_Order_Participans extends Model
     public function employee()
     {
         return $this->belongsTo(CoreEmployee::class, 'employee_id');
-    }
-
-    public function createdby()
-    {
-        return $this->belongsTo(CoreEmployee::class, 'follower_id');
     }
 }

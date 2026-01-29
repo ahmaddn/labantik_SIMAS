@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class M_Official_Travel_Orders extends Model
@@ -19,6 +20,7 @@ class M_Official_Travel_Orders extends Model
         'letter_number',
         'purpose',
         'departure_from',
+        'departure_to',
         'departure_date',
         'departure_place',
         'return_date',
@@ -46,8 +48,17 @@ class M_Official_Travel_Orders extends Model
         return $this->belongsTo(User::class, 'headmaster_id');
     }
 
-    public function createdby()
+    public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function employees()
+    {
+        return $this->hasMany(M_Travel_Order_Participans::class, 'travel_order_id');
+    }
+    public function followers()
+    {
+        return $this->hasMany(M_Travel_Order_Followers::class, 'travel_order_id');
     }
 }

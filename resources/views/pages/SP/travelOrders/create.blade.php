@@ -57,10 +57,10 @@
                                             </span>
                                             <div class="text-start ms-3 d-none d-lg-block">
                                                 <h4 class="fs-18 fw-semibold">
-                                                    Info Personal
+                                                    Informasi Personal
                                                 </h4>
                                                 <p class="text-gray-light mb-0">
-                                                    Isi info dibawah ini
+                                                    Isi Informasi Personal
                                                 </p>
                                             </div>
                                         </button>
@@ -93,19 +93,21 @@
                                             </span>
                                             <div class="text-start ms-3 d-none d-lg-block">
                                                 <h4 class="fs-18 fw-semibold">
-                                                    Social Links
+                                                    Informasi Tambahan
                                                 </h4>
                                                 <p class="text-gray-light mb-0">
-                                                    Add Social Links
+                                                    Isi Informasi Tambahan
                                                 </p>
                                             </div>
                                         </button>
                                     </li>
                                 </ul>
-                                <div class="tab-content" id="myTabstep2Content">
-                                    <div aria-labelledby="step5-tab" class="tab-pane fade show active" id="step5-tab-pane"
-                                        role="tabpanel" tabindex="0">
-                                        <form>
+                                <form action="{{ route('sp.travelOrders.store') }}" method="POST">
+                                    @method('POST')
+                                    @csrf
+                                    <div class="tab-content" id="myTabstep2Content">
+                                        <div aria-labelledby="step5-tab" class="tab-pane fade show active"
+                                            id="step5-tab-pane" role="tabpanel" tabindex="0">
                                             <div class="row">
                                                 {{-- <div class="col-lg-6">
                                                     <div class="form-group mb-4">
@@ -127,7 +129,8 @@
                                                             Nomor Surat
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <input type="text" class="form-control text-dark ps-5 h-55"
+                                                            <input type="text" name="letter_number"
+                                                                class="form-control text-dark ps-5 h-55"
                                                                 value="{{ $letterNumber }}"
                                                                 placeholder="Masukkan Nomor Surat">
 
@@ -187,38 +190,33 @@
                                                         <button
                                                             class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
                                                             Back
+                                                        </button>
                                                     </div>
+
+
                                                 </div>
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div aria-labelledby="step6-tab" class="tab-pane fade" id="step6-tab-pane"
-                                        role="tabpanel" tabindex="0">
-                                        <h4 class="fs-18 fw-semibold">
-                                            Personal Information
-                                        </h4>
-                                        <p class="text-gray-light mb-4">
-                                            Fill all Information as below
-                                        </p>
-                                        <form>
+                                        </div>
+                                        <div aria-labelledby="step6-tab" class="tab-pane fade" id="step6-tab-pane"
+                                            role="tabpanel" tabindex="0">
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Keberangkatan dari :
+                                                            Tempat Surat Dikeluarkan :
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input name="departure_from"
                                                                 class="form-control ps-5 text-gray-light h-55"
-                                                                placeholder="Isi Keberangkatan dari">
+                                                                placeholder="Isi Tempat Surat Dikeluarkan">
                                                             </input>
                                                             <i
-                                                                class="ri-map-2-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                                class="ri-map-pin-2-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
                                                             Tempat Keberangkatan :
@@ -229,12 +227,28 @@
                                                                 placeholder="Isi Tempat Keberangkatan">
                                                             </input>
                                                             <i
-                                                                class="ri-list-ordered position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                                class="ri-map-pin-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Tempat Tujuan :
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <input name="departure_to"
+                                                                class="form-control ps-5 text-gray-light h-55"
+                                                                placeholder="Isi Tempat Tujuan">
+                                                            </input>
+                                                            <i
+                                                                class="ri-map-pin-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                            </i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
                                                             Tanggal Keberangkatan
@@ -244,12 +258,12 @@
                                                                 class="form-control ps-5 text-gray-light h-55">
                                                             </input>
                                                             <i
-                                                                class="ri-font-size position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                                class="ri-calendar-todo-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
                                                             Tanggal Kembali
@@ -259,7 +273,7 @@
                                                                 class="form-control ps-5 text-gray-light h-55">
                                                             </input>
                                                             <i
-                                                                class="ri-hashtag position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                                class="ri-calendar-check-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
                                                         </div>
                                                     </div>
@@ -270,50 +284,33 @@
                                                             Lama Perjalanan Dinas
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <input name="departure_date"
+                                                            <input name="duration_days"
                                                                 class="form-control ps-5 text-gray-light h-55"
                                                                 placeholder="Isi Lama Perjalanan Dinas. Contoh : 5 Hari">
                                                             </input>
                                                             <i
-                                                                class="ri-hashtag position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                                class="ri-sun-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
-                                                    <div class="form-group d-flex gap-3">
-                                                        <button
-                                                            class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
-                                                            Back
-                                                        </button>
-                                                        <button class="btn btn-primary py-3 px-5 fw-semibold text-white">
-                                                            Next
-                                                        </button>
-                                                    </div>
-                                                </div>
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div aria-labelledby="step7-tab" class="tab-pane fade" id="step7-tab-pane"
-                                        role="tabpanel" tabindex="0">
-                                        <h4 class="fs-18 fw-semibold">
-                                            Social Information
-                                        </h4>
-                                        <p class="text-gray-light mb-4">
-                                            Fill all Information as below
-                                        </p>
-                                        <form>
+                                        </div>
+                                        <div aria-labelledby="step7-tab" class="tab-pane fade" id="step7-tab-pane"
+                                            role="tabpanel" tabindex="0">
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Facebook
+                                                            Instansi
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input class="form-control text-dark ps-5 h-55"
-                                                                placeholder="URL" type="text" />
+                                                                value="SMKN 1 Talaga" type="text"
+                                                                placeholder="Masukkan Instansi Pembebanan Anggaran"
+                                                                name="budget_resource" />
                                                             <i
-                                                                class="ri-facebook-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                                class="ri-building-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
                                                         </div>
                                                     </div>
@@ -321,13 +318,14 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Twitter
+                                                            Akun
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input class="form-control text-dark ps-5 h-55"
-                                                                placeholder="URL" type="text" />
+                                                                placeholder="Masukkan Akun (Opsional)" type="text"
+                                                                name="acc" />
                                                             <i
-                                                                class="ri-twitter-x-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                                class="ri-account-circle-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
                                                         </div>
                                                     </div>
@@ -335,13 +333,14 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Linkedin
+                                                            Kode Surat
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input class="form-control text-dark ps-5 h-55"
-                                                                placeholder="URL" type="email" />
+                                                                placeholder="Masukkan Kode Surat (Opsional)"
+                                                                name="code" type="text" />
                                                             <i
-                                                                class="ri-linkedin-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                                class="ri-file-code-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
                                                         </div>
                                                     </div>
@@ -349,23 +348,19 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            YouTube
+                                                            Tanggal Surat Dikeluarkan
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <input class="form-control text-dark ps-5 h-55"
-                                                                placeholder="URL" type="number" />
+                                                            <input class="form-control text-dark ps-5 h-55" type="date"
+                                                                name="issue_date" />
                                                             <i
-                                                                class="ri-youtube-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                                class="ri-calendar-schedule-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
                                                             </i>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12">
-                                                    <div class="form-group d-flex gap-3">
-                                                        <button
-                                                            class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
-                                                            Back
-                                                        </button>
+                                                    <div class="form-group d-flex justify-content-end gap-3">
                                                         <button class="btn btn-primary py-3 px-5 fw-semibold text-white"
                                                             type="submit">
                                                             Submit
@@ -373,17 +368,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div aria-labelledby="code2-tab" class="tab-pane fade" id="code2-tab-pane" role="tabpanel"
-                                tabindex="0">
-                                <button
-                                    class="btn btn-outline-primary bg-white btn-sm copy-btn position-absolute top-0 end-0"
-                                    data-clipboard-target="#basicAlertsCode2">
-                                    Copy
-                                </button>
+                                </form>
                             </div>
                         </div>
                     </div>
