@@ -10,6 +10,9 @@ use App\Models\RefClass;
 use App\Models\CoreEmployee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
+
+use function Illuminate\Support\years;
 
 class GeneralLettersController extends Controller
 {
@@ -18,7 +21,7 @@ class GeneralLettersController extends Controller
         $letters = M_General_Letters::with([
             'student',
             'headmaster',
-            'creator'
+            //'creator'
         ])->latest()->get();
 
         return view('pages.SK.generalLetters.index', compact('letters'));
@@ -73,8 +76,24 @@ class GeneralLettersController extends Controller
                             ->orderBy('name', 'asc')
                             ->get(['id', 'name', 'academic_level']);
 
-        return view('pages.SK.generalLetters.create', compact('headmaster', 'classes'));
+        $year = now()->year;
+
+         $lastLetter = M_General_Letters::whereYear('created_at', $year)
+        ->orderBy('created_at', 'desc')
+        ->first();
+
+    if ($lastLetter) {
+        $lastNumber = (int) explode('/', $lastLetter->letter_number)[0];
+        $nextNumber = $lastNumber + 1;
+    } else {
+        $nextNumber = 4;
     }
+
+    $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+    $letterNumber = $formattedNumber . '/TU.01.02/SMK-Tlg/CADISDIKWIL.IX/' . $year;
+        return view('pages.SK.generalLetters.create', compact('headmaster', 'classes', 'letterNumber'));
+    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -84,23 +103,23 @@ class GeneralLettersController extends Controller
         $validated = $request->validate([
             'student_id' => 'required|uuid|exists:ref_student_academic_years,id',
             'letter_number' => 'nullable|string|max:100|unique:m_general_letters,letter_number',
-            'content' => 'required|string',
+            'content' => 'required|string|max:5000',
             'issue_date' => 'required|date',
         ]);
 
-        $validated['headmaster_id'] = 'e8d5b988-5c06-11f0-87ba-c3c79bb1a62b'; // ID kepala sekolah, saya ambil dari database
-        $validated['id'] = Str::uuid()->toString();
+        // Get headmaster ID
+        $headmaster = CoreEmployee::where('job_name', 'like', '%kepala sekolah%')->first();
 
-        if (empty($validated['letter_number'])) {
-            $year = date('Y');
-            $count = M_General_Letters::whereYear('created_at', $year)->count() + 1;
-            $validated['letter_number'] = sprintf('%03d/TU.01.02/SMK-Tlg.CADISWIL.IX/%d', $count, $year);
-        }
-
-        $validated['created_by'] = auth()->id();
-
-        // Simpan
-        $letter = M_General_Letters::create($validated);
+    $letter = M_General_Letters::create([
+        'id' => Str::uuid()->toString(),
+        'student_academic_year_id' => $validated['student_id'], 
+        'student_id' => $validated['student_id'], 
+        'headmaster_id' => $headmaster->id ?? 'e8d5b988-5c06-11f0-87ba-c3c79bb1a62b',
+        'letter_number' => $validated['letter_number'],
+        'content' => $validated['content'],
+        'issue_date' => $validated['issue_date'],
+        'created_by' => auth()->id(),
+    ]);
 
         return redirect()->route('sk.generalLetters.index')
             ->with('success', 'Surat Keterangan berhasil dibuat.');
@@ -114,8 +133,8 @@ class GeneralLettersController extends Controller
     {
         $letter = M_General_Letters::with([
             'headmaster',
-            'student.student', // nested relation jika perlu
-            'creator'
+            'student', // nested relation jika perlu
+          //  'creator'
         ])->findOrFail($id);
 
         return view('pages.SK.generalLetters.show', compact('letter'));
@@ -124,24 +143,41 @@ class GeneralLettersController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
     public function edit(string $id)
     {
         $letter = M_General_Letters::findOrFail($id);
 
         // Ambil data kepala sekolah
-        $headmasters = CoreEmployee::whereHas('roles', function ($query) {
+        $headmasters = CoreEmployee::whereHas('user.roles', function ($query) {
             $query->whereIn('name', ['kepala_sekolah', 'headmaster', 'admin']);
-        })->orWhere('position', 'like', '%kepala%sekolah%')
-            ->orderBy('name')
-            ->get();
+        })
+        ->orWhere('job_name', 'like', '%kepala%sekolah%')
+        ->orWhere('job_name', 'like', '%headmaster%')
+        ->orderBy('full_name')
+        ->get();
 
         // Ambil data siswa
-        $students = RefStudent::with('student')
-            ->whereHas('student')
+        $students = RefStudent::with('user')
+            ->whereHas('user')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('pages.SK.generalLetters.edit', compact('letter', 'headmasters', 'students'));
+      
+        if (class_exists('\App\Models\RefClass')) {
+            $classes = \App\Models\RefClass::orderBy('academic_level')
+                ->orderBy('name')
+                ->get();
+        } else {
+            $classes = collect(); 
+        }
+
+        return view('pages.SK.generalLetters.edit', compact(
+            'letter', 
+            'headmasters', 
+            'students',
+            'classes'
+        ));
     }
 
     /**
@@ -151,8 +187,13 @@ class GeneralLettersController extends Controller
     {
         $letter = M_General_Letters::findOrFail($id);
 
+         dd([
+        'request_data' => $request->all(),
+        'current_letter' => $letter->toArray()
+    ]);
+
         $validated = $request->validate([
-            'headmaster_id' => 'required|uuid|exists:core_users,id',
+           // 'headmaster_id' => 'required|uuid|exists:core_users,id',
             'student_id' => 'required|uuid|exists:ref_student_academic_years,id',
             'letter_number' => 'nullable|string|max:100|unique:m_general_letters,letter_number,' . $id . ',id',
             'content' => 'required|string',
