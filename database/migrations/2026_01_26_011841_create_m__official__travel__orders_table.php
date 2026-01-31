@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('departure_from')->nullable();
             $table->string('departure_to')->nullable();
             $table->date('departure_date')->nullable();
+            $table->date('departure_time')->nullable();
             $table->string('departure_place')->nullable();
             $table->date('return_date')->nullable();
             $table->string('duration_days')->nullable();

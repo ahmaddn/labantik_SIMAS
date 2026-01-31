@@ -37,7 +37,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/travelOrders/employees/search', [TravelOrdersController::class, 'search'])
             ->name('employees.search');
         Route::get('/travelOrders/preview/{id}', [TravelOrdersController::class, 'preview'])->name('travelOrders.preview');
+        Route::post('/travelOrders/{id}/increment-download', [TravelOrdersController::class, 'incrementDownload'])
+            ->name('travelOrders.increment-download');
     });
+
 
     // Surat Undangan
     Route::prefix('su')->name('su.')->group(function () {
