@@ -34,10 +34,9 @@ Route::middleware(['auth'])->group(function () {
 
         // Perjalanan Dinas
         Route::resource('travelOrders', TravelOrdersController::class);
-        // routes/web.php atau api.php
-        // routes/web.php
         Route::get('/travelOrders/employees/search', [TravelOrdersController::class, 'search'])
             ->name('employees.search');
+        Route::get('/travelOrders/preview/{id}', [TravelOrdersController::class, 'preview'])->name('travelOrders.preview');
     });
 
     // Surat Undangan
@@ -72,8 +71,7 @@ Route::middleware(['auth'])->group(function () {
         // Umum (Siswa)
         Route::resource('generalLetters', GeneralLettersController::class);
         Route::get('/generalLetters/refstudents/search', [GeneralLettersController::class, 'search'])
-        ->name('students.search');
-
+            ->name('students.search');
     });
 
     // Surat Lain
@@ -82,5 +80,4 @@ Route::middleware(['auth'])->group(function () {
         // Pengembalian Ke orang Tua
         Route::resource('studentReturns', StudentReturnsController::class);
     });
-
 });
