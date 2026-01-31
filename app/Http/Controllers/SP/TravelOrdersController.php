@@ -139,7 +139,7 @@ class TravelOrdersController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('sp.travelOrders.index')
+                ->route('sp.travelOrders.preview', $travelOrder->id)
                 ->with('success', 'Data Surat Perintah Perjalanan Dinas berhasil ditambahkan');
         } catch (Exception $e) {
             DB::rollBack();
@@ -291,5 +291,12 @@ class TravelOrdersController extends Controller
                 ->back()
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function preview($id)
+    {
+        $travelOrder = M_Official_Travel_Orders::with('employees', 'followers')->findOrFail($id);
+
+        return view('preview.sp.travel-order.print', compact('travelOrder'));
     }
 }
