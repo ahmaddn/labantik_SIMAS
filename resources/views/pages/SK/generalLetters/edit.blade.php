@@ -3,7 +3,7 @@
     <div class="main-content-container overflow-hidden">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
             <h3 class="mb-0">
-                Tambah Data
+                Edit Data
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb align-items-center mb-0 lh-1">
@@ -28,7 +28,7 @@
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
                         <span class="text-secondary">
-                            Tambah Data
+                            Edit Data
                         </span>
                     </li>
                 </ol>
@@ -39,7 +39,7 @@
                 <div class="card bg-white border border-white rounded-10 mb-4">
                     <div class="card-body p-20">
                         <h4 class="fs-18 fw-medium mb-20">
-                            Data SKS
+                            Edit Data SKS
                         </h4>
                         <div class="tab-content" id="myTab2Content">
                             <div aria-labelledby="preview2-tab" class="tab-pane fade show active" id="preview2-tab-pane"
@@ -75,18 +75,20 @@
                                             </span>
                                             <div class="text-start ms-3 d-none d-lg-block">
                                                 <h4 class="fs-18 fw-semibold">
-                                                    Data Siswa
+                                                    Data Surat
                                                 </h4>
                                                 <p class="text-gray-light mb-0">
-                                                    Tujuan Surat
+                                                    Detail Surat Keterangan
                                                 </p>
                                             </div>
                                         </button>
                                     </li>
                                 </ul>
 
-                                <form action="{{ route('sk.generalLetters.store') }}" method="POST" id="mainForm">
+                                <form action="{{ route('sk.generalLetters.update', $letter->id) }}" method="POST"
+                                    id="mainForm">
                                     @csrf
+                                    @method('PUT')
                                     <div class="tab-content" id="myTabstep2Content">
                                         <div aria-labelledby="step5-tab" class="tab-pane fade show active"
                                             id="step5-tab-pane" role="tabpanel" tabindex="0">
@@ -99,16 +101,25 @@
                                                                 <div
                                                                     class="d-flex justify-content-between align-items-center">
                                                                     <div>
-                                                                        <p class="mb-1">
-                                                                            <strong>{{ $headmaster->full_name ?? 'MUCHAMAD EKI S.A., S.Kom' }}</strong>
-                                                                        </p>
-                                                                        <p class="mb-0 text-muted">
-                                                                            NIP:
-                                                                            {{ $headmaster->nip ?? '197610012006041011' }}
-                                                                            @if (isset($headmaster->job_name))
-                                                                                | {{ $headmaster->job_name }}
-                                                                            @endif
-                                                                        </p>
+                                                                        @if (isset($letter->headmaster))
+                                                                            <p class="mb-1">
+                                                                                <strong>{{ $letter->headmaster->full_name }}</strong>
+                                                                            </p>
+                                                                            <p class="mb-0 text-muted">
+                                                                                NIP:
+                                                                                {{ $letter->headmaster->nip ?? '197610012006041011' }}
+                                                                                @if ($letter->headmaster->job_name)
+                                                                                    | {{ $letter->headmaster->job_name }}
+                                                                                @endif
+                                                                            </p>
+                                                                        @else
+                                                                            <p class="mb-1">
+                                                                                <strong>Belum dipilih</strong>
+                                                                            </p>
+                                                                            <p class="mb-0 text-muted">
+                                                                                Silahkan pilih kepala sekolah
+                                                                            </p>
+                                                                        @endif
                                                                     </div>
                                                                     <div class="text-success">
                                                                         <i class="ri-checkbox-circle-line fs-20"></i>
@@ -131,7 +142,8 @@
                                                                 class="form-select form-control ps-5 h-55" required>
                                                                 <option value="">Pilih Kelas :</option>
                                                                 @foreach ($classes as $class)
-                                                                    <option value="{{ $class->id }}">
+                                                                    <option value="{{ $class->id }}"
+                                                                        {{ $letter->class_id == $class->id ? 'selected' : '' }}>
                                                                         {{ $class->academic_level }} {{ $class->name }}
                                                                     </option>
                                                                 @endforeach
@@ -143,13 +155,23 @@
                                                 </div>
 
                                                 {{-- siswa --}}
-                                                <div class="col-lg-6" id="siswa-container" style="display: none;">
+                                                <div class="col-lg-6" id="siswa-container" style="display: none">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
                                                             Nama Siswa : <span class="text-danger">*</span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <select name="student_id" id="siswa" required>
+                                                                <option value="">Pilih Siswa :</option>
+                                                                @foreach ($students as $student)
+                                                                    <option value="{{ $student->id }}"
+                                                                        {{ $letter->student_id == $student->id ? 'selected' : '' }}>
+                                                                        {{ $student->name }}
+                                                                        @if ($student->user && $student->user->name)
+                                                                            ({{ $student->user->name }})
+                                                                        @endif
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
                                                             <i
                                                                 class="ri-user-2-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
@@ -159,10 +181,10 @@
 
                                                 <div class="col-lg-12">
                                                     <div class="form-group d-flex gap-3">
-                                                        <button
+                                                        <a href="{{ route('sk.generalLetters.index') }}"
                                                             class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
                                                             Back
-                                                        </button>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -175,13 +197,12 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Nomor Surat
+                                                            Nomor Surat <span class="text-danger">*</span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="letter_number"
                                                                 class="form-control text-dark ps-5 h-55"
-                                                                value="{{ $letterNumber }}" required
-                                                                id="letterNumberInput" onfocus="this.select()">
+                                                                value="{{ $letter->letter_number }}" required>
                                                             <i
                                                                 class="ri-hashtag position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
                                                         </div>
@@ -196,7 +217,8 @@
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="date" name="issue_date"
-                                                                class="form-control ps-5 h-55" value="{{ date('Y-m-d') }}"
+                                                                class="form-control ps-5 h-55"
+                                                                value="{{ \Carbon\Carbon::parse($letter->issue_date)->format('Y-m-d') }}"
                                                                 required>
                                                             <i
                                                                 class="ri-calendar-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
@@ -213,7 +235,7 @@
                                                         <div class="form-group position-relative">
                                                             <textarea name="content" class="form-control ps-5" rows="4"
                                                                 placeholder="Contoh: Yang bersangkutan adalah benar siswa di SMK Negeri 1 Talaga Tahun Pelajaran 2025/2026 dan aktif mengikuti kegiatan ekstrakurikuler bola voli."
-                                                                required></textarea>
+                                                                required>{{ $letter->content }}</textarea>
                                                             <i
                                                                 class="ri-file-text-line position-absolute top-0 start-0 fs-20 text-gray-light ps-20 pt-3"></i>
                                                         </div>
@@ -261,7 +283,7 @@
                                                     <div class="form-group d-flex justify-content-end gap-3">
                                                         <button class="btn btn-primary py-3 px-5 fw-semibold text-white"
                                                             type="submit">
-                                                            Submit
+                                                            Update
                                                         </button>
                                                     </div>
                                                 </div>
