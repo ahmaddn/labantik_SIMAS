@@ -119,22 +119,23 @@
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-end" style="gap: 12px;">
-                                            <button class="bg-transparent p-0 border-0 hover-text-success"
+                                            <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                                href="{{ route('sp.travelOrders.preview', $sppd->id) }}"
                                                 data-bs-placement="top" data-bs-title="View" data-bs-toggle="tooltip">
-                                                <i class="material-symbols-outlined fs-16 fw-normal text-primary">
-                                                    visibility
+                                                <i class="material-symbols-outlined fs-16 fw-normal text-secondary">
+                                                    print
                                                 </i>
-                                            </button>
-                                            <a class="bg-transparent p-0 border-0 hover-text-success"
+                                            </a>
+                                            <a class="bg-transparent p-0 border-0 hover-text-primary"
                                                 href="{{ route('sp.travelOrders.edit', $sppd->id) }}"
                                                 data-bs-placement="top" data-bs-title="Edit" data-bs-toggle="tooltip">
-                                                <i class="material-symbols-outlined fs-16 fw-normal text-body">
+                                                <i class="material-symbols-outlined fs-16 fw-normal text-primary">
                                                     edit
                                                 </i>
                                             </a>
                                             <button class="bg-transparent p-0 border-0 hover-text-danger" type="button"
                                                 data-bs-toggle="modal" data-bs-target="#deleteSPPD{{ $sppd->id }}">
-                                                <i class="material-symbols-outlined fs-16 fw-normal text-body">
+                                                <i class="material-symbols-outlined fs-16 fw-normal text-danger">
                                                     delete
                                                 </i>
                                             </button>

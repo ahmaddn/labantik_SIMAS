@@ -293,10 +293,23 @@ class TravelOrdersController extends Controller
         }
     }
 
+    public function incrementDownload($id)
+    {
+        $travelOrder = M_Official_Travel_Orders::findOrFail($id);
+
+        $travelOrder->increment('download_count');
+
+        return response()->json([
+            'success' => true,
+            'download_count' => $travelOrder->download_count,
+            'message' => 'Download count updated'
+        ]);
+    }
+
     public function preview($id)
     {
-        $travelOrder = M_Official_Travel_Orders::with('employees', 'followers')->findOrFail($id);
+        $travelOrder = M_Official_Travel_Orders::with('employees.employee', 'followers.follower')->findOrFail($id);
 
-        return view('preview.sp.travel-order.print', compact('travelOrder'));
+        return view('preview.SP.travelOrder.print', compact('travelOrder'));
     }
 }
