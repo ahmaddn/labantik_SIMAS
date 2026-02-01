@@ -133,7 +133,7 @@
                                             </a>
 
                                             <!-- Tombol Hapus -->
-                                                <button class="bg-transparent p-0 border-0 hover-text-danger" type="button"
+                                            <button class="bg-transparent p-0 border-0 hover-text-danger" type="button"
                                                 data-bs-toggle="modal" data-bs-target="#deleteletter{{ $letter->id }}">
                                                 <i class="material-symbols-outlined fs-16 fw-normal text-body">
                                                     delete
@@ -172,7 +172,7 @@
                                                                 <i class="ri-close-line me-1"></i>Batal
                                                             </button>
                                                             <form
-                                                                action="{{ route('sp.travelOrders.destroy', $letter->id) }}"
+                                                                action="{{ route('sk.generalLetters.destroy', $letter->id) }}"
                                                                 method="POST" style="display: inline;">
                                                                 @csrf
                                                                 @method('DELETE')
