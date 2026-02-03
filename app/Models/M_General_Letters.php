@@ -38,7 +38,6 @@ class M_General_Letters extends Model
     {
         return $this->belongsTo(RefStudentAcademicYear::class, 'student_id');
     }
-
     public function headmaster()
     {
         return $this->belongsTo(User::class, 'headmaster_id');

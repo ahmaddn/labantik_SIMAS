@@ -34,6 +34,18 @@
                 </ol>
             </nav>
         </div>
+        @if ($errors->any())
+            <div class="alert fs-16 alert-success alert-dismissible" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+                <button aria-label="Close" class="btn-close shadow-none" data-bs-dismiss="alert" type="button">
+                </button>
+
+            </div>
+        @endif
         <div class="row justify-content-center">
             <div class="col-lg-12">
                 <div class="card bg-white border border-white rounded-10 mb-4">
