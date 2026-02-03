@@ -114,12 +114,12 @@
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-end" style="gap: 12px;">
-                                            <!-- Tombol Lihat -->
-                                            <a href="{{ route('sk.generalLetters.show', $letter->id) }}"
-                                                class="bg-transparent p-0 border-0 hover-text-success"
-                                                data-bs-placement="top" data-bs-title="Lihat" data-bs-toggle="tooltip">
-                                                <i class="material-symbols-outlined fs-16 fw-normal text-primary">
-                                                    visibility
+                                            <!-- Tombol Preview -->
+                                             <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                                href="{{ route('sk.generalLetters.preview', $letter->id) }}"
+                                                data-bs-placement="top" data-bs-title="View" data-bs-toggle="tooltip">
+                                                <i class="material-symbols-outlined fs-16 fw-normal text-secondary">
+                                                    print
                                                 </i>
                                             </a>
 

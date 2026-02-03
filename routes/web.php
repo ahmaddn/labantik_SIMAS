@@ -81,6 +81,9 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('generalLetters', GeneralLettersController::class);
         Route::get('/generalLetters/refstudents/search', [GeneralLettersController::class, 'search'])
             ->name('students.search');
+        Route::get('/generalLetters/preview/{id}', [GeneralLettersController::class, 'preview'])->name('generalLetters.preview');
+        Route::post('/generalLetter/{id}/increment-download', [GeneralLettersController::class, 'incrementDownload'])
+            ->name('travelOrders.increment-download');
     });
 
     // Surat Lain
