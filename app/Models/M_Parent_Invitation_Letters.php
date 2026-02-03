@@ -19,6 +19,7 @@ class M_Parent_Invitation_Letters extends Model
         'student_id',
         'letter_number',
         'to',
+        'purpose',
         'categories',
         'meeting_day',
         'meeting_date',

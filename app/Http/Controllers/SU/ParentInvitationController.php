@@ -131,7 +131,7 @@ class ParentInvitationController extends Controller
         ]);
 
         // Redirect to print preview based on category
-        return redirect()->route('su.parentInvitations.preview', $invitation->id);
+        return redirect()->route('su.parentInvitation.print', $invitation->id);
     }
 
 
@@ -203,7 +203,7 @@ class ParentInvitationController extends Controller
         if ($invitation->categories === 'Individu') {
             $view = 'preview.SU.parentInvitation.printIndividu';
         } elseif ($invitation->categories === 'Jamak') {
-            $view = 'preview.SU.parentInvitation.printJamak';
+            $view = 'preview.SU.parentInvitation.printUmum';
         } else {
             abort(404, 'Kategori tidak dikenali');
         }
