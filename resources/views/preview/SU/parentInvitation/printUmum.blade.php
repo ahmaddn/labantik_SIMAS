@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surat Undangan - {{ $invitation->letter_number }}</title>
     <style>
+        /* --- RESET & FONT --- */
         * {
             margin: 0;
             padding: 0;
@@ -13,30 +14,79 @@
         }
 
         body {
-            background-color: #e0e0e0;
+            background-color: #f0f0f0;
             font-family: Arial, Helvetica, sans-serif;
+            font-size: 11pt;
+            line-height: 1.4;
             margin: 0;
             padding: 20px;
+        }
+
+        /* --- TOMBOL ACTIONS --- */
+        .action-buttons {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             display: flex;
-            justify-content: center;
-        }
-
-        .page {
+            justify-content: space-between;
+            align-items: center;
+            max-width: 210mm;
+            margin: 0 auto 20px auto;
+            padding: 15px 20px;
             background-color: white;
-            width: 210mm;
-            min-height: 297mm;
-            padding: 15mm 20mm;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            box-sizing: border-box;
-            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        /* --- PRINT STYLES --- */
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-edit {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-print {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background-color: #059669;
+        }
+
+        .btn-back {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: #4b5563;
+        }
+
+        /* Sembunyikan tombol saat print */
         @media print {
+            .action-buttons {
+                display: none !important;
+            }
+
             body {
-                background-color: white;
-                padding: 0;
+                background: none;
                 margin: 0;
+                padding: 0;
             }
 
             .page {
@@ -52,77 +102,88 @@
                 size: A4;
                 margin: 15mm 20mm;
             }
+        }
 
-            .no-print {
-                display: none;
-            }
+        /* --- HALAMAN --- */
+        .page {
+            background-color: white;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 15mm 20mm;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            position: relative;
         }
 
         /* --- KOP SURAT --- */
         .header {
-            border-bottom: 3px solid black;
-            padding-bottom: 3px;
-            margin-bottom: 3px;
+            border-bottom: 3px solid #000;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
             position: relative;
+            min-height: 100px;
+            padding-left: 100px;
         }
 
         .header::after {
             content: '';
             display: block;
-            border-bottom: 1px solid black;
+            border-bottom: 1px solid #000;
             margin-top: 3px;
         }
 
-        .header-table {
-            width: 100%;
-            border-collapse: collapse;
+        .header img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: auto;
+            height: 115px;
         }
 
-        .logo-cell {
-            width: 80px;
-            vertical-align: top;
+        .header-text {
             text-align: center;
-            padding-right: 10px;
         }
 
-        .logo-img {
-            width: 75px;
-            height: auto;
-        }
-
-        .text-cell {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .text-cell h3 {
+        .header h3,
+        .header h2,
+        .header h4,
+        .header p {
             margin: 0;
+        }
+
+        .header h3 {
             font-size: 11pt;
             font-weight: bold;
             text-transform: uppercase;
             line-height: 1.2;
         }
 
-        .text-cell h2 {
-            margin: 2px 0;
+        .header h2 {
             font-size: 13pt;
             font-weight: bold;
             text-transform: uppercase;
+            margin: 2px 0;
         }
 
-        .text-cell p {
-            margin: 1px 0;
+        .header p {
             font-size: 8pt;
             line-height: 1.2;
+            margin: 1px 0;
         }
 
-        .address {
-            font-size: 7pt !important;
+        .header .address {
+            font-family: Tahoma, Arial, sans-serif;
+            font-size: 7pt;
+            font-weight: normal;
+            text-align: center;
+            line-height: 1.4;
+            color: #000;
         }
 
-        .links {
-            color: blue;
-            text-decoration: underline;
+        .header .address a {
+            text-decoration: none;
+            color: #000;
         }
 
         /* --- TANGGAL & INFO SURAT --- */
@@ -232,37 +293,18 @@
             display: block;
         }
 
-        /* Print Button */
-        .print-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14pt;
-            z-index: 1000;
-        }
-
-        .print-button:hover {
-            background-color: #0056b3;
-        }
-
         /* Print-specific adjustments */
         @media print {
             .header {
-                border-bottom: 3px solid black;
+                border-bottom: 3px solid #000;
             }
 
             .header::after {
-                border-bottom: 1px solid black;
+                border-bottom: 1px solid #000;
             }
 
-            .logo-img {
-                width: 70px;
+            .header img {
+                height: 110px;
             }
 
             .signature-section {
@@ -270,36 +312,46 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 
 <body>
-    <button class="print-button no-print" onclick="window.print()">🖨️ Print</button>
+    <!-- TOMBOL AKSI -->
+    <div class="action-buttons">
+        <a href="{{ route('su.parentInvitations.index') }}" class="btn btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Kembali
+        </a>
+        <a href="{{ route('su.parentInvitations.edit', $invitation->id) }}" class="btn btn-edit">
+            <i class="fa-solid fa-edit"></i> Edit
+        </a>
+        <button onclick="handlePrint()" class="btn btn-print">
+            <i class="fa-solid fa-print"></i> Print
+        </button>
+    </div>
 
     <div class="page">
         <!-- KOP SURAT -->
         <div class="header">
-            <table class="header-table">
-                <tr>
-                    <td class="logo-cell">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Coat_of_arms_of_West_Java.svg/1200px-Coat_of_arms_of_West_Java.svg.png"
-                            alt="Logo Jabar" class="logo-img">
-                    </td>
-                    <td class="text-cell">
-                        <h3>PEMERINTAH DAERAH PROVINSI JAWA BARAT</h3>
-                        <h3>CABANG DINAS PENDIDIKAN WILAYAH IX</h3>
-                        <h2>SEKOLAH MENENGAH KEJURUAN NEGERI 1 TALAGA</h2>
-                        <p>Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi komunikasi, Bisnis dan Manajemen
-                        </p>
-                        <p class="address">Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten
-                            Majalengka</p>
-                        <p class="address">Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga
-                            Kabupaten Majalengka</p>
-                        <p class="address">Telpon (0233) 319238 FAX (0233) 319238 POS 45463 NPSN: 20213872</p>
-                        <p class="address">Website <span class="links">www.smkn1talaga.sch.id</span> - Email <span
-                                class="links">admin@smkn1talaga.sch.id</span></p>
-                    </td>
-                </tr>
-            </table>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Coat_of_arms_of_West_Java.svg/500px-Coat_of_arms_of_West_Java.svg.png"
+                alt="Logo Jabar">
+            <div class="header-text">
+                <h3>PEMERINTAH DAERAH PROVINSI JAWA BARAT</h3>
+                <h3>CABANG DINAS PENDIDIKAN WILAYAH IX</h3>
+                <h2>SEKOLAH MENENGAH KEJURUAN NEGERI 1 TALAGA</h2>
+                <p>Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen</p>
+                <div class="address">
+                    Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br>
+                    Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br>
+                    Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;
+                    FAX <i class="fa-solid fa-fax"></i> (0233) 319238 &nbsp;
+                    POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp;
+                    NPSN: 20213872<br>
+                    Website <i class="fa-solid fa-globe"></i>
+                    <a href="http://www.smkn1talaga.sch.id">www.smkn1talaga.sch.id</a>
+                    &nbsp;–&nbsp; Email <i class="fa-solid fa-envelope"></i>
+                    <a href="mailto:admin@smkn1talaga.sch.id">admin@smkn1talaga.sch.id</a>
+                </div>
+            </div>
         </div>
 
         <!-- TANGGAL DI KANAN -->
@@ -415,8 +467,27 @@
     </div>
 
     <script>
-        // Auto print when page loads (optional)
-        // window.onload = function() { window.print(); }
+        function handlePrint() {
+            // Kirim request untuk increment download count
+            fetch("{{ route('su.parentInvitations.increment-download', $invitation->id) }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Download count updated:', data);
+                    // Jalankan print setelah berhasil update
+                    window.print();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Tetap print meskipun ada error
+                    window.print();
+                });
+        }
     </script>
 </body>
 

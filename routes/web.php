@@ -53,6 +53,8 @@ Route::middleware(['auth'])->group(function () {
             ->name('students.search');
         Route::get('parentInvitations/{id}/preview', [ParentInvitationController::class, 'preview'])
             ->name('parentInvitation.print');
+        Route::post('parentInvitation/{id}/increment-download', [TravelOrdersController::class, 'incrementDownload'])
+            ->name('parentInvitations.increment-download');
     });
 
     // Surat Pengantar
