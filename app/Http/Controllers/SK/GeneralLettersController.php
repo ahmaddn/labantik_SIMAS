@@ -187,11 +187,6 @@ class GeneralLettersController extends Controller
     {
         $letter = M_General_Letters::findOrFail($id);
 
-        dd([
-            'request_data' => $request->all(),
-            'current_letter' => $letter->toArray()
-        ]);
-
         $validated = $request->validate([
             // 'headmaster_id' => 'required|uuid|exists:core_users,id',
             'student_id' => 'required|uuid|exists:ref_student_academic_years,id',
@@ -219,22 +214,6 @@ class GeneralLettersController extends Controller
     }
 
     /**
-     * Cetak/Print surat
-     */
-    public function print(string $id)
-    {
-        $letter = M_General_Letters::with([
-            'headmaster',
-            'student.student'
-        ])->findOrFail($id);
-
-        // Tambah download count
-        $letter->increment('download_count');
-
-        return view('pages.SK.generalLetters.print', compact('letter'));
-    }
-
-    /**
      * Preview surat
      */
     public function preview(string $id)
@@ -244,7 +223,7 @@ class GeneralLettersController extends Controller
             'student.student'
         ])->findOrFail($id);
 
-        return view('pages.SK.generalLetters.preview', compact('letter'));
+        return view('preview.SK.generalLetters.print', compact('letter'));
     }
 
     /**
@@ -257,8 +236,11 @@ class GeneralLettersController extends Controller
         // Tambah download count
         $letter->increment('download_count');
 
-        // Logika untuk download file jika ada
-        // return response()->download($path);
+        return response()->json([
+            'success' => true,
+            'download_count' => $letter->download_count,
+            'message' =>  'Download Count Update'
+        ]);
 
         return redirect()->back()
             ->with('success', 'Surat berhasil didownload.');

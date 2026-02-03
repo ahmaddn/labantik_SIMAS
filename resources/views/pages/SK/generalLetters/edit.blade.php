@@ -154,8 +154,9 @@
                                                     </div>
                                                 </div>
 
-                                                {{-- siswa --}}
-                                                <div class="col-lg-6" id="siswa-container" style="display: none">
+                                                {{-- siswa - PERBAIKAN: Tampilkan jika ada data siswa sebelumnya --}}
+                                                <div class="col-lg-6" id="siswa-container"
+                                                    style="display: {{ $letter->student_id ? 'block' : 'none' }}">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
                                                             Nama Siswa : <span class="text-danger">*</span>
@@ -163,15 +164,15 @@
                                                         <div class="form-group position-relative">
                                                             <select name="student_id" id="siswa" required>
                                                                 <option value="">Pilih Siswa :</option>
-                                                                @foreach ($students as $student)
-                                                                    <option value="{{ $student->id }}"
-                                                                        {{ $letter->student_id == $student->id ? 'selected' : '' }}>
-                                                                        {{ $student->name }}
-                                                                        @if ($student->user && $student->user->name)
-                                                                            ({{ $student->user->name }})
+                                                                {{-- Tampilkan siswa yang sudah dipilih --}}
+                                                                @if($letter->student_id && $letter->student)
+                                                                    <option value="{{ $letter->student->id }}" selected>
+                                                                        {{ $letter->student->name }}
+                                                                        @if ($letter->student->user && $letter->student->user->name)
+                                                                            ({{ $letter->student->user->name }})
                                                                         @endif
                                                                     </option>
-                                                                @endforeach
+                                                                @endif
                                                             </select>
                                                             <i
                                                                 class="ri-user-2-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
@@ -302,42 +303,50 @@
 
 @push('scripts')
     <script>
+        // PERBAIKAN: Inisialisasi Select2 saat halaman dimuat
+        $(document).ready(function() {
+            // Inisialisasi select2 untuk siswa
+            $('#siswa').select2({
+                placeholder: 'Cari Siswa...',
+                allowClear: true,
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ route('sk.students.search') }}',
+                    dataType: 'json',
+                    delay: 300,
+                    data: function(params) {
+                        return {
+                            q: params.term,
+                            class_id: $('#class_id').val(),
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: data.pagination.more
+                            }
+                        };
+                    }
+                }
+            });
+        });
+
         $('#class_id').on('change', function() {
             var classId = $(this).val();
 
             if (classId) {
                 $('#siswa-container').slideDown();
                 $('#siswa').prop('required', true);
+
+                // Reset pilihan siswa jika kelas diganti (opsional)
+                // Uncomment baris di bawah jika ingin reset siswa saat ganti kelas
+                // $('#siswa').val(null).trigger('change');
             } else {
                 $('#siswa-container').slideUp();
                 $('#siswa').prop('required', false);
                 $('#siswa').val(null).trigger('change');
-            }
-        });
-
-        $('#siswa').select2({
-            placeholder: 'Cari Siswa...',
-            allowClear: true,
-            minimumInputLength: 2,
-            ajax: {
-                url: '{{ route('sk.students.search') }}',
-                dataType: 'json',
-                delay: 300,
-                data: function(params) {
-                    return {
-                        q: params.term,
-                        class_id: $('#class_id').val(),
-                        page: params.page || 1
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data.results,
-                        pagination: {
-                            more: data.pagination.more
-                        }
-                    };
-                }
             }
         });
 
