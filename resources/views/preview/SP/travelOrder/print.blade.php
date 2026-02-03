@@ -66,6 +66,15 @@
             background-color: #059669;
         }
 
+        .btn-back {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: #4b5563;
+        }
+
         /* Sembunyikan tombol saat print */
         @media print {
             .action-buttons {
@@ -111,6 +120,57 @@
             left: 0;
             top: 0;
             width: 115px;
+            height: 130px;
+        }
+
+        .header h3,
+        .header h2,
+        .header h4,
+        .header p {
+            margin: 0px 0;
+        }
+
+        .header h4 {
+            font-size: 14pt;
+            font-weight: bold;
+        }
+
+        .header h2 {
+            font-size: 18pt;
+            font-weight: bold;
+        }
+
+        .header .address {
+            font-family: Tahoma;
+            font-size: 9pt;
+            font-weight: normal;
+            text-align: center;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        /* Memastikan link website/email warnanya hitam & tidak bergaris bawah */
+        .header .address a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        /* --- KOP SURAT Landscape --- */
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #000;
+            padding-bottom: 5px;
+            padding-left: 100px;
+            margin-bottom: 10px;
+            position: relative;
+            min-height: 100px;
+        }
+
+        .header img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: auto;
             height: 130px;
         }
 
@@ -254,23 +314,62 @@
                 margin: 0;
                 box-shadow: none;
                 width: 100%;
-            }
-
-            /* Halaman 1 */
-            @page {
-                size: A4 portrait;
+                page-break-inside: avoid;
             }
 
             .page-portrait {
                 page-break-after: always;
             }
 
-            /* Halaman 2 */
             .page-landscape-wrapper {
                 page-break-before: always;
                 page: landscape-page;
-                /* Panggil setting landscape */
+                page-break-after: auto;
+                /* Ganti dari default */
             }
+
+            /* Hilangkan page break setelah elemen terakhir */
+            .page-landscape-wrapper:last-of-type {
+                page-break-after: avoid !important;
+                break-after: avoid-page !important;
+            }
+
+            /* Cegah margin/padding yang menyebabkan overflow */
+            .page-landscape:last-child {
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
+            }
+
+            * Halaman terakhir tidak break */ .last-page {
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+
+            .page-portrait {
+                page-break-after: always;
+            }
+
+            /* Semua landscape kecuali yang terakhir */
+            .page-landscape-wrapper:not(.last-page) {
+                page-break-before: always;
+                page: landscape-page;
+            }
+
+            .page-landscape-wrapper.last-page {
+                page-break-before: always;
+                page-break-after: avoid !important;
+                page: landscape-page;
+            }
+        }
+
+        @page landscape-page {
+            size: A4 landscape;
+            margin: 0;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 0;
         }
 
         @page landscape-page {
@@ -282,6 +381,9 @@
 
 <body>
     <div class="action-buttons">
+        <a href="{{ route('sp.travelOrders.index') }}" class="btn btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Kembali
+        </a>
         <a href="{{ route('sp.travelOrders.edit', $travelOrder->id) }}" class="btn btn-edit">
             <i class="fa-solid fa-edit"></i> Edit
         </a>
@@ -366,31 +468,35 @@
                 </tbody>
             </table>
 
-            <table class="no-border" style="margin-top: 15px">
+            <table class="no-border" style="margin-top: 15px; width: 100%;">
                 <tr>
-                    <td style="width: 80px">Untuk</td>
-                    <td style="width: 10px">:</td>
-                    <td>
-                        <table class="no-border" style="margin: 0">
+                    <td style="width: 20px; vertical-align: top;">Untuk</td>
+                    <td>: {{ $travelOrder->purpose }}</td>
+                    <td style="vertical-align: top;">
+                        <table class="no-border" style="margin-top: 50px; margin-left: 20px; border-spacing: 0;">
                             <tr>
-                                <td style="width: 100px">Hari</td>
-                                <td>:
+                                <td style="width: 70px; padding: 1px 0;">Hari</td>
+                                <td style="width: 10px; padding: 1px 5px;">:</td>
+                                <td style="padding: 1px 0;">
                                     {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->translatedFormat('l') }}
                                 </td>
                             </tr>
                             <tr>
-                                <td>Tanggal</td>
-                                <td>:
+                                <td style="padding: 1px 0;">Tanggal</td>
+                                <td style="padding: 1px 5px;">:</td>
+                                <td style="padding: 1px 0;">
                                     {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->translatedFormat('d F Y') }}
                                 </td>
                             </tr>
                             <tr>
-                                <td>Waktu</td>
-                                <td>: {{ $travelOrder->departure_time }} WIB</td>
+                                <td style="padding: 1px 0;">Waktu</td>
+                                <td style="padding: 1px 5px;">:</td>
+                                <td style="padding: 1px 0;">{{ $travelOrder->departure_time }} WIB</td>
                             </tr>
                             <tr>
-                                <td>Tempat</td>
-                                <td>: {{ $travelOrder->departure_place }}</td>
+                                <td style="padding: 1px 0;">Tempat</td>
+                                <td style="padding: 1px 5px;">:</td>
+                                <td style="padding: 1px 0;">{{ $travelOrder->departure_place }}</td>
                             </tr>
                         </table>
                     </td>
@@ -425,18 +531,18 @@
 
     @foreach ($travelOrder->employees as $index => $employ)
         <!-- === HALAMAN 2: SPPD (LANDSCAPE) === -->
-        <div class="page-landscape-wrapper">
+        <div class="page-landscape-wrapper {{ $loop->last ? 'last-page' : '' }}">
             <div class="page-landscape">
                 <div class="sppd-container">
                     <!-- KOLOM KIRI -->
                     <div class="col-left">
 
                         <!-- KOP SURAT (Dikecilkan agar muat) -->
-                        <div class="header"
+                        <div class="header1"
                             style="border-bottom: 2px solid black; margin-bottom: 5px; padding-bottom: 2px; position: relative; min-height: 90px;">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Lambang_Jawa_Barat.svg/1200px-Lambang_Jawa_Barat.svg.png"
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Coat_of_arms_of_West_Java.svg/500px-Coat_of_arms_of_West_Java.svg.png"
                                 alt="Logo"
-                                style="position: absolute; top: 0; left: 0; width: 60px; height: auto;" />
+                                style="position: absolute; top: 0; left: 0; width: 70px; height: auto;" />
 
                             <div style="margin-left: 70px; text-align: center;">
                                 <h4 style="font-size: 8pt; margin: 0;">PEMERINTAH DAERAH PROVINSI JAWA BARAT</h4>

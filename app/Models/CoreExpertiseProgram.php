@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,7 @@ class CoreExpertiseProgram extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
 
     /**
      * Get classes under this program.

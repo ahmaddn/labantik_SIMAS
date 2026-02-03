@@ -47,6 +47,12 @@ Route::middleware(['auth'])->group(function () {
 
         // Orang Tua
         Route::resource('parentInvitations', ParentInvitationController::class);
+        Route::get('parentInvitations/{id}/preview', [ParentInvitationController::class, 'preview'])
+            ->name('parentInvitations.preview');
+        Route::get('parentInvitations/students/search', [ParentInvitationController::class, 'search'])
+            ->name('students.search');
+        Route::get('parentInvitations/{id}/preview', [ParentInvitationController::class, 'preview'])
+            ->name('parentInvitation.print');
     });
 
     // Surat Pengantar
