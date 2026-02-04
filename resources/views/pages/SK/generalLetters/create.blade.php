@@ -23,7 +23,7 @@
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
                         <span>
-                            Surat Keterangan Siswa
+                            Siswa
                         </span>
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
@@ -159,10 +159,10 @@
 
                                                 <div class="col-lg-12">
                                                     <div class="form-group d-flex gap-3">
-                                                        <button
+                                                        <a href="{{ route('sk.generalLetters.index') }}"
                                                             class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
                                                             Back
-                                                        </button>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>

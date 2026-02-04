@@ -23,7 +23,7 @@
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
                         <span>
-                            Surat Keterangan Siswa
+                            Siswa
                         </span>
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
@@ -143,7 +143,7 @@
                                                                 <option value="">Pilih Kelas :</option>
                                                                 @foreach ($classes as $class)
                                                                     <option value="{{ $class->id }}"
-                                                                        {{ $letter->class_id == $class->id ? 'selected' : '' }}>
+                                                                        {{ $letter->student->class_id == $class->id ? 'selected' : '' }}>
                                                                         {{ $class->academic_level }} {{ $class->name }}
                                                                     </option>
                                                                 @endforeach
@@ -165,11 +165,11 @@
                                                             <select name="student_id" id="siswa" required>
                                                                 <option value="">Pilih Siswa :</option>
                                                                 {{-- Tampilkan siswa yang sudah dipilih --}}
-                                                                @if($letter->student_id && $letter->student)
+                                                                @if ($letter->student_id && $letter->student)
                                                                     <option value="{{ $letter->student->id }}" selected>
-                                                                        {{ $letter->student->name }}
-                                                                        @if ($letter->student->user && $letter->student->user->name)
-                                                                            ({{ $letter->student->user->name }})
+                                                                        {{ $letter->student->student->full_name }}
+                                                                        @if ($letter->student->student && $letter->student->student->student_number)
+                                                                            ({{ $letter->student->student->student_number }})
                                                                         @endif
                                                                     </option>
                                                                 @endif
@@ -180,7 +180,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-lg-12">
+                                               <div class="col-lg-12">
                                                     <div class="form-group d-flex gap-3">
                                                         <a href="{{ route('sk.generalLetters.index') }}"
                                                             class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">

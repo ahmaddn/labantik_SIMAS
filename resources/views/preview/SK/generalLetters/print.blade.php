@@ -385,7 +385,9 @@
                 <tr>
                     <td class="col-label">Kelas</td>
                     <td class="col-sep">:</td>
-                    <td class="col-value">{{ $letter->student->class->name }}</td>
+                    <td class="col-value">
+                        {{ $letter->student->class->academic_level  }}
+                        {{ $letter->student->class->name }}</td>
                 </tr>
                 <tr>
                     <td class="col-label">Jurusan</td>
@@ -405,10 +407,10 @@
 
         <!-- TTD -->
         <div class="ttd-container">
-            <div class="ttd-tanggal">{{ $letter->departure_from }},
+            <div class="ttd-tanggal">Talaga,
                 {{ \Carbon\Carbon::parse($letter->issue_date)->locale('id')->translatedFormat('d F Y') }}
             </div>
-            <div class="ttd-jabatan">Kepala Sekolah,</div>
+            <div class="ttd-jabatan">Kepala Sekolah</div>
             <div class="ttd-nama">MUCHAMAD EKI S.A., S.Kom</div>
             <div class="ttd-nip">NIP. 197610012006041011</div>
         </div>

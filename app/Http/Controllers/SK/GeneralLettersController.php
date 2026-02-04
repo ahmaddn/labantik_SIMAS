@@ -121,7 +121,7 @@ class GeneralLettersController extends Controller
             'created_by' => auth()->id(),
         ]);
 
-        return redirect()->route('sk.generalLetters.index')
+        return redirect()->route('sk.generalLetters.preview', $letter->id)
             ->with('success', 'Surat Keterangan berhasil dibuat.');
     }
 
@@ -159,7 +159,6 @@ class GeneralLettersController extends Controller
 
         // Ambil data siswa
         $students = RefStudent::with('user')
-            ->whereHas('user')
             ->orderBy('created_at', 'desc')
             ->get();
 
