@@ -308,7 +308,7 @@
             }
 
             .header img {
-                height: 80px;
+                height: 115px;
             }
 
             .signature-area {
