@@ -96,6 +96,7 @@
                                         {{ $letter->student->student->student_number ?? '-' }}
                                     </td>
                                     <td class="text-body">
+                                        {{ $letter->student->class->academic_level ?? '-' }}
                                         {{ $letter->student->class->name ?? '-' }}
                                     </td>
                                     <td class="text-body">
