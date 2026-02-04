@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('letter_number');
             $table->date('issue_date');
             $table->uuid('created_by');
+            $table->string('towards')->nullable();
             $table->integer('download_count')->default(0);
             $table->timestamps();
-
             $table->foreign('headmaster_id')->references('id')->on('core_users');
             $table->foreign('created_by')->references('id')->on('core_users');
         });
