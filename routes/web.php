@@ -78,6 +78,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Kesalahan Penulisan Ijazah
         Route::resource('dataCorrections', DataCorrectionsController::class);
+        Route::get('/dataCorrections/refstudents/search', [DataCorrectionsController::class, 'search'])
+            ->name('student.search');
 
         // Umum (Siswa)
         Route::resource('generalLetters', GeneralLettersController::class);

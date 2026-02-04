@@ -1,0 +1,683 @@
+@extends('layouts.app')
+@section('content')
+    <div class="main-content-container overflow-hidden">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
+            <h3 class="mb-0">
+                Tambah Data
+            </h3>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb align-items-center mb-0 lh-1">
+                    <li class="breadcrumb-item">
+                        <a class="d-flex align-items-center text-decoration-none" href="index.html">
+                            <i class="ri-home-8-line fs-15 text-primary me-1">
+                            </i>
+                            <span class="text-body fs-14 hover">
+                                Dashboard
+                            </span>
+                        </a>
+                    </li>
+                    <li aria-current="page" class="breadcrumb-item active">
+                        <span>Surat Keterangan (SK)</span>
+                    </li>
+                    <li aria-current="page" class="breadcrumb-item active">
+                        <span>Koreksi Data Ijazah</span>
+                    </li>
+                    <li aria-current="page" class="breadcrumb-item active">
+                        <span class="text-secondary">Tambah Data</span>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="card bg-white border border-white rounded-10 mb-4">
+                    <div class="card-body p-20">
+                        <h4 class="fs-18 fw-medium mb-20">
+                            Data SKKPI
+                        </h4>
+
+                        <div class="tab-content" id="myTab2Content">
+                            <div aria-labelledby="preview2-tab" class="tab-pane fade show active" id="preview2-tab-pane"
+                                role="tabpanel" tabindex="0">
+                                <ul class="nav nav-tabs justify-content-around border-0 mb-4 wizard-tabs2" id="myTabstep2"
+                                    role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button aria-controls="step1-tab-pane" aria-selected="true"
+                                            class="nav-link p-0 d-flex align-items-center active"
+                                            data-bs-target="#step1-tab-pane" data-bs-toggle="tab" id="step1-tab"
+                                            role="tab" type="button">
+                                            <span
+                                                class="fs-20 fw-bold text-primary wh-48 bg-primary bg-opacity-10 rounded-circle d-inline-block">
+                                                1
+                                            </span>
+                                            <div class="text-start ms-3 d-none d-lg-block">
+                                                <h4 class="fs-18 fw-semibold">Pilih Siswa</h4>
+                                                <p class="text-gray-light mb-0">Data siswa & kelas</p>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button aria-controls="step2-tab-pane" aria-selected="false"
+                                            class="nav-link p-0 d-flex align-items-center" data-bs-target="#step2-tab-pane"
+                                            data-bs-toggle="tab" id="step2-tab" role="tab" type="button">
+                                            <span
+                                                class="fs-20 fw-bold text-primary wh-48 bg-primary bg-opacity-10 rounded-circle d-inline-block">
+                                                2
+                                            </span>
+                                            <div class="text-start ms-3 d-none d-lg-block">
+                                                <h4 class="fs-18 fw-semibold">Data Surat</h4>
+                                                <p class="text-gray-light mb-0">Informasi surat</p>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button aria-controls="step3-tab-pane" aria-selected="false"
+                                            class="nav-link p-0 d-flex align-items-center" data-bs-target="#step3-tab-pane"
+                                            data-bs-toggle="tab" id="step3-tab" role="tab" type="button">
+                                            <span
+                                                class="fs-20 fw-bold text-primary wh-48 bg-primary bg-opacity-10 rounded-circle d-inline-block">
+                                                3
+                                            </span>
+                                            <div class="text-start ms-3 d-none d-lg-block">
+                                                <h4 class="fs-18 fw-semibold">Detail Koreksi</h4>
+                                                <p class="text-gray-light mb-0">Data salah & benar</p>
+                                            </div>
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <form action="{{ route('sk.dataCorrections.store') }}" method="POST" id="mainForm">
+                                    @csrf
+
+                                    <input type="hidden" name="student_id" id="hidden_student_id" value="">
+                                    <div class="tab-content" id="myTabstep2Content">
+                                        <div aria-labelledby="step1-tab" class="tab-pane fade show active"
+                                            id="step1-tab-pane" role="tabpanel" tabindex="0">
+                                            <div class="row">
+                                                <div class="row mb-4">
+                                                    <div class="col-lg-12">
+                                                        <div class="card bg-light">
+                                                            <div class="card-body">
+                                                                <h6 class="card-title fw-semibold">Kepala Sekolah</h6>
+                                                                <div
+                                                                    class="d-flex justify-content-between align-items-center">
+                                                                    <div>
+                                                                        <p class="mb-1">
+                                                                            <strong>{{ $headmaster->full_name ?? 'MUCHAMAD EKI S.A., S.Kom' }}</strong>
+                                                                        </p>
+                                                                        <p class="mb-0 text-muted">
+                                                                            NIP:
+                                                                            {{ $headmaster->nip ?? '197610012006041011' }}
+                                                                            @if (isset($headmaster->job_name))
+                                                                                | {{ $headmaster->job_name }}
+                                                                            @endif
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="text-success">
+                                                                        <i class="ri-checkbox-circle-line fs-20"></i>
+                                                                        <small>Telah ditetapkan</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {{-- kelas --}}
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Kelas <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <select name="class_id" id="class_id"
+                                                                class="form-select form-control ps-5 h-55" required>
+                                                                <option value="">Pilih Kelas :</option>
+                                                                @foreach ($classes as $class)
+                                                                    <option value="{{ $class->id }}">
+                                                                        {{ $class->academic_level }} {{ $class->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <i
+                                                                class="ri-map-2-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {{-- siswa --}}
+                                                <div class="col-lg-6" id="siswa-container" style="display: none;">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Nama Siswa : <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <select name="student_id" id="siswa" required>
+                                                            </select>
+                                                            <i
+                                                                class="ri-user-2-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12">
+                                                    <div class="form-group d-flex justify-content-between gap-3">
+                                                        <a href="{{ route('sk.dataCorrections.index') }}"
+                                                            class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
+                                                            Back
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div aria-labelledby="step2-tab" class="tab-pane fade" id="step2-tab-pane"
+                                            role="tabpanel" tabindex="0">
+                                            <div class="row">
+                                                <!-- Nomor Surat -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Nomor Surat <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <input type="text" name="letter_number"
+                                                                class="form-control text-dark ps-5 h-55"
+                                                                value="{{ $letterNumber }}" required>
+                                                            <i
+                                                                class="ri-hashtag position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Tahun Kelulusan -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Tahun Kelulusan <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <input type="text" name="graduation_year"
+                                                                class="form-control ps-5 h-55"
+                                                                value="{{ old('graduation_year', date('Y')) }}"
+                                                                placeholder="Contoh: 2024" required>
+                                                            <i
+                                                                class="ri-calendar-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Tanggal Surat -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Tanggal Surat <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <input type="date" name="issue_date"
+                                                                class="form-control ps-5 h-55"
+                                                                value="{{ old('issue_date', date('Y-m-d')) }}" required>
+                                                            <i
+                                                                class="ri-calendar-check-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Kompetensi Keahlian -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Kompetensi Keahlian <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <input type="text" name="kompetensi_keahlian"
+                                                                id="kompetensi_keahlian" class="form-control ps-5 h-55"
+                                                                value="{{ old('kompetensi_keahlian') }}"
+                                                                placeholder="Contoh: Teknik Kendaraan Ringan Otomotif"
+                                                                required>
+                                                            <i
+                                                                class="ri-briefcase-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Jenis Koreksi -->
+                                                <div class="col-lg-12">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Bagian Yang Di Koreksi <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <textarea name="content" class="form-control ps-5" rows="4"
+                                                                placeholder="Contoh: Yang bersangkutan adalah benar siswa di SMK Negeri 1 Talaga Tahun Pelajaran 2025/2026 dan aktif mengikuti kegiatan ekstrakurikuler bola voli."
+                                                                required></textarea>
+                                                            <i
+                                                                class="ri-file-text-line position-absolute top-0 start-0 fs-20 text-gray-light ps-20 pt-3"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Template Koreksi Cepat -->
+                                                <div class="col-lg-12">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Template Koreksi Cepat
+                                                        </label>
+                                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                                onclick="setTemplate('nama-siswa')">
+                                                                <i class="ri-user-line me-1"></i> Nama Siswa
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                                onclick="setTemplate('nama-orangtua')">
+                                                                <i class="ri-parent-line me-1"></i> Nama Orang Tua
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                                onclick="setTemplate('tanggal-lahir')">
+                                                                <i class="ri-calendar-line me-1"></i> Tanggal Lahir
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                                onclick="setTemplate('tempat-lahir')">
+                                                                <i class="ri-map-pin-line me-1"></i> Tempat Lahir
+                                                            </button>
+                                                        </div>
+                                                        <div class="d-flex flex-wrap gap-2">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                                onclick="setTemplate('nomor-ijazah')">
+                                                                <i class="ri-file-text-line me-1"></i> Nomor Ijazah
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                                onclick="setTemplate('tahun-lulus')">
+                                                                <i class="ri-graduation-cap-line me-1"></i> Tahun Lulus
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                                onclick="setTemplate('kompetensi-keahlian')">
+                                                                <i class="ri-briefcase-line me-1"></i> Kompetensi Keahlian
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                                onclick="setTemplate('umum-koreksi')">
+                                                                <i class="ri-edit-line me-1"></i> Koreksi Umum
+                                                            </button>
+                                                        </div>
+                                                        <small class="text-muted mt-2 d-block">
+                                                            <i class="ri-information-line me-1"></i> Template akan mengisi
+                                                            bagian "Isi Koreksi" dengan format standar
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div aria-labelledby="step3-tab" class="tab-pane fade" id="step3-tab-pane"
+                                            role="tabpanel" tabindex="0">
+                                            <div class="row">
+                                                <!-- Nama Field yang Dikoreksi -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Nama Field yang Dikoreksi <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <input type="text" name="field_name"
+                                                                class="form-control ps-5 h-55"
+                                                                value="{{ old('field_name') }}"
+                                                                placeholder="Contoh: Nama Ibu Kandung" required>
+                                                            <i
+                                                                class="ri-file-edit-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Dokumen Referensi (Opsional) -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Dokumen Referensi (Opsional)
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <input type="text" name="reference_document"
+                                                                class="form-control ps-5 h-55"
+                                                                value="{{ old('reference_document') }}"
+                                                                placeholder="Contoh: Akta Kelahiran No. 1234/2005">
+                                                            <i
+                                                                class="ri-file-text-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Data yang SALAH -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Data yang SALAH (di Ijazah) <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <input type="text" name="incorrect_data"
+                                                                class="form-control ps-5 h-55 border-danger bg-danger bg-opacity-10"
+                                                                value="{{ old('incorrect_data') }}"
+                                                                placeholder="Tulis data yang SALAH" required>
+                                                            <i
+                                                                class="ri-close-circle-line position-absolute top-50 start-0 translate-middle-y fs-20 text-danger ps-20"></i>
+                                                        </div>
+                                                        <small class="text-danger">
+                                                            <i class="ri-error-warning-line"></i> Data ini yang tertulis
+                                                            SALAH di ijazah
+                                                        </small>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Data yang BENAR -->
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Data yang BENAR (Seharusnya) <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <input type="text" name="correct_data"
+                                                                class="form-control ps-5 h-55 border-success bg-success bg-opacity-10"
+                                                                value="{{ old('correct_data') }}"
+                                                                placeholder="Tulis data yang BENAR" required>
+                                                            <i
+                                                                class="ri-check-line position-absolute top-50 start-0 translate-middle-y fs-20 text-success ps-20"></i>
+                                                        </div>
+                                                        <small class="text-success">
+                                                            <i class="ri-checkbox-circle-line"></i> Data yang seharusnya
+                                                            benar
+                                                        </small>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Catatan Perbandingan -->
+                                                <div class="col-lg-12">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Catatan Perbandingan (Opsional)
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <textarea name="comparison_note" class="form-control ps-5" rows="3"
+                                                                placeholder="Catatan tambahan mengenai perbedaan data...">{{ old('comparison_note') }}</textarea>
+                                                            <i
+                                                                class="ri-sticky-note-line position-absolute top-0 start-0 fs-20 text-gray-light ps-20 pt-3"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Catatan Penting -->
+                                                <div class="col-lg-12">
+                                                    <div class="alert alert-warning">
+                                                        <h6 class="alert-heading">
+                                                            <i class="ri-alert-line me-2"></i>Penting!
+                                                        </h6>
+                                                        <p class="mb-2">Pastikan data yang dimasukkan sudah sesuai dengan
+                                                            dokumen asli (Akte, KK, dll).</p>
+                                                        <p class="mb-0">Surat koreksi ini akan menjadi dokumen resmi
+                                                            untuk pembetulan data di ijazah.</p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Tombol Aksi Final -->
+                                                <div class="col-lg-12">
+                                                    <div class="form-group d-flex justify-content-end gap-3">
+                                                        <button class="btn btn-primary py-3 px-5 fw-semibold text-white"
+                                                            type="submit">
+                                                            Submit
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            // Handler untuk perubahan kelas
+            $('#class_id').on('change', function() {
+                var classId = $(this).val();
+
+                if (classId) {
+                    $('#siswa-container').slideDown();
+
+                    // Hapus opsi siswa sebelumnya dan reset
+                    $('#siswa').empty().trigger('change');
+
+                    // Inisialisasi select2 untuk siswa
+                    initStudentSelect2();
+                } else {
+                    $('#siswa-container').slideUp();
+                    $('#siswa').empty().trigger('change');
+                }
+            });
+
+            // Fungsi inisialisasi select2 untuk siswa
+            function initStudentSelect2() {
+                $('#siswa').select2({
+                    placeholder: 'Cari atau pilih siswa...',
+                    allowClear: true,
+                    minimumInputLength: 0,
+                    ajax: {
+                        url: '{{ route('sk.student.search') }}',
+                        dataType: 'json',
+                        delay: 300,
+                        data: function(params) {
+                            return {
+                                q: params.term || '', // Pastikan selalu string
+                                class_id: $('#class_id').val(),
+                                _token: '{{ csrf_token() }}', // Tambah token CSRF
+                                page: params.page || 1
+                            };
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: data.results || [],
+                                pagination: {
+                                    more: (data.pagination && data.pagination.more) || false
+                                }
+                            };
+                        },
+                        cache: true
+                    }
+                }).on('select2:select', function(e) {
+                    // Set nilai ke hidden input saat siswa dipilih
+                    $('#hidden_student_id').val(e.params.data.id);
+                });
+            }
+
+            // Inisialisasi awal select2 (kosong)
+            initStudentSelect2();
+
+            $(document).on('click', '.next-tab', function() {
+                const target = $(this).data('next');
+                navigateToTab(target);
+            });
+
+            // Fungsi navigasi tab
+            function navigateToTab(target) {
+                // Validasi step 1
+                if (target === 'step2') {
+                    const classId = $('#class_id').val();
+                    const siswaId = $('#siswa').val();
+
+                    if (!classId) {
+                        alert('Pilih kelas terlebih dahulu!');
+                        $('#class_id').focus();
+                        return false;
+                    }
+                    if (!siswaId) {
+                        alert('Pilih siswa terlebih dahulu!');
+                        $('#siswa').select2('open');
+                        return false;
+                    }
+
+                    // Update kompetensi keahlian berdasarkan kelas (contoh)
+                    updateKompetensiKeahlian();
+                }
+
+                // Validasi step 2
+                if (target === 'step3') {
+                    const letterNumber = $('input[name="letter_number"]').val();
+                    const graduationYear = $('input[name="graduation_year"]').val();
+                    const kompetensiKeahlian = $('#kompetensi_keahlian').val();
+                    const content = $('textarea[name="content"]').val();
+                    const issueDate = $('input[name="issue_date"]').val();
+
+                    if (!letterNumber || !graduationYear || !kompetensiKeahlian || !content || !issueDate) {
+                        alert('Harap lengkapi semua field yang wajib diisi!');
+                        return false;
+                    }
+
+                    // Validasi format tahun kelulusan
+                    if (!/^\d{4}$/.test(graduationYear)) {
+                        alert('Format tahun kelulusan harus 4 digit (contoh: 2024)');
+                        $('input[name="graduation_year"]').focus();
+                        return false;
+                    }
+                }
+
+                // Pindah ke tab berikutnya
+                $(`#${target}-tab`).tab('show');
+                updateTabIndicators(target);
+            }
+
+            // Validasi sebelum submit
+            $('#mainForm').on('submit', function(e) {
+                e.preventDefault(); // Prevent default dulu untuk validasi
+
+                // Validasi step 1
+                const classId = $('#class_id').val();
+                const siswaId = $('#siswa').val();
+                if (!classId || !siswaId) {
+                    alert('Harap lengkapi data siswa terlebih dahulu!');
+                    $('#step1-tab').tab('show');
+                    return false;
+                }
+
+                // Validasi step 2
+                const letterNumber = $('input[name="letter_number"]').val();
+                const graduationYear = $('input[name="graduation_year"]').val();
+                const kompetensiKeahlian = $('#kompetensi_keahlian').val();
+                const content = $('textarea[name="content"]').val();
+                const issueDate = $('input[name="issue_date"]').val();
+
+                if (!letterNumber || !graduationYear || !kompetensiKeahlian || !content || !issueDate) {
+                    alert('Harap lengkapi data surat terlebih dahulu!');
+                    $('#step2-tab').tab('show');
+                    return false;
+                }
+
+                // Validasi step 3
+                const fieldName = $('input[name="field_name"]').val();
+                const incorrectData = $('input[name="incorrect_data"]').val();
+                const correctData = $('input[name="correct_data"]').val();
+
+                if (!fieldName || !incorrectData || !correctData) {
+                    alert('Harap lengkapi detail koreksi terlebih dahulu!');
+                    $('#step3-tab').tab('show');
+                    return false;
+                }
+
+                // Validasi data salah vs benar harus beda
+                if (incorrectData.trim().toLowerCase() === correctData.trim().toLowerCase()) {
+                    alert('Data yang SALAH dan data yang BENAR tidak boleh sama!');
+                    $('input[name="correct_data"]').focus();
+                    return false;
+                }
+
+                // Konfirmasi akhir
+                if (!confirm('Apakah Anda yakin ingin menyimpan surat koreksi ini?')) {
+                    return false;
+                }
+
+                // Show loading
+                const submitBtn = $('#submit-btn');
+                submitBtn.prop('disabled', true).html(
+                    '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Menyimpan...'
+                );
+
+                // Submit form setelah semua validasi lolos
+                this.submit();
+            });
+        });
+    </script>
+    <script>
+        function setTemplate(type) {
+            const templates = {
+                'nama-siswa': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Nama Siswa di Ijazah dan Akte Kelahiran.',
+
+                'nama-orangtua': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Nama Orang Tua di Ijazah dan Akte Kelahiran.',
+
+                'tanggal-lahir': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Tanggal Lahir di Ijazah dan Akte Kelahiran.',
+
+                'tempat-lahir': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Tempat Lahir di Ijazah dan Akte Kelahiran.',
+
+                'nomor-ijazah': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Nomor Ijazah di dokumen sekolah dan dokumen asli.',
+
+                'tahun-lulus': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga dengan Kompetensi Keahlian [Jurusan], namun terdapat perbedaan Penulisan Tahun Kelulusan di Ijazah dan dokumen arsip sekolah.',
+
+                'kompetensi-keahlian': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun], namun terdapat perbedaan Penulisan Kompetensi Keahlian di Ijazah dan dokumen sekolah.',
+
+                'umum-koreksi': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan penulisan data di Ijazah dan dokumen resmi lainnya.'
+            };
+
+            const fieldMappings = {
+                'nama-siswa': 'Nama Siswa',
+                'nama-orangtua': 'Nama Orang Tua',
+                'tanggal-lahir': 'Tanggal Lahir',
+                'tempat-lahir': 'Tempat Lahir',
+                'nomor-ijazah': 'Nomor Ijazah',
+                'tahun-lulus': 'Tahun Lulus',
+                'kompetensi-keahlian': 'Kompetensi Keahlian',
+                'umum-koreksi': 'Data Umum Ijazah'
+            };
+
+            // Ambil data dari form
+            const studentName = $('#siswa option:selected').text();
+            const graduationYear = $('input[name="graduation_year"]').val() || '[Tahun]';
+            const kompetensiKeahlian = $('#kompetensi_keahlian').val() || '[Jurusan]';
+
+            if (templates[type]) {
+                let templateText = templates[type];
+
+                // Replace placeholder dengan data aktual
+                templateText = templateText.replace(/\[Tahun\]/g, graduationYear);
+                templateText = templateText.replace(/\[Jurusan\]/g, kompetensiKeahlian);
+
+                // Tambahkan penjelasan perbandingan jika ada data salah & benar
+                const incorrectData = $('input[name="incorrect_data"]').val();
+                const correctData = $('input[name="correct_data"]').val();
+
+                if (incorrectData && correctData) {
+                    templateText += `\n\nDalam Ijazah Tertulis **${incorrectData}** Seharusnya **${correctData}**.`;
+                } else {
+                    templateText += '\n\nDalam Ijazah Tertulis **[Data yang Salah]** Seharusnya **[Data yang Benar]**.';
+                }
+
+                // Isi ke textarea
+                $('textarea[name="content"]').val(templateText);
+
+                // Auto-fill field name
+                if (fieldMappings[type]) {
+                    $('input[name="field_name"]').val(fieldMappings[type]);
+                }
+
+                // Auto-fill contoh untuk data salah & benar berdasarkan template
+                autoFillExampleData(type);
+
+                // Beri feedback
+                showToast('Template berhasil diterapkan!', 'success');
+            }
+        }
+    </script>
+@endpush
