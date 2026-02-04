@@ -18,6 +18,7 @@ class M_Cover_Letters extends Model
         'headmaster_id',
         'letter_number',
         'issue_date',
+        'towards',
         'created_by',
     ];
 
@@ -40,5 +41,10 @@ class M_Cover_Letters extends Model
     public function createdby()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(M_Detail_Cover_Letters::class, 'cover_letter_id');
     }
 }
