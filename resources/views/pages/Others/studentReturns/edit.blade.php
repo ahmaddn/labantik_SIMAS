@@ -18,7 +18,7 @@
                         <span>Surat Pengantar</span>
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
-                        <span>Pindah Sekolah</span>
+                        <span>Pengembalian Siswa</span>
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
                         <span class="text-secondary">Edit Data</span>
@@ -45,7 +45,7 @@
                 <div class="card bg-white border border-white rounded-10 mb-4">
                     <div class="card-body p-20">
                         <h4 class="fs-18 fw-medium mb-20">
-                            Edit Data Surat Pindah Sekolah
+                            Edit Data Surat Pengembalian Siswa
                         </h4>
                         <div class="tab-content" id="myTab2Content">
                             <div aria-labelledby="preview2-tab" class="tab-pane fade show active" id="preview2-tab-pane"
@@ -68,7 +68,7 @@
                                                     Informasi Siswa
                                                 </h4>
                                                 <p class="text-gray-light mb-0">
-                                                    Pilih siswa yang akan pindah
+                                                    Pilih siswa yang akan dikembalikan
                                                 </p>
                                             </div>
                                         </button>
@@ -87,7 +87,26 @@
                                                     Detail Surat
                                                 </h4>
                                                 <p class="text-gray-light mb-0">
-                                                    Isi detail surat pindah
+                                                    Isi detail surat pengembalian
+                                                </p>
+                                            </div>
+                                        </button>
+                                    </li>
+
+                                    <li class="nav-item" role="presentation">
+                                        <button aria-controls="step3-tab-pane" aria-selected="false"
+                                            class="nav-link p-0 d-flex align-items-center" data-bs-target="#step3-tab-pane"
+                                            data-bs-toggle="tab" id="step3-tab" role="tab" type="button">
+                                            <span
+                                                class="fs-20 fw-bold text-primary wh-48 bg-primary bg-opacity-10 rounded-circle d-inline-block">
+                                                3
+                                            </span>
+                                            <div class="text-start ms-3 d-none d-lg-block">
+                                                <h4 class="fs-18 fw-semibold">
+                                                    Alasan Pengembalian
+                                                </h4>
+                                                <p class="text-gray-light mb-0">
+                                                    Tambahkan alasan pengembalian
                                                 </p>
                                             </div>
                                         </button>
@@ -95,7 +114,7 @@
                                 </ul>
 
                                 {{-- Main Form --}}
-                                <form action="{{ route('s_peng.schoolTransfers.update', $transferLetter->id) }}"
+                                <form action="{{ route('others.studentReturns.update', $studentReturn->id) }}"
                                     id="mainForm" method="POST">
                                     @csrf
                                     @method('PUT')
@@ -120,7 +139,7 @@
                                                                 <option value="">Pilih Kelas</option>
                                                                 @foreach ($classes as $class)
                                                                     <option value="{{ $class->id }}"
-                                                                        {{ old('class_id', $transferLetter->student->class_id) == $class->id ? 'selected' : '' }}>
+                                                                        {{ old('class_id', $currentClassId) == $class->id ? 'selected' : '' }}>
                                                                         {{ $class->academic_level }} {{ $class->name }}
                                                                     </option>
                                                                 @endforeach
@@ -144,9 +163,9 @@
                                                             <select name="student_id" id="siswa"
                                                                 class="form-select form-control ps-5 h-55 @error('student_id') is-invalid @enderror"
                                                                 required>
-                                                                <option value="{{ $transferLetter->student_id }}">
-                                                                    {{ $transferLetter->student->student->full_name }} -
-                                                                    {{ $transferLetter->student->student->student_number }}
+                                                                <option value="{{ $studentReturn->student_id }}" selected>
+                                                                    {{ $studentReturn->student->student->full_name }} -
+                                                                    {{ $studentReturn->student->student->student_number }}
                                                                 </option>
                                                             </select>
                                                             <i
@@ -174,7 +193,7 @@
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="letter_number"
                                                                 class="form-control text-dark ps-5 h-55 @error('letter_number') is-invalid @enderror"
-                                                                value="{{ old('letter_number', $transferLetter->letter_number) }}"
+                                                                value="{{ old('letter_number', $studentReturn->letter_number) }}"
                                                                 placeholder="Masukkan Nomor Surat" required>
                                                             <i
                                                                 class="ri-hashtag position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
@@ -186,94 +205,109 @@
                                                     </div>
                                                 </div>
 
-                                                {{-- Tanggal Surat --}}
+                                                {{-- Tanggal Pengembalian --}}
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Tanggal Surat <span class="text-danger">*</span>
+                                                            Tanggal Pengembalian <span class="text-danger">*</span>
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <input type="date" name="issue_date"
-                                                                class="form-control ps-5 h-55 @error('issue_date') is-invalid @enderror"
-                                                                value="{{ old('issue_date', $transferLetter->issue_date) }}"
+                                                            <input type="date" name="return_date"
+                                                                class="form-control ps-5 h-55 @error('return_date') is-invalid @enderror"
+                                                                value="{{ old('return_date', $studentReturn->return_date) }}"
                                                                 required>
                                                             <i
                                                                 class="ri-calendar-check-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
-                                                            @error('issue_date')
+                                                            @error('return_date')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
 
-
-                                                {{-- Sekolah Tujuan --}}
-                                                <div class="col-lg-6">
-                                                    <div class="form-group mb-4">
-                                                        <label class="label fs-16">
-                                                            Sekolah Tujuan <span class="text-danger">*</span>
-                                                        </label>
-                                                        <div class="form-group position-relative">
-                                                            <input type="text" name="destination_school"
-                                                                class="form-control ps-5 h-55 @error('destination_school') is-invalid @enderror"
-                                                                placeholder="Contoh: SMK Negeri 2 Majalengka"
-                                                                value="{{ old('destination_school', $transferLetter->destination_school) }}"
-                                                                required>
-                                                            <i
-                                                                class="ri-school-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
-                                                            @error('destination_school')
-                                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-
+                                        {{-- ===== STEP 3: Alasan Pengembalian ===== --}}
+                                        <div aria-labelledby="step3-tab" class="tab-pane fade" id="step3-tab-pane"
+                                            role="tabpanel" tabindex="0">
+                                            <div class="row">
                                                 {{-- Template Alasan --}}
-                                                {{-- <div class="col-lg-12">
+                                                <div class="col-lg-12">
                                                     <div class="form-group mb-4">
-                                                        <label class="label fs-16">
-                                                            Template Alasan
+                                                        <label class="label fs-16 mb-2">
+                                                            Template Alasan (Opsional)
                                                         </label>
-                                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                                        <div class="d-flex flex-wrap gap-2">
                                                             <button type="button" class="btn btn-sm btn-outline-primary"
-                                                                onclick="setReason('pindah-domisili')">
-                                                                <i class="ri-home-line me-1"></i> Pindah Domisili
+                                                                onclick="addReasonTemplate('pelanggaran')">
+                                                                <i class="ri-error-warning-line me-1"></i> Pelanggaran Tata
+                                                                Tertib
                                                             </button>
                                                             <button type="button" class="btn btn-sm btn-outline-primary"
-                                                                onclick="setReason('orang-tua')">
-                                                                <i class="ri-parent-line me-1"></i> Permintaan Orang Tua
+                                                                onclick="addReasonTemplate('kesehatan')">
+                                                                <i class="ri-heart-pulse-line me-1"></i> Masalah Kesehatan
                                                             </button>
                                                             <button type="button" class="btn btn-sm btn-outline-primary"
-                                                                onclick="setReason('ekonomi')">
-                                                                <i class="ri-money-dollar-circle-line me-1"></i> Alasan
-                                                                Ekonomi
+                                                                onclick="addReasonTemplate('keluarga')">
+                                                                <i class="ri-parent-line me-1"></i> Permintaan Keluarga
                                                             </button>
                                                             <button type="button" class="btn btn-sm btn-outline-primary"
-                                                                onclick="setReason('jurusan')">
-                                                                <i class="ri-book-line me-1"></i> Pindah Jurusan
+                                                                onclick="addReasonTemplate('akademik')">
+                                                                <i class="ri-book-line me-1"></i> Prestasi Akademik Menurun
                                                             </button>
                                                         </div>
                                                     </div>
-                                                </div> --}}
+                                                </div>
 
-                                                {{-- Alasan --}}
-                                                {{-- <div class="col-lg-12">
+                                                {{-- Daftar Alasan --}}
+                                                <div class="col-lg-12">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Alasan Pindah <span class="text-danger">*</span>
+                                                            Alasan Pengembalian <span class="text-danger">*</span>
+                                                            <small class="text-muted">(Minimal 1 alasan)</small>
                                                         </label>
-                                                        <div class="form-group position-relative">
-                                                            <textarea name="reason" id="reason" class="form-control ps-5 @error('reason') is-invalid @enderror"
-                                                                rows="4" placeholder="Masukkan alasan pindah sekolah" required>{{ old('reason', $transferLetter->reason) }}</textarea>
-                                                            <i
-                                                                class="ri-file-text-line position-absolute top-0 start-0 fs-20 text-gray-light ps-20 pt-3"></i>
-                                                            @error('reason')
-                                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                            @enderror
+                                                        <div id="reasons-container">
+                                                            @forelse (old('reasons', $studentReturn->reasons->pluck('reason')->toArray()) as $index => $reason)
+                                                                <div class="reason-item mb-3">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-text">
+                                                                            <i class="ri-file-text-line"></i>
+                                                                        </span>
+                                                                        <textarea name="reasons[]" class="form-control @error('reasons.' . $index) is-invalid @enderror" rows="3"
+                                                                            placeholder="Masukkan alasan pengembalian siswa" required>{{ $reason }}</textarea>
+                                                                        <button type="button" class="btn btn-danger"
+                                                                            onclick="removeReason(this)"
+                                                                            {{ $loop->first && $loop->count == 1 ? 'disabled' : '' }}>
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    @error('reasons.' . $index)
+                                                                        <div class="text-danger fs-14 mt-1">
+                                                                            {{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            @empty
+                                                                <div class="reason-item mb-3">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-text">
+                                                                            <i class="ri-file-text-line"></i>
+                                                                        </span>
+                                                                        <textarea name="reasons[]" class="form-control" rows="3" placeholder="Masukkan alasan pengembalian siswa"
+                                                                            required></textarea>
+                                                                        <button type="button" class="btn btn-danger"
+                                                                            onclick="removeReason(this)" disabled>
+                                                                            <i class="ri-delete-bin-line"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            @endforelse
                                                         </div>
+                                                        <button type="button" class="btn btn-sm btn-primary mt-2"
+                                                            onclick="addReason()">
+                                                            <i class="ri-add-line me-1"></i> Tambah Alasan
+                                                        </button>
                                                     </div>
-                                                </div> --}}
-
+                                                </div>
                                             </div>
                                         </div>
 
@@ -283,7 +317,7 @@
                                     <div class="row mt-4">
                                         <div class="col-lg-12">
                                             <div class="form-group d-flex justify-content-between gap-3">
-                                                <a href="{{ route('s_peng.schoolTransfers.index') }}"
+                                                <a href="{{ route('others.studentReturns.index') }}"
                                                     class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
                                                     <i class="ri-arrow-left-line me-1"></i> Kembali
                                                 </a>
@@ -307,18 +341,25 @@
 @push('scripts')
     <script>
         let siswaSelectInitialized = false;
+        let reasonCounter = {{ old('reasons') ? count(old('reasons')) : $studentReturn->reasons->count() }};
 
-        // ─── Kelas berubah → tampilkan / sembunyikan Siswa ──────────────
+        // ─── Inisialisasi Select2 untuk siswa saat load ─────────────────
+        $(document).ready(function() {
+            initSiswaSelect2();
+            siswaSelectInitialized = true;
+        });
+
+        // ─── Kelas berubah → reload siswa ────────────────────────────────
         $('#class_id').on('change', function() {
             var classId = $(this).val();
 
             if (classId) {
+                $('#siswa').val(null).trigger('change');
+
                 if (!siswaSelectInitialized) {
                     initSiswaSelect2();
                     siswaSelectInitialized = true;
                 }
-            } else {
-                $('#siswa').val(null).trigger('change');
             }
         });
 
@@ -329,7 +370,7 @@
                 allowClear: true,
                 minimumInputLength: 2,
                 ajax: {
-                    url: '{{ route('s_peng.students.search') }}',
+                    url: '{{ route('others.students.search') }}',
                     dataType: 'json',
                     delay: 300,
                     data: function(params) {
@@ -351,22 +392,67 @@
             });
         }
 
-        // // ─── Template alasan pindah ─────────────────────────────────────
-        // function setReason(type) {
-        //     const reasons = {
-        //         'pindah-domisili': 'Siswa yang bersangkutan mengajukan pindah sekolah dikarenakan orang tua/wali pindah domisili ke daerah lain yang mengharuskan siswa untuk melanjutkan pendidikan di sekolah yang lebih dekat dengan tempat tinggal baru.',
-        //         'orang-tua': 'Siswa yang bersangkutan mengajukan pindah sekolah atas permintaan orang tua/wali untuk melanjutkan pendidikan di sekolah lain yang dianggap lebih sesuai dengan kebutuhan dan kondisi keluarga.',
-        //         'ekonomi': 'Siswa yang bersangkutan mengajukan pindah sekolah dikarenakan kondisi ekonomi keluarga yang mengharuskan untuk mencari alternatif sekolah yang lebih terjangkau atau dekat dengan tempat tinggal untuk menghemat biaya transportasi.',
-        //         'jurusan': 'Siswa yang bersangkutan mengajukan pindah sekolah untuk melanjutkan pendidikan dengan jurusan/program keahlian yang lebih sesuai dengan minat dan bakat siswa yang tidak tersedia di sekolah ini.'
-        //     };
+        // ─── Tambah Alasan Baru ──────────────────────────────────────────
+        function addReason() {
+            const container = document.getElementById('reasons-container');
+            const newReason = document.createElement('div');
+            newReason.className = 'reason-item mb-3';
+            newReason.innerHTML = `
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="ri-file-text-line"></i>
+                    </span>
+                    <textarea name="reasons[]" class="form-control" rows="3"
+                        placeholder="Masukkan alasan pengembalian siswa" required></textarea>
+                    <button type="button" class="btn btn-danger" onclick="removeReason(this)">
+                        <i class="ri-delete-bin-line"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(newReason);
+            updateRemoveButtons();
+            reasonCounter++;
+        }
 
-        //     $('#reason').val(reasons[type] || '');
-        // }
+        // ─── Hapus Alasan ────────────────────────────────────────────────
+        function removeReason(button) {
+            button.closest('.reason-item').remove();
+            updateRemoveButtons();
+        }
 
-        // // Initialize Select2 on page load
-        // $(document).ready(function() {
-        //     initSiswaSelect2();
-        //     siswaSelectInitialized = true;
-        // });
+        // ─── Update tombol hapus (disable jika hanya 1 alasan) ──────────
+        function updateRemoveButtons() {
+            const items = document.querySelectorAll('.reason-item');
+            items.forEach((item, index) => {
+                const btn = item.querySelector('.btn-danger');
+                if (items.length === 1) {
+                    btn.disabled = true;
+                } else {
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        // ─── Template Alasan ─────────────────────────────────────────────
+        function addReasonTemplate(type) {
+            const templates = {
+                'pelanggaran': 'Siswa yang bersangkutan telah melakukan pelanggaran tata tertib sekolah secara berulang dan tidak menunjukkan perbaikan perilaku meskipun telah diberikan pembinaan.',
+                'kesehatan': 'Berdasarkan kondisi kesehatan siswa yang memerlukan perhatian khusus dari keluarga dan tidak memungkinkan untuk melanjutkan pembelajaran di sekolah saat ini.',
+                'keluarga': 'Atas permintaan orang tua/wali siswa dengan pertimbangan kondisi keluarga yang memerlukan kehadiran siswa di rumah untuk jangka waktu yang tidak dapat ditentukan.',
+                'akademik': 'Siswa mengalami penurunan prestasi akademik yang signifikan dan memerlukan pendampingan intensif dari keluarga untuk dapat melanjutkan pembelajaran dengan lebih baik.'
+            };
+
+            const container = document.getElementById('reasons-container');
+            const textareas = container.querySelectorAll('textarea[name="reasons[]"]');
+            const lastTextarea = textareas[textareas.length - 1];
+
+            if (lastTextarea.value.trim() === '') {
+                lastTextarea.value = templates[type] || '';
+            } else {
+                addReason();
+                const newTextareas = container.querySelectorAll('textarea[name="reasons[]"]');
+                newTextareas[newTextareas.length - 1].value = templates[type] || '';
+            }
+        }
     </script>
 @endpush
