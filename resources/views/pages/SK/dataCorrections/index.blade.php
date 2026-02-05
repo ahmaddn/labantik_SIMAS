@@ -69,7 +69,7 @@
                                     Tempat, Tanggal Lahir
                                 </th>
                                 <th class="fw-medium" scope="col">
-                                    Status / Keterangan
+                                    Keterangan
                                 </th>
                                 <th class="fw-medium" scope="col">
                                     Dibuat Oleh
@@ -93,11 +93,22 @@
                                         {{ $correction->student->student->full_name ?? '-' }}
                                     </td>
                                     <td class="text-body">
-                                        {{ $correction->student->student->student_number ?? '-' }}
+                                        {{ $correction->student->student->birth_place_date ?? '-' }}
                                     </td>
                                     <td class="text-body">
-                                        {{ $correction->student->class->academic_level ?? '-' }}
-                                        {{ $correction->student->class->name ?? '-' }}
+                                        @if ($correction->correction_type == 'student_name')
+                                            <span class="badge bg-primary">Koreksi Nama Siswa</span>
+                                        @elseif($correction->correction_type == 'parent_name')
+                                            <span class="badge bg-info">Koreksi Nama Orang Tua</span>
+                                        @elseif($correction->correction_type == 'birth_date')
+                                            <span class="badge bg-warning">Koreksi Tanggal Lahir</span>
+                                        @elseif($correction->correction_type == 'birth_place')
+                                            <span class="badge bg-success">Koreksi Tempat Lahir</span>
+                                        @elseif($correction->correction_type == 'diploma_number')
+                                            <span class="badge bg-danger">Koreksi Nomor Ijazah</span>
+                                        @else
+                                            <span class="badge bg-secondary">Koreksi Umum</span>
+                                        @endif
                                     </td>
                                     <td class="text-body">
                                         <span
@@ -116,8 +127,8 @@
                                     <td>
                                         <div class="d-flex justify-content-end" style="gap: 12px;">
                                             <!-- Tombol Preview -->
-                                             <a class="bg-transparent p-0 border-0 hover-text-secondary"
-                                                href="{{ route('sk.generalLetters.preview', $correction->id) }}"
+                                            <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                                href="{{ route('sk.dataCorrections.preview', $correction->id) }}"
                                                 data-bs-placement="top" data-bs-title="View" data-bs-toggle="tooltip">
                                                 <i class="material-symbols-outlined fs-16 fw-normal text-secondary">
                                                     print
@@ -125,7 +136,7 @@
                                             </a>
 
                                             <!-- Tombol Edit -->
-                                            <a href="{{ route('sk.generalLetters.edit', $correction->id) }}"
+                                            <a href="{{ route('sk.dataCorrections.edit', $correction->id) }}"
                                                 class="bg-transparent p-0 border-0 hover-text-success"
                                                 data-bs-placement="top" data-bs-title="Edit" data-bs-toggle="tooltip">
                                                 <i class="material-symbols-outlined fs-16 fw-normal text-body">
@@ -159,7 +170,8 @@
                                                             </div>
                                                             <h5 class="mb-2">Apakah Anda yakin?</h5>
                                                             <p class="text-muted mb-0">
-                                                                Data Surat Keterangan Kesalahan Penulisan Ijazah ini akan dihapus secara
+                                                                Data Surat Keterangan Kesalahan Penulisan Ijazah ini akan
+                                                                dihapus secara
                                                                 permanen dan tidak dapat dikembalikan.
                                                             </p>
                                                             <p class="text-muted mt-2 mb-0">

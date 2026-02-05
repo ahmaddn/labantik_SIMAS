@@ -62,9 +62,6 @@ Route::middleware(['auth'])->group(function () {
 
         // Surat Pengantar
         Route::resource('coverLetters', CoverLettersController::class);
-        Route::get('cover-letters/{id}/preview', [CoverLettersController::class, 'print'])->name('coverLetters.print');
-        Route::post('cover-letters/{id}/increment-download', [CoverLettersController::class, 'incrementDownload'])->name('coverLetters.increment-download');
-
 
         // Pengantar Pindah
         Route::resource('schoolTransfers', SchoolTransfersController::class);
@@ -83,6 +80,13 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('dataCorrections', DataCorrectionsController::class);
         Route::get('/dataCorrections/refstudents/search', [DataCorrectionsController::class, 'search'])
             ->name('student.search');
+        Route::get('/class/detail/{id}', [DataCorrectionsController::class, 'getClassDetail'])
+            ->name('class.detail');
+        Route::get('/sk/student/detail/{id}', [DataCorrectionsController::class, 'getStudentDetail'])
+            ->name('student.detail');
+        Route::get('/dataCorrections/preview/{id}', [DataCorrectionsController::class, 'preview'])->name('dataCorrections.preview');
+        Route::post('/dataCorrections/{id}/increment-download', [DataCorrectionsController::class, 'incrementDownload'])
+            ->name('dataCorrections.increment-download');
 
         // Umum (Siswa)
         Route::resource('generalLetters', GeneralLettersController::class);
@@ -90,7 +94,7 @@ Route::middleware(['auth'])->group(function () {
             ->name('students.search');
         Route::get('/generalLetters/preview/{id}', [GeneralLettersController::class, 'preview'])->name('generalLetters.preview');
         Route::post('/generalLetter/{id}/increment-download', [GeneralLettersController::class, 'incrementDownload'])
-            ->name('travelOrders.increment-download');
+            ->name('generalLetters.increment-download');
     });
 
     // Surat Lain
