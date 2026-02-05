@@ -126,19 +126,12 @@
             padding-left: 100px;
         }
 
-        .header::after {
-            content: '';
-            display: block;
-            border-bottom: 1px solid #000;
-            margin-top: 3px;
-        }
-
         .header img {
             position: absolute;
             left: 0;
             top: 0;
             width: auto;
-            height: 115px;
+            height: 120px;
         }
 
         .header-text {
@@ -153,14 +146,14 @@
         }
 
         .header h3 {
-            font-size: 11pt;
+            font-size: 14pt;
             font-weight: bold;
             text-transform: uppercase;
             line-height: 1.2;
         }
 
         .header h2 {
-            font-size: 13pt;
+            font-size: 18pt;
             font-weight: bold;
             text-transform: uppercase;
             margin: 2px 0;
@@ -173,8 +166,8 @@
         }
 
         .header .address {
-            font-family: Tahoma, Arial, sans-serif;
-            font-size: 7pt;
+            font-family: Tahoma;
+            font-size: 9pt;
             font-weight: normal;
             text-align: center;
             line-height: 1.4;
@@ -195,7 +188,7 @@
         }
 
         .content {
-            font-size: 11pt;
+            font-size: 10pt;
             line-height: 1.4;
         }
 
@@ -336,10 +329,10 @@
                 alt="Logo Jabar">
             <div class="header-text">
                 <h3>PEMERINTAH DAERAH PROVINSI JAWA BARAT</h3>
-                <h3>CABANG DINAS PENDIDIKAN WILAYAH IX</h3>
-                <h2>SEKOLAH MENENGAH KEJURUAN NEGERI 1 TALAGA</h2>
-                <p>Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen</p>
+                <h2>CABANG DINAS PENDIDIKAN WILAYAH IX</h2>
+                <h3>SEKOLAH MENENGAH KEJURUAN NEGERI 1 TALAGA</h3>
                 <div class="address">
+                    Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen
                     Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br>
                     Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br>
                     Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;

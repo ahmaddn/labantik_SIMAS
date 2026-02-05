@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('m_detail_cover_letters', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('cover_letter_id');
-            $table->string('documet_sent');
+            $table->string('document_sent');
             $table->integer('qty');
             $table->text('notes')->nullable();
             $table->timestamps();

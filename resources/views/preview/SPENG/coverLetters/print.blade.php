@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surat Undangan - {{ $invitation->letter_number }}</title>
+    <title>Surat Pengantar - {{ $coverLetter->letter_number }}</title>
     <style>
         /* --- RESET & FONT --- */
         * {
@@ -109,7 +109,7 @@
             background-color: white;
             width: 210mm;
             min-height: 297mm;
-            padding: 15mm 20mm;
+            padding: 10mm 20mm;
             margin: 0 auto;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
@@ -118,22 +118,20 @@
 
         /* --- KOP SURAT --- */
         .header {
-            text-align: center;
-            border-bottom: 3px solid #000;
+            border-bottom: 4px double #000;
             padding-bottom: 5px;
-            padding-left: 100px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             position: relative;
             min-height: 100px;
+            padding-left: 100px;
         }
-
 
         .header img {
             position: absolute;
             left: 0;
             top: 0;
             width: auto;
-            height: 120px;
+            height: 115px;
         }
 
         .header-text {
@@ -142,7 +140,6 @@
 
         .header h3,
         .header h2,
-        .header h4,
         .header p {
             margin: 0;
         }
@@ -151,7 +148,7 @@
             font-size: 14pt;
             font-weight: bold;
             text-transform: uppercase;
-            line-height: 1.2;
+            line-height: 1.15;
         }
 
         .header h2 {
@@ -163,8 +160,8 @@
 
         .header p {
             font-size: 8pt;
-            line-height: 1.2;
-            margin: 1px 0;
+            line-height: 1.15;
+            margin: 0;
         }
 
         .header .address {
@@ -172,137 +169,149 @@
             font-size: 9pt;
             font-weight: normal;
             text-align: center;
-            line-height: 1.4;
+            line-height: 1.3;
             color: #000;
+            margin-top: 2px;
         }
 
         .header .address a {
-            text-decoration: none;
-            color: #000;
+            text-decoration: underline;
+            color: blue;
         }
 
-        /* --- TANGGAL & INFO SURAT --- */
-        .date-section {
-            text-align: right;
-            margin-top: 15px;
-            margin-bottom: 15px;
+        /* --- JUDUL SURAT --- */
+        .title-section {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .title-section h2 {
+            font-size: 12pt;
+            text-decoration: underline;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .title-section p {
             font-size: 11pt;
+            margin: 5px 0 0 0;
         }
 
-        .content {
+        /* --- TUJUAN --- */
+        .recipient-section {
+            width: 100%;
+            margin-bottom: 20px;
             font-size: 10pt;
-            line-height: 1.4;
+            position: relative;
         }
 
-        .info-table {
+        .recipient-right {
+            margin-left: 55%;
+        }
+
+        .recipient-table {
+            border-collapse: collapse;
+        }
+
+        .recipient-table td {
+            vertical-align: top;
+            padding-bottom: 2px;
+        }
+
+        .recipient-table td:first-child {
+            padding-right: 5px;
+        }
+
+        .recipient-indent {
+            padding-left: 20px;
+        }
+
+        /* --- TABEL ISI --- */
+        .content-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
-        }
-
-        .info-table td {
-            vertical-align: top;
-            padding: 2px 0;
-        }
-
-        .label-col {
-            width: 70px;
-        }
-
-        .colon-col {
-            width: 15px;
-        }
-
-        /* --- PENERIMA --- */
-        .recipient-block {
-            margin-left: 0;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        /* --- ISI TEXT --- */
-        .greeting {
-            margin-top: 15px;
-            font-style: italic;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .paragraph {
-            text-align: justify;
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-
-        /* --- JADWAL (Hari, Tanggal, dll) --- */
-        .schedule-table {
-            margin-left: 60px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border-collapse: collapse;
-        }
-
-        .schedule-table td {
-            padding: 3px 0;
-            vertical-align: top;
-        }
-
-        .sch-label {
-            width: 90px;
-        }
-
-        .sch-colon {
-            width: 15px;
-            text-align: left;
-        }
-
-        /* --- PENUTUP & TTD --- */
-        .closing {
-            margin-top: 15px;
-            text-align: justify;
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-
-        .closing-greeting {
-            font-style: italic;
-            font-weight: bold;
-            margin-top: 10px;
+            font-size: 10pt;
             margin-bottom: 20px;
         }
 
-        .signature-section {
-            margin-top: 20px;
-            margin-left: 55%;
-            text-align: left;
+        .content-table th,
+        .content-table td {
+            border: 1px solid black;
+            padding: 10px;
+            vertical-align: top;
+        }
+
+        .content-table th {
+            text-align: center;
+            font-weight: bold;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        .col-no {
+            width: 5%;
+            text-align: center;
+        }
+
+        .col-document {
             width: 45%;
         }
 
-        .kepala-sekolah {
+        .col-qty {
+            width: 15%;
+            text-align: center;
+        }
+
+        .col-notes {
+            width: 35%;
+        }
+
+        /* --- TANDA TANGAN --- */
+        .signature-area {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 10pt;
+        }
+
+        .signature-left {
+            width: 40%;
+            margin-top: 80px;
+        }
+
+        .signature-right {
+            width: 40%;
+            text-align: center;
+        }
+
+        .position-title {
             margin-bottom: 70px;
         }
 
-        .nama-kepsek {
+        .name-underline {
             font-weight: bold;
             text-decoration: underline;
-            display: block;
+            margin-bottom: 2px;
+        }
+
+        .underline-blank {
+            display: inline-block;
+            border-bottom: 1px solid black;
+            min-width: 150px;
         }
 
         /* Print-specific adjustments */
         @media print {
             .header {
-                border-bottom: 3px solid #000;
-            }
-
-            .header::after {
-                border-bottom: 1px solid #000;
+                border-bottom: 4px double #000;
             }
 
             .header img {
-                height: 110px;
+                height: 115px;
             }
 
-            .signature-section {
+            .signature-area {
                 page-break-inside: avoid;
             }
         }
@@ -313,10 +322,10 @@
 <body>
     <!-- TOMBOL AKSI -->
     <div class="action-buttons">
-        <a href="{{ route('su.parentInvitations.index') }}" class="btn btn-back">
+        <a href="{{ route('s_peng.coverLetters.index') }}" class="btn btn-back">
             <i class="fa-solid fa-arrow-left"></i> Kembali
         </a>
-        <a href="{{ route('su.parentInvitations.edit', $invitation->id) }}" class="btn btn-edit">
+        <a href="{{ route('s_peng.coverLetters.edit', $coverLetter->id) }}" class="btn btn-edit">
             <i class="fa-solid fa-edit"></i> Edit
         </a>
         <button onclick="handlePrint()" class="btn btn-print">
@@ -349,122 +358,123 @@
             </div>
         </div>
 
-        <!-- TANGGAL DI KANAN -->
-        <div class="date-section">
-            Talaga, {{ \Carbon\Carbon::parse($invitation->issue_date)->locale('id')->isoFormat('D MMMM YYYY') }}
+        <!-- JUDUL SURAT -->
+        <div class="title-section">
+            <h2>SURAT PENGANTAR</h2>
+            <p>Nomor : {{ $coverLetter->letter_number }}</p>
         </div>
 
-        <div class="content">
-            <!-- NOMOR SURAT -->
-            <table class="info-table">
-                <tr>
-                    <td class="label-col">Nomor</td>
-                    <td class="colon-col">:</td>
-                    <td>{{ $invitation->letter_number }}</td>
-                </tr>
-                <tr>
-                    <td class="label-col">Lampiran</td>
-                    <td class="colon-col">:</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td class="label-col">Perihal</td>
-                    <td class="colon-col">:</td>
-                    <td>Undangan</td>
-                </tr>
-            </table>
-
-            <!-- KEPADA -->
-            <div class="recipient-block">
-                Kepada<br>
-                Yth. {{ $invitation->to ?? 'Bapak/Ibu Orang Tua/Wali Siswa/i' }}<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;di<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tempat
-            </div>
-
-            <!-- SALAM PEMBUKA -->
-            <div class="greeting">
-                Assalamu'alaikum Warohmatullohi Wabarokatuh.
-            </div>
-
-            <!-- PARAGRAF 1 -->
-            <div class="paragraph">
-                Salam silaturahmi teriring do'a kami sampaikan semoga tetap dalam lindungan Allah SWT dan diberikan
-                kesehatan dalam menjalankan aktifitas kesehariannya.
-            </div>
-
-            <!-- PARAGRAF 2 (Purpose) -->
-            <div class="paragraph">
-                {{ $invitation->purpose ?? 'Sehubungan ada beberapa informasi yang perlu disampaikan dan di musyawarahkan mengenai Program Sekolah SMK Negeri 1 Talaga, maka kami mengundang Bapak/Ibu Orang Tua/Wali Siswa/i untuk hadir dalam kegiatan tersebut.' }}
-            </div>
-
-            <!-- PARAGRAF 3 -->
-            <div class="paragraph">
-                Adapun kegiatan tersebut akan dilaksanakan pada :
-            </div>
-
-            <!-- DETAIL JADWAL -->
-            <table class="schedule-table">
-                <tr>
-                    <td class="sch-label">Hari</td>
-                    <td class="sch-colon">:</td>
-                    <td>{{ $invitation->meeting_day ?? '............................................' }}</td>
-                </tr>
-                <tr>
-                    <td class="sch-label">Tanggal</td>
-                    <td class="sch-colon">:</td>
-                    <td>
-                        @if ($invitation->meeting_date)
-                            {{ \Carbon\Carbon::parse($invitation->meeting_date)->locale('id')->isoFormat('D MMMM YYYY') }}
-                        @else
-                            ............................................
-                        @endif
-                    </td>
-                </tr>
-                <tr>
-                    <td class="sch-label">Waktu</td>
-                    <td class="sch-colon">:</td>
-                    <td>{{ $invitation->meeting_time ?? '............................................' }}</td>
-                </tr>
-                <tr>
-                    <td class="sch-label">Tempat/Ruang</td>
-                    <td class="sch-colon">:</td>
-                    <td>{{ $invitation->meeting_place ?? '............................................' }}</td>
-                </tr>
-                @if ($invitation->meeting_with)
+        <!-- TUJUAN -->
+        <div class="recipient-section">
+            <div class="recipient-right">
+                <table class="recipient-table">
                     <tr>
-                        <td class="sch-label">Menghadap</td>
-                        <td class="sch-colon">:</td>
-                        <td>{{ $invitation->meeting_with }}</td>
+                        <td></td>
+                        <td>Talaga,
+                            {{ \Carbon\Carbon::parse($coverLetter->issue_date)->locale('id')->isoFormat('D MMMM YYYY') }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Kepada</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;">Yth.</td>
+                        <td>{!! nl2br(e($coverLetter->towards)) !!}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="recipient-indent">di</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="recipient-indent" style="font-style: italic;">Tempat</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- TABEL ISI -->
+        <table class="content-table">
+            <thead>
+                <tr>
+                    <th class="col-no">NO</th>
+                    <th class="col-document">NASKAH DINAS YANG DIKIRIMKAN</th>
+                    <th class="col-qty">BANYAKNYA</th>
+                    <th class="col-notes">KETERANGAN</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if ($coverLetter->details && $coverLetter->details->count() > 0)
+                    @foreach ($coverLetter->details as $index => $detail)
+                        <tr>
+                            <td class="col-no">{{ $index + 1 }}.</td>
+                            <td class="col-document">{{ $detail->document_sent ?? '-' }}</td>
+                            <td class="col-qty">
+                                {{ $detail->qty ?? '-' }}
+                                @if ($detail->qty)
+                                    <br>Bundel
+                                @endif
+                            </td>
+                            <td class="col-notes">
+                                {{ $detail->notes ?? 'Disampaikan dengan hormat, agar menjadi maklum dan untuk dapat penyelesaian sebagaimana mestinya.' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td class="col-no">1.</td>
+                        <td class="col-document" style="height: 150px;">&nbsp;</td>
+                        <td class="col-qty">1 ( Satu )<br>Bundel</td>
+                        <td class="col-notes">Disampaikan dengan hormat, agar menjadi maklum dan untuk dapat
+                            penyelesaian sebagaimana mestinya.</td>
                     </tr>
                 @endif
-            </table>
+            </tbody>
+        </table>
 
-            <!-- PENUTUP -->
-            <div class="closing">
-                Demikian Undangan ini kami sampaikan, atas perhatian dan kehadirannya kami ucapkan terima kasih.
+        <!-- TANDA TANGAN -->
+        <div class="signature-area">
+            <div class="signature-left">
+                <div>Diterima Tanggal: <span class="underline-blank"></span></div>
+                <div style="margin-top: 5px;">Yang Menerima,</div>
+                <div style="margin-top: 70px;">
+                    <span class="underline-blank" style="min-width: 200px;"></span>
+                </div>
             </div>
 
-            <!-- SALAM PENUTUP -->
-            <div class="closing-greeting">
-                Wassalamu'alaikum Warohmatullohi Wabarokatuh.
+            <div class="signature-right">
+                <div class="position-title">
+                    @if ($coverLetter->headmaster)
+                        {{ $coverLetter->headmaster->position ?? 'Kepala Sekolah' }}
+                    @else
+                        Kepala Sekolah
+                    @endif
+                </div>
+
+                <span class="name-underline">
+                    @if ($coverLetter->headmaster)
+                        {{ $coverLetter->headmaster->name ?? 'MUCHAMAD EKI S.A., S.Kom' }}
+                    @else
+                        MUCHAMAD EKI S.A., S.Kom
+                    @endif
+                </span>
+                <div>
+                    @if ($coverLetter->headmaster && $coverLetter->headmaster->nip)
+                        NIP. {{ $coverLetter->headmaster->nip }}
+                    @else
+                        NIP. 197610012006041011
+                    @endif
+                </div>
             </div>
-
-            <!-- TANDA TANGAN -->
-            <div class="signature-section">
-                <div class="kepala-sekolah">Kepala SMKN 1 Talaga</div>
-
-                <span class="nama-kepsek">MUCHAMAD EKI S.A., S.Kom</span>
-                <span>NIP. 197610012006041011</span>
-            </div>
-
         </div>
+
     </div>
 
     <script>
         function handlePrint() {
             // Kirim request untuk increment download count
-            fetch("{{ route('su.parentInvitations.increment-download', $invitation->id) }}", {
+            fetch("{{ route('s_peng.coverLetters.increment-download', $coverLetter->id) }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

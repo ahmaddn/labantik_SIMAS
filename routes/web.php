@@ -62,6 +62,9 @@ Route::middleware(['auth'])->group(function () {
 
         // Surat Pengantar
         Route::resource('coverLetters', CoverLettersController::class);
+        Route::get('cover-letters/{id}/preview', [CoverLettersController::class, 'print'])->name('coverLetters.print');
+        Route::post('cover-letters/{id}/increment-download', [CoverLettersController::class, 'incrementDownload'])->name('coverLetters.increment-download');
+
 
         // Pengantar Pindah
         Route::resource('schoolTransfers', SchoolTransfersController::class);
