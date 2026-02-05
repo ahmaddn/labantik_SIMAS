@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surat Pengantar - {{ $coverLetter->letter_number }}</title>
+    <title>Surat Pengantar Pindah Sekolah - {{ $schoolTransfers->letter_number }}</title>
     <style>
         /* --- RESET & FONT --- */
         * {
@@ -15,7 +15,7 @@
 
         body {
             background-color: #f0f0f0;
-            font-family: Arial;
+            font-family: Arial, Helvetica, sans-serif;
             font-size: 11pt;
             line-height: 1.4;
             margin: 0;
@@ -179,126 +179,122 @@
             color: blue;
         }
 
-        /* --- JUDUL SURAT --- */
-        .title-section {
-            text-align: center;
-            margin-top: 20px;
+        /* --- HEADER TANGGAL & TUJUAN --- */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 11pt;
             margin-bottom: 30px;
         }
 
-        .title-section h2 {
-            font-size: 12pt;
-            text-decoration: underline;
-            margin: 0;
-            font-weight: bold;
+        .header-kiri {
+            width: 60%;
         }
 
-        .title-section p {
-            font-size: 11pt;
-            margin: 5px 0 0 0;
-        }
-
-        /* --- TUJUAN --- */
-        .recipient-section {
-            width: 100%;
-            margin-bottom: 20px;
-            font-size: 10pt;
-            position: relative;
-        }
-
-        .recipient-right {
-            margin-left: 55%;
-        }
-
-        .recipient-table {
-            border-collapse: collapse;
-        }
-
-        .recipient-table td {
-            vertical-align: top;
-            padding-bottom: 2px;
-        }
-
-        .recipient-table td:first-child {
-            padding-right: 5px;
-        }
-
-        .recipient-indent {
-            padding-left: 20px;
-        }
-
-        /* --- TABEL ISI --- */
-        .content-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 10pt;
-            margin-bottom: 20px;
-        }
-
-        .content-table th,
-        .content-table td {
-            border: 1px solid black;
-            padding: 10px;
-            vertical-align: top;
-        }
-
-        .content-table th {
-            text-align: center;
-            font-weight: bold;
-            padding-top: 15px;
-            padding-bottom: 15px;
-        }
-
-        .col-no {
-            width: 5%;
-            text-align: center;
-        }
-
-        .col-document {
-            width: 45%;
-        }
-
-        .col-qty {
-            width: 15%;
-            text-align: center;
-        }
-
-        .col-notes {
+        .header-kanan {
             width: 35%;
         }
 
-        /* --- TANDA TANGAN --- */
-        .signature-area {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            font-size: 10pt;
+        .nomor-lampiran-table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .signature-left {
-            width: 40%;
-            margin-top: 80px;
+        .nomor-lampiran-table td {
+            vertical-align: top;
+            padding-bottom: 3px;
         }
 
-        .signature-right {
-            width: 40%;
+        .label-cell {
+            width: 60px;
+            white-space: nowrap;
+        }
+
+        .titik-dua {
+            width: 10px;
             text-align: center;
         }
 
-        .position-title {
-            margin-bottom: 70px;
+        .tanggal-section {
+            text-align: right;
+            margin-bottom: 5px;
+            font-size: 11pt;
+            margin-right: 0;
         }
 
-        .name-underline {
+        /* --- ISI SURAT --- */
+        .isi-surat {
+            font-size: 11pt;
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        .paragraf {
+            margin-bottom: 15px;
+        }
+
+        /* --- DATA SISWA --- */
+        .data-siswa {
+            margin-left: 40px;
+            margin-bottom: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table td {
+            vertical-align: top;
+            padding-bottom: 5px;
+            font-size: 11pt;
+        }
+
+        .data-label {
+            width: 160px;
+        }
+
+        .data-separator {
+            width: 20px;
+            text-align: center;
+        }
+
+        .data-content {
+            font-weight: bold;
+        }
+
+        /* --- TANDA TANGAN --- */
+        .ttd-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 40px;
+            font-size: 11pt;
+        }
+
+        .ttd-box {
+            width: 250px;
+            text-align: left;
+        }
+
+        .ttd-nama {
             font-weight: bold;
             text-decoration: underline;
+            margin-top: 70px;
             margin-bottom: 2px;
         }
 
-        .underline-blank {
-            display: inline-block;
-            border-bottom: 1px solid black;
-            min-width: 150px;
+        /* Helper styling */
+        .bold {
+            font-weight: bold;
+        }
+
+        .underline {
+            text-decoration: underline;
+        }
+
+        .italic {
+            font-style: italic;
         }
 
         /* Print-specific adjustments */
@@ -310,10 +306,6 @@
             .header img {
                 height: 115px;
             }
-
-            .signature-area {
-                page-break-inside: avoid;
-            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -322,10 +314,10 @@
 <body>
     <!-- TOMBOL AKSI -->
     <div class="action-buttons">
-        <a href="{{ route('s_peng.coverLetters.index') }}" class="btn btn-back">
+        <a href="{{ route('s_peng.schoolTransfers.index') }}" class="btn btn-back">
             <i class="fa-solid fa-arrow-left"></i> Kembali
         </a>
-        <a href="{{ route('s_peng.coverLetters.edit', $coverLetter->id) }}" class="btn btn-edit">
+        <a href="{{ route('s_peng.schoolTransfers.edit', $schoolTransfers->id) }}" class="btn btn-edit">
             <i class="fa-solid fa-edit"></i> Edit
         </a>
         <button onclick="handlePrint()" class="btn btn-print">
@@ -343,11 +335,11 @@
                 <h2>CABANG DINAS PENDIDIKAN WILAYAH IX</h2>
                 <h3>SEKOLAH MENENGAH KEJURUAN NEGERI 1 TALAGA</h3>
                 <div class="address">
-                    Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen
+                    Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen<br>
                     Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br>
                     Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br>
-                    Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;
-                    FAX <i class="fa-solid fa-fax"></i> (0233) 319238 &nbsp;
+                    Telpon <i class="fa-solid fa-phone"></i> (0233) 319236 &nbsp;
+                    FAX <i class="fa-solid fa-fax"></i> (0233) 319236 &nbsp;
                     POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp;
                     NPSN: 20213872<br>
                     Website <i class="fa-solid fa-globe"></i>
@@ -358,110 +350,121 @@
             </div>
         </div>
 
-        <!-- JUDUL SURAT -->
-        <div class="title-section">
-            <h2>SURAT PENGANTAR</h2>
-            <p>Nomor : {{ $coverLetter->letter_number }}</p>
+        <!-- HEADER TANGGAL, NOMOR, TUJUAN -->
+        <div class="tanggal-section">
+            Talaga, {{ \Carbon\Carbon::parse($schoolTransfers->issue_date)->locale('id')->isoFormat('D MMMM YYYY') }}
         </div>
 
-        <!-- TUJUAN -->
-        <div class="recipient-section">
-            <div class="recipient-right">
-                <table class="recipient-table">
+        <div class="header-section">
+            <div class="header-kiri">
+                <table class="nomor-lampiran-table">
                     <tr>
-                        <td></td>
-                        <td>Talaga,
-                            {{ \Carbon\Carbon::parse($coverLetter->issue_date)->locale('id')->isoFormat('D MMMM YYYY') }}
-                        </td>
+                        <td class="label-cell">Nomor</td>
+                        <td class="titik-dua">:</td>
+                        <td>{{ $schoolTransfers->letter_number }}</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td>Kepada</td>
+                        <td class="label-cell">Lampiran</td>
+                        <td class="titik-dua">:</td>
+                        <td>-</td>
                     </tr>
                     <tr>
-                        <td style="vertical-align: top;">Yth.</td>
-                        <td>{!! nl2br(e($coverLetter->towards)) !!}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td class="recipient-indent">di</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td class="recipient-indent" style="font-style: italic;">Tempat</td>
+                        <td class="label-cell">Perihal</td>
+                        <td class="titik-dua">:</td>
+                        <td class="bold underline">Pengantar Pindah Sekolah</td>
                     </tr>
                 </table>
             </div>
+
+            <div class="header-kanan">
+                Kepada<br>
+                Yth. Kepala {{ $schoolTransfers->destination_school }}<br>
+                <span style="padding-left: 25px;">di</span><br>
+                <span style="padding-left: 25px;" class="italic">Tempat</span>
+            </div>
         </div>
 
-        <!-- TABEL ISI -->
-        <table class="content-table">
-            <thead>
-                <tr>
-                    <th class="col-no">NO</th>
-                    <th class="col-document">NASKAH DINAS YANG DIKIRIMKAN</th>
-                    <th class="col-qty">BANYAKNYA</th>
-                    <th class="col-notes">KETERANGAN</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if ($coverLetter->details && $coverLetter->details->count() > 0)
-                    @foreach ($coverLetter->details as $index => $detail)
-                        <tr>
-                            <td class="col-no">{{ $index + 1 }}.</td>
-                            <td class="col-document">{{ $detail->document_sent ?? '-' }}</td>
-                            <td class="col-qty">
-                                {{ $detail->qty ?? '-' }}
-                                @if ($detail->qty)
-                                    <br>Bundel
-                                @endif
-                            </td>
-                            <td class="col-notes">
-                                {{ $detail->notes ?? 'Disampaikan dengan hormat, agar menjadi maklum dan untuk dapat penyelesaian sebagaimana mestinya.' }}
-                            </td>
-                        </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td class="col-no">1.</td>
-                        <td class="col-document" style="height: 150px;">&nbsp;</td>
-                        <td class="col-qty">1 ( Satu )<br>Bundel</td>
-                        <td class="col-notes">Disampaikan dengan hormat, agar menjadi maklum dan untuk dapat
-                            penyelesaian sebagaimana mestinya.</td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
-
-        <!-- TANDA TANGAN -->
-        <div class="signature-area">
-            <div class="signature-left">
-                <div>Diterima Tanggal: <span class="underline-blank"></span></div>
-                <div style="margin-top: 5px;">Yang Menerima,</div>
-                <div style="margin-top: 70px;">
-                    <span class="underline-blank" style="min-width: 200px;"></span>
-                </div>
+        <!-- ISI SURAT -->
+        <div class="isi-surat">
+            <div class="paragraf">
+                Dengan Hormat,
             </div>
 
-            <div class="signature-right">
-                <div class="position-title">
-                    @if ($coverLetter->headmaster)
-                        {{ $coverLetter->headmaster->position ?? 'Kepala Sekolah' }}
-                    @else
-                        Kepala Sekolah
-                    @endif
-                </div>
+            <div class="paragraf">
+                Berdasarkan Surat Permohonan Pindah Sekolah dari Orang Tua/Wali Siswa yang bernama
+                <span class="bold">{{ strtoupper($schoolTransfers->student->student->mother_name ?? '-') }}</span>
+                untuk Siswa :
+            </div>
 
-                <span class="name-underline">
-                    @if ($coverLetter->headmaster)
-                        {{ $coverLetter->headmaster->name ?? 'MUCHAMAD EKI S.A., S.Kom' }}
+            <div class="data-siswa">
+                <table class="data-table">
+                    <tr>
+                        <td class="data-label">Nama</td>
+                        <td class="data-separator">:</td>
+                        <td class="data-content">{{ strtoupper($schoolTransfers->student->student->full_name ?? '-') }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Tempat, Tanggal Lahir</td>
+                        <td class="data-separator">:</td>
+                        <td>
+                            {{ $schoolTransfers->student->student->birth_place_date ?? '-' }},
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">NIS</td>
+                        <td class="data-separator">:</td>
+                        <td>{{ $schoolTransfers->student->student->student_number ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Kelas</td>
+                        <td class="data-separator">:</td>
+                        <td>{{ $schoolTransfers->student->class->academic_level ?? '-' }}
+                            {{ $schoolTransfers->student->class->name ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Program Keahlian</td>
+                        <td class="data-separator">:</td>
+                        <td>{{ $schoolTransfers->student->class->expertiseProgram->name ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="data-label">Alamat</td>
+                        <td class="data-separator">:</td>
+                        <td>{{ $schoolTransfers->student->student->address ?? '-' }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="paragraf">
+                Maka pada prinsipnya kami tidak keberatan untuk pindah ke <span
+                    class="bold">{{ strtoupper($schoolTransfers->destination_school) }}</span>.
+            </div>
+
+            <div class="paragraf">
+                Demikian Surat pengantar ini kami sampaikan untuk dipergunakan sebagaimana mestinya.
+            </div>
+        </div>
+
+        <!-- TANDA TANGAN -->
+        <div class="ttd-container">
+            <div class="ttd-box">
+                Hormat Kami,<br>
+                @if ($schoolTransfers->headmaster)
+                    {{ $schoolTransfers->headmaster->position ?? 'Kepala Sekolah' }}
+                @else
+                    Kepala Sekolah
+                @endif
+
+                <div class="ttd-nama">
+                    @if ($schoolTransfers->headmaster)
+                        {{ strtoupper($schoolTransfers->headmaster->name ?? 'MUCHAMAD EKI S.A., S.Kom') }}
                     @else
                         MUCHAMAD EKI S.A., S.Kom
                     @endif
-                </span>
+                </div>
                 <div>
-                    @if ($coverLetter->headmaster && $coverLetter->headmaster->nip)
-                        NIP. {{ $coverLetter->headmaster->nip }}
+                    @if ($schoolTransfers->headmaster && $schoolTransfers->headmaster->nip)
+                        NIP. {{ $schoolTransfers->headmaster->nip }}
                     @else
                         NIP. 197610012006041011
                     @endif
@@ -474,7 +477,7 @@
     <script>
         function handlePrint() {
             // Kirim request untuk increment download count
-            fetch("{{ route('s_peng.coverLetters.increment-download', $coverLetter->id) }}", {
+            fetch("{{ route('s_peng.schoolTransfers.increment-download', $schoolTransfers->id) }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
