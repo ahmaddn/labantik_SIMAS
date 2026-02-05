@@ -229,4 +229,14 @@ class SchoolTransfersController extends Controller
             ]
         ]);
     }
+
+    public function incrementDownload(string $id)
+    {
+        $schoolTransfers = M_School_Transfer_Letters::with(['details', 'createdBy'])
+            ->findOrFail($id);
+
+        // Increment download count
+        $schoolTransfers->increment('download_count');
+        return view('preview.SPENG.schoolTransfers.print', compact('schoolTransfers'));
+    }
 }

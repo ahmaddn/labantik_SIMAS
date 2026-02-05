@@ -282,7 +282,7 @@ class CoverLettersController extends Controller
             ->findOrFail($id);
 
         // Increment download count
-        $coverLetter->increment(column: 'download_count');
+        $coverLetter->increment('download_count');
 
         return view('preview.SPENG.coverLetters.print', compact('coverLetter'));
     }
