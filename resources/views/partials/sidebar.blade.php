@@ -133,7 +133,7 @@
              </li>
              <li class="menu-item open">
                  <a class="menu-link {{ request()->routeIs('sk.dataCorrections.index') ? 'active' : '' }}"
-                     href="{{ route('sk.dataCorrections.index') }};">
+                     href="{{ route('sk.dataCorrections.index') }}">
                      <span class="material-symbols-outlined menu-icon">
                          scan_delete
                      </span>
