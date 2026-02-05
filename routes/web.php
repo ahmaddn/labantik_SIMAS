@@ -68,6 +68,10 @@ Route::middleware(['auth'])->group(function () {
 
         // Pengantar Pindah
         Route::resource('schoolTransfers', SchoolTransfersController::class);
+        Route::get('schoolTransfers/{id}/preview', [SchoolTransfersController::class, 'print'])->name('schoolTransfers.print');
+        Route::post('schoolTransfers/{id}/increment-download', [SchoolTransfersController::class, 'incrementDownload'])->name('schoolTransfers.increment-download');
+        Route::get('/schoolTransfers/students/search', [SchoolTransfersController::class, 'searchStudents'])
+            ->name('students.search');
     });
 
     // Surat Keterangan
