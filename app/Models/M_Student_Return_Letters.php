@@ -47,4 +47,9 @@ class M_Student_Return_Letters extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function reasons()
+    {
+        return $this->hasMany(M_Reason_Student_Return_Letters::class, 'student_return_letter_id');
+    }
 }

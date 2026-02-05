@@ -106,5 +106,10 @@ Route::middleware(['auth'])->group(function () {
 
         // Pengembalian Ke orang Tua
         Route::resource('studentReturns', StudentReturnsController::class);
+        Route::get('/studentReturns/refstudents/search', [StudentReturnsController::class, 'search'])
+            ->name('students.search');
+        Route::get('/studentReturns/preview/{id}', [StudentReturnsController::class, 'preview'])->name('studentReturns.preview');
+        Route::post('/studentReturn/{id}/increment-download', [StudentReturnsController::class, 'incrementDownload'])
+            ->name('studentReturns.increment-download');
     });
 });

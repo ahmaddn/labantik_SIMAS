@@ -3,7 +3,7 @@
 @section('content')
     <div class="main-content-container overflow-hidden">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
-            <h3 class="mb-0">Surat Pindah Sekolah</h3>
+            <h3 class="mb-0">Surat Pengembalian Siswa</h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb align-items-center mb-0 lh-1">
                     <li class="breadcrumb-item">
@@ -16,7 +16,7 @@
                         <span>Surat Pengantar</span>
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
-                        <span class="text-secondary">Pindah Sekolah</span>
+                        <span class="text-secondary">Pengembalian Siswa</span>
                     </li>
                 </ol>
             </nav>
@@ -32,9 +32,9 @@
 
         <div class="card bg-white rounded-10 border border-white mb-4">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 p-20 pb-0">
-                <h3>Daftar Surat Pindah Sekolah</h3>
+                <h3>Daftar Surat Pengembalian Siswa</h3>
                 <div class="dropdown select-dropdown without-border">
-                    <a href="{{ route('s_peng.schoolTransfers.create') }}"
+                    <a href="{{ route('others.studentReturns.create') }}"
                         class="btn bg-primary bg-opacity-10 fw-normal fs-16 text-primary">
                         <i class="ri-add-line"></i>
                         Tambah Surat
@@ -52,15 +52,14 @@
                                     <tr>
                                         <th class="fw-medium pe-0 rtl-pe" scope="col">Nomor Surat</th>
                                         <th class="fw-medium" scope="col">Nama Siswa</th>
-                                        <th class="fw-medium" scope="col">Sekolah Tujuan</th>
-                                        <th class="fw-medium" scope="col">Alasan</th>
-                                        <th class="fw-medium" scope="col">Tanggal</th>
+                                        <th class="fw-medium" scope="col">Tanggal Pengembalian</th>
+                                        <th class="fw-medium" scope="col">Jumlah Alasan</th>
                                         <th class="fw-medium" scope="col">Dibuat oleh</th>
                                         <th class="fw-medium" scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($schoolTransfers as $letter)
+                                    @forelse ($studentReturns as $letter)
                                         <tr>
                                             <td class="text-body pe-0 rtl-pe">{{ $letter->letter_number }}</td>
                                             <td>
@@ -77,16 +76,13 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-body">{{ $letter->destination_school }}</td>
                                             <td class="text-body">
-                                                <span class="text-truncate d-inline-block" style="max-width: 200px;"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="{{ $letter->reason }}">
-                                                    {{ Str::limit($letter->reason, 50) }}
-                                                </span>
+                                                {{ $letter->return_date ? \Carbon\Carbon::parse($letter->return_date)->format('d/m/Y') : '-' }}
                                             </td>
                                             <td class="text-body">
-                                                {{ $letter->issue_date ? \Carbon\Carbon::parse($letter->issue_date)->format('d/m/Y') : '-' }}
+                                                <span class="badge bg-info">
+                                                    {{ $letter->reasons->count() }} Alasan
+                                                </span>
                                             </td>
                                             <td>
                                                 <span
@@ -97,7 +93,7 @@
                                             <td>
                                                 <div class="d-flex justify-content-end" style="gap: 12px;">
                                                     <a class="bg-transparent p-0 border-0 hover-text-secondary"
-                                                        href="{{ route('s_peng.schoolTransfers.print', $letter->id) }}"
+                                                        href="{{ route('others.studentReturns.preview', $letter->id) }}"
                                                         data-bs-placement="top" data-bs-title="Print"
                                                         data-bs-toggle="tooltip">
                                                         <i class="material-symbols-outlined fs-16 fw-normal text-secondary">
@@ -105,7 +101,7 @@
                                                         </i>
                                                     </a>
                                                     <a class="bg-transparent p-0 border-0 hover-text-primary"
-                                                        href="{{ route('s_peng.schoolTransfers.edit', $letter->id) }}"
+                                                        href="{{ route('others.studentReturns.edit', $letter->id) }}"
                                                         data-bs-placement="top" data-bs-title="Edit"
                                                         data-bs-toggle="tooltip">
                                                         <i class="material-symbols-outlined fs-16 fw-normal text-primary">
@@ -133,8 +129,7 @@
                                                                         Hapus
                                                                     </h5>
                                                                     <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
+                                                                        data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body text-center py-4">
                                                                     <div class="mb-3">
@@ -143,7 +138,7 @@
                                                                     </div>
                                                                     <h5 class="mb-2">Apakah Anda yakin?</h5>
                                                                     <p class="text-muted mb-0">
-                                                                        Data Surat Pindah Sekolah ini akan dihapus
+                                                                        Data Surat Pengembalian Siswa ini akan dihapus
                                                                         secara permanen dan tidak dapat dikembalikan.
                                                                     </p>
                                                                     <p class="text-muted mt-2 mb-0">
@@ -157,7 +152,7 @@
                                                                         <i class="ri-close-line me-1"></i>Batal
                                                                     </button>
                                                                     <form
-                                                                        action="{{ route('s_peng.schoolTransfers.destroy', $letter->id) }}"
+                                                                        action="{{ route('others.studentReturns.destroy', $letter->id) }}"
                                                                         method="POST" style="display: inline;">
                                                                         @csrf
                                                                         @method('DELETE')
@@ -175,8 +170,8 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td class="text-body text-center" colspan="7">
-                                                Tidak Ada Data Surat Pindah Sekolah
+                                            <td class="text-body text-center" colspan="6">
+                                                Tidak Ada Data Surat Pengembalian Siswa
                                             </td>
                                         </tr>
                                     @endforelse

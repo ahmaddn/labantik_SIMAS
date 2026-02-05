@@ -15,10 +15,10 @@
                         </a>
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
-                        <span>Surat Undangan (SU)</span>
+                        <span>Surat Pengantar</span>
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
-                        <span>Surat Pindah Sekolah</span>
+                        <span>Pindah Sekolah</span>
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
                         <span class="text-secondary">Tambah Data</span>
