@@ -28,7 +28,18 @@
                 </ol>
             </nav>
         </div>
+        @if ($errors->any())
+            <div class="alert fs-16 alert-success alert-dismissible" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+                <button aria-label="Close" class="btn-close shadow-none" data-bs-dismiss="alert" type="button">
+                </button>
 
+            </div>
+        @endif
         <div class="row justify-content-center">
             <div class="col-lg-12">
                 <div class="card bg-white border border-white rounded-10 mb-4">
@@ -233,25 +244,31 @@
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="kompetensi_keahlian"
                                                                 id="kompetensi_keahlian" class="form-control ps-5 h-55"
-                                                                value="{{ old('kompetensi_keahlian') }}"
-                                                                placeholder="Contoh: Teknik Kendaraan Ringan Otomotif"
-                                                                required>
+                                                                placeholder="Akan otomatis terisi"
+                                                                value="{{ old('kompetensi_keahlian') }}" readonly>
                                                             <i
                                                                 class="ri-briefcase-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
                                                         </div>
+                                                        <small class="text-muted">
+                                                            <i class="ri-information-line me-1"></i>
+                                                            Akan otomatis terisi berdasarkan siswa yang dipilih
+                                                        </small>
                                                     </div>
                                                 </div>
 
-                                                <!-- Jenis Koreksi -->
+                                                <!-- Hidden Input untuk Correction Type (akan otomatis terisi dari template) -->
+                                                <input type="hidden" name="correction_type" id="correction_type_hidden"
+                                                    value="student_name">
+
+                                                <!-- Isi Koreksi / Keterangan -->
                                                 <div class="col-lg-12">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Bagian Yang Di Koreksi <span class="text-danger">*</span>
+                                                            Isi Koreksi / Keterangan <span class="text-danger">*</span>
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <textarea name="content" class="form-control ps-5" rows="4"
-                                                                placeholder="Contoh: Yang bersangkutan adalah benar siswa di SMK Negeri 1 Talaga Tahun Pelajaran 2025/2026 dan aktif mengikuti kegiatan ekstrakurikuler bola voli."
-                                                                required></textarea>
+                                                            <textarea name="content" id="content_textarea" class="form-control ps-5" rows="4"
+                                                                placeholder="Gunakan template di bawah atau tulis manual..." required>{{ old('content') }}</textarea>
                                                             <i
                                                                 class="ri-file-text-line position-absolute top-0 start-0 fs-20 text-gray-light ps-20 pt-3"></i>
                                                         </div>
@@ -308,7 +325,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div aria-labelledby="step3-tab" class="tab-pane fade" id="step3-tab-pane"
                                             role="tabpanel" tabindex="0">
                                             <div class="row">
@@ -449,33 +465,51 @@
 
                 if (classId) {
                     $('#siswa-container').slideDown();
-
-                    // Hapus opsi siswa sebelumnya dan reset
                     $('#siswa').empty().trigger('change');
-
-                    // Inisialisasi select2 untuk siswa
+                    fetchClassDetail(classId);
                     initStudentSelect2();
                 } else {
                     $('#siswa-container').slideUp();
                     $('#siswa').empty().trigger('change');
+                    $('#kompetensi_keahlian').val('');
                 }
             });
+
+            // Fungsi untuk fetch detail kelas
+            function fetchClassDetail(classId) {
+                const baseUrl = '{{ url('sk/class/detail') }}';
+
+                $.ajax({
+                    url: baseUrl + '/' + classId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            $('#kompetensi_keahlian').val(response.data.expertiseConcentration);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error fetching class detail:', xhr);
+                        $('#kompetensi_keahlian').val('');
+                    }
+                });
+            }
 
             // Fungsi inisialisasi select2 untuk siswa
             function initStudentSelect2() {
                 $('#siswa').select2({
                     placeholder: 'Cari atau pilih siswa...',
                     allowClear: true,
-                    minimumInputLength: 0,
+                    minimumInputLength: 2,
                     ajax: {
                         url: '{{ route('sk.student.search') }}',
                         dataType: 'json',
                         delay: 300,
                         data: function(params) {
                             return {
-                                q: params.term || '', // Pastikan selalu string
+                                q: params.term || '',
                                 class_id: $('#class_id').val(),
-                                _token: '{{ csrf_token() }}', // Tambah token CSRF
+                                _token: '{{ csrf_token() }}',
                                 page: params.page || 1
                             };
                         },
@@ -490,144 +524,113 @@
                         cache: true
                     }
                 }).on('select2:select', function(e) {
-                    // Set nilai ke hidden input saat siswa dipilih
                     $('#hidden_student_id').val(e.params.data.id);
+                }).on('select2:clear', function() {
+                    $('#hidden_student_id').val('');
                 });
             }
 
-            // Inisialisasi awal select2 (kosong)
+            // Inisialisasi awal select2
             initStudentSelect2();
 
-            $(document).on('click', '.next-tab', function() {
-                const target = $(this).data('next');
-                navigateToTab(target);
-            });
+            // Validasi saat klik tab wizard
+            $('.wizard-tabs2 button[data-bs-toggle="tab"]').on('click', function(e) {
+                const targetTab = $(this).data('bs-target');
 
-            // Fungsi navigasi tab
-            function navigateToTab(target) {
-                // Validasi step 1
-                if (target === 'step2') {
-                    const classId = $('#class_id').val();
-                    const siswaId = $('#siswa').val();
-
-                    if (!classId) {
-                        alert('Pilih kelas terlebih dahulu!');
-                        $('#class_id').focus();
+                // Validasi Step 1 -> Step 2
+                if (targetTab === '#step2-tab-pane') {
+                    if (!$('#class_id').val()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        alert('Silakan pilih kelas terlebih dahulu!');
                         return false;
                     }
-                    if (!siswaId) {
-                        alert('Pilih siswa terlebih dahulu!');
-                        $('#siswa').select2('open');
-                        return false;
-                    }
-
-                    // Update kompetensi keahlian berdasarkan kelas (contoh)
-                    updateKompetensiKeahlian();
-                }
-
-                // Validasi step 2
-                if (target === 'step3') {
-                    const letterNumber = $('input[name="letter_number"]').val();
-                    const graduationYear = $('input[name="graduation_year"]').val();
-                    const kompetensiKeahlian = $('#kompetensi_keahlian').val();
-                    const content = $('textarea[name="content"]').val();
-                    const issueDate = $('input[name="issue_date"]').val();
-
-                    if (!letterNumber || !graduationYear || !kompetensiKeahlian || !content || !issueDate) {
-                        alert('Harap lengkapi semua field yang wajib diisi!');
-                        return false;
-                    }
-
-                    // Validasi format tahun kelulusan
-                    if (!/^\d{4}$/.test(graduationYear)) {
-                        alert('Format tahun kelulusan harus 4 digit (contoh: 2024)');
-                        $('input[name="graduation_year"]').focus();
+                    if (!$('#hidden_student_id').val()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        alert('Silakan pilih siswa terlebih dahulu!');
                         return false;
                     }
                 }
 
-                // Pindah ke tab berikutnya
-                $(`#${target}-tab`).tab('show');
-                updateTabIndicators(target);
-            }
+                // Validasi Step 2 -> Step 3
+                if (targetTab === '#step3-tab-pane') {
+                    if (!$('input[name="letter_number"]').val()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        alert('Nomor surat harus diisi!');
+                        return false;
+                    }
+                    if (!$('input[name="graduation_year"]').val()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        alert('Tahun kelulusan harus diisi!');
+                        return false;
+                    }
+                    if (!$('input[name="issue_date"]').val()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        alert('Tanggal surat harus diisi!');
+                        return false;
+                    }
+                }
+            }); // TUTUP EVENT CLICK TAB DI SINI
 
-            // Validasi sebelum submit
+            // Validasi final sebelum submit (DIPINDAH KELUAR)
             $('#mainForm').on('submit', function(e) {
-                e.preventDefault(); // Prevent default dulu untuk validasi
-
-                // Validasi step 1
-                const classId = $('#class_id').val();
-                const siswaId = $('#siswa').val();
-                if (!classId || !siswaId) {
-                    alert('Harap lengkapi data siswa terlebih dahulu!');
-                    $('#step1-tab').tab('show');
-                    return false;
-                }
-
-                // Validasi step 2
-                const letterNumber = $('input[name="letter_number"]').val();
-                const graduationYear = $('input[name="graduation_year"]').val();
-                const kompetensiKeahlian = $('#kompetensi_keahlian').val();
-                const content = $('textarea[name="content"]').val();
-                const issueDate = $('input[name="issue_date"]').val();
-
-                if (!letterNumber || !graduationYear || !kompetensiKeahlian || !content || !issueDate) {
-                    alert('Harap lengkapi data surat terlebih dahulu!');
-                    $('#step2-tab').tab('show');
-                    return false;
-                }
-
-                // Validasi step 3
-                const fieldName = $('input[name="field_name"]').val();
                 const incorrectData = $('input[name="incorrect_data"]').val();
                 const correctData = $('input[name="correct_data"]').val();
+                const fieldName = $('input[name="field_name"]').val();
 
-                if (!fieldName || !incorrectData || !correctData) {
-                    alert('Harap lengkapi detail koreksi terlebih dahulu!');
-                    $('#step3-tab').tab('show');
+                if (!fieldName) {
+                    e.preventDefault();
+                    alert('Nama field yang dikoreksi harus diisi!');
+                    const step3Tab = new bootstrap.Tab(document.getElementById('step3-tab'));
+                    step3Tab.show();
+                    $('input[name="field_name"]').focus();
                     return false;
                 }
 
-                // Validasi data salah vs benar harus beda
-                if (incorrectData.trim().toLowerCase() === correctData.trim().toLowerCase()) {
-                    alert('Data yang SALAH dan data yang BENAR tidak boleh sama!');
+                if (!incorrectData) {
+                    e.preventDefault();
+                    alert('Data yang salah harus diisi!');
+                    const step3Tab = new bootstrap.Tab(document.getElementById('step3-tab'));
+                    step3Tab.show();
+                    $('input[name="incorrect_data"]').focus();
+                    return false;
+                }
+
+                if (!correctData) {
+                    e.preventDefault();
+                    alert('Data yang benar harus diisi!');
+                    const step3Tab = new bootstrap.Tab(document.getElementById('step3-tab'));
+                    step3Tab.show();
                     $('input[name="correct_data"]').focus();
                     return false;
                 }
 
-                // Konfirmasi akhir
-                if (!confirm('Apakah Anda yakin ingin menyimpan surat koreksi ini?')) {
+                if (incorrectData === correctData) {
+                    e.preventDefault();
+                    alert('Data yang salah dan data yang benar tidak boleh sama!');
+                    const step3Tab = new bootstrap.Tab(document.getElementById('step3-tab'));
+                    step3Tab.show();
+                    $('input[name="correct_data"]').focus();
                     return false;
                 }
-
-                // Show loading
-                const submitBtn = $('#submit-btn');
-                submitBtn.prop('disabled', true).html(
-                    '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Menyimpan...'
-                );
-
-                // Submit form setelah semua validasi lolos
-                this.submit();
             });
         });
     </script>
+
     <script>
         function setTemplate(type) {
             const templates = {
                 'nama-siswa': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Nama Siswa di Ijazah dan Akte Kelahiran.',
-
                 'nama-orangtua': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Nama Orang Tua di Ijazah dan Akte Kelahiran.',
-
                 'tanggal-lahir': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Tanggal Lahir di Ijazah dan Akte Kelahiran.',
-
                 'tempat-lahir': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Tempat Lahir di Ijazah dan Akte Kelahiran.',
-
                 'nomor-ijazah': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Nomor Ijazah di dokumen sekolah dan dokumen asli.',
-
                 'tahun-lulus': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga dengan Kompetensi Keahlian [Jurusan], namun terdapat perbedaan Penulisan Tahun Kelulusan di Ijazah dan dokumen arsip sekolah.',
-
                 'kompetensi-keahlian': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun], namun terdapat perbedaan Penulisan Kompetensi Keahlian di Ijazah dan dokumen sekolah.',
-
                 'umum-koreksi': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan penulisan data di Ijazah dan dokumen resmi lainnya.'
             };
 
@@ -642,19 +645,25 @@
                 'umum-koreksi': 'Data Umum Ijazah'
             };
 
-            // Ambil data dari form
-            const studentName = $('#siswa option:selected').text();
+            const correctionTypeMapping = {
+                'nama-siswa': 'student_name',
+                'nama-orangtua': 'parent_name',
+                'tanggal-lahir': 'birth_date',
+                'tempat-lahir': 'birth_date',
+                'nomor-ijazah': 'other',
+                'tahun-lulus': 'other',
+                'kompetensi-keahlian': 'other',
+                'umum-koreksi': 'other'
+            };
+
             const graduationYear = $('input[name="graduation_year"]').val() || '[Tahun]';
             const kompetensiKeahlian = $('#kompetensi_keahlian').val() || '[Jurusan]';
 
             if (templates[type]) {
                 let templateText = templates[type];
-
-                // Replace placeholder dengan data aktual
                 templateText = templateText.replace(/\[Tahun\]/g, graduationYear);
                 templateText = templateText.replace(/\[Jurusan\]/g, kompetensiKeahlian);
 
-                // Tambahkan penjelasan perbandingan jika ada data salah & benar
                 const incorrectData = $('input[name="incorrect_data"]').val();
                 const correctData = $('input[name="correct_data"]').val();
 
@@ -664,19 +673,20 @@
                     templateText += '\n\nDalam Ijazah Tertulis **[Data yang Salah]** Seharusnya **[Data yang Benar]**.';
                 }
 
-                // Isi ke textarea
-                $('textarea[name="content"]').val(templateText);
+                $('#content_textarea').val(templateText);
 
-                // Auto-fill field name
                 if (fieldMappings[type]) {
                     $('input[name="field_name"]').val(fieldMappings[type]);
                 }
 
-                // Auto-fill contoh untuk data salah & benar berdasarkan template
-                autoFillExampleData(type);
+                if (correctionTypeMapping[type]) {
+                    $('#correction_type_hidden').val(correctionTypeMapping[type]);
+                }
 
-                // Beri feedback
-                showToast('Template berhasil diterapkan!', 'success');
+                $('#content_textarea').addClass('border-success');
+                setTimeout(function() {
+                    $('#content_textarea').removeClass('border-success');
+                }, 1000);
             }
         }
     </script>

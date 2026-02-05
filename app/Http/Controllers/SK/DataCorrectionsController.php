@@ -97,7 +97,7 @@ class DataCorrectionsController extends Controller
         }
 
         $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
-        $letterNumber = $formattedNumber . '/TU.01.03/SMK-Tlg/KOREKSI/' . $year;
+        $letterNumber = $formattedNumber . '/TU.01.03/SMK-Tlg.CADISDIKWIL.IX/' . $year;
 
         // Data jenis koreksi
         $correctionTypes = [
@@ -288,22 +288,18 @@ class DataCorrectionsController extends Controller
     }
 
     /**
-     * AJAX: Get student detail by ID (untuk auto-fill form)
+     * AJAX: Get class detail by ID (untuk auto-fill expertise program)
      */
-    public function getStudentDetail(string $id)
+    public function getClassDetail(string $id)
     {
-        $studentAcademicYear = RefStudentAcademicYear::with(['student', 'class'])
-            ->findOrFail($id);
+        $class = RefClass::with('expertiseConcentration')->findOrFail($id);
 
         return response()->json([
             'success' => true,
             'data' => [
-                'full_name' => $studentAcademicYear->student->full_name,
-                'student_number' => $studentAcademicYear->student->student_number,
-                'class_name' => $studentAcademicYear->class->name ?? '-',
-                'birth_place_date' => $studentAcademicYear->student->birth_place_date,
-                'guardian_name' => $studentAcademicYear->student->guardian_name,
-                'mother_name' => $studentAcademicYear->student->mother_name,
+                'class_name' => $class->name,
+                'academic_level' => $class->academic_level,
+                'expertiseConcentration' => $class->expertiseConcentration->name ?? '-',
             ]
         ]);
     }
