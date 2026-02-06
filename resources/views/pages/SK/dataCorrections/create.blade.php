@@ -404,20 +404,6 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Catatan Perbandingan -->
-                                                <div class="col-lg-12">
-                                                    <div class="form-group mb-4">
-                                                        <label class="label fs-16">
-                                                            Catatan Perbandingan (Opsional)
-                                                        </label>
-                                                        <div class="form-group position-relative">
-                                                            <textarea name="comparison_note" class="form-control ps-5" rows="3"
-                                                                placeholder="Catatan tambahan mengenai perbedaan data...">{{ old('comparison_note') }}</textarea>
-                                                            <i
-                                                                class="ri-sticky-note-line position-absolute top-0 start-0 fs-20 text-gray-light ps-20 pt-3"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                                 <!-- Catatan Penting -->
                                                 <div class="col-lg-12">
