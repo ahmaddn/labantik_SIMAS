@@ -128,7 +128,6 @@ class DataCorrectionsController extends Controller
             'incorrect_data' => 'required|string|max:255',
             'correct_data' => 'required|string|max:255|different:incorrect_data',
             'reference_document' => 'nullable|string|max:255',
-            'comparison_note' => 'nullable|string',
             'issue_date' => 'required|date',
         ], [
             'correct_data.different' => 'Data benar harus berbeda dengan data yang salah.',
@@ -148,7 +147,6 @@ class DataCorrectionsController extends Controller
             'incorrect_data' => $validated['incorrect_data'],
             'correct_data' => $validated['correct_data'],
             'reference_document' => $validated['reference_document'] ?? null,
-            'comparison_note' => $validated['comparison_note'] ?? null,
             'issue_date' => $validated['issue_date'],
             'created_by' => auth()->id(),
         ]);
@@ -233,12 +231,11 @@ class DataCorrectionsController extends Controller
             'student_id' => 'required|uuid|exists:ref_student_academic_years,id',
             'letter_number' => 'nullable|string|max:100|unique:m_data_correction_letters,letter_number,' . $id . ',id',
             'graduation_year' => 'required|string|max:255',
-            'correction_type' => 'required|in:student_name,parent_name,birth_date,other',
+            'correction_type' => 'required|in:student_name,parent_name,birth_date,birth_place,other',
             'field_name' => 'required|string|max:255',
             'incorrect_data' => 'required|string|max:255',
             'correct_data' => 'required|string|max:255|different:incorrect_data',
             'reference_document' => 'nullable|string|max:255',
-            'comparison_note' => 'nullable|string',
             'issue_date' => 'required|date',
         ]);
 

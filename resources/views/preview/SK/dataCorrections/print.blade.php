@@ -443,6 +443,8 @@
                     Nama Orang Tua
                 @elseif($correction->correction_type == 'birth_date')
                     Tanggal Lahir
+                @elseif($correction->correction_type == 'birth_place')
+                    Tanggal Lahir
                 @else
                     {{ $correction->field_name ?? 'Data' }}
                 @endif
