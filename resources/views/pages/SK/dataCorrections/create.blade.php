@@ -267,8 +267,10 @@
                                                             Isi Koreksi / Keterangan <span class="text-danger">*</span>
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <textarea name="content" id="content_textarea" class="form-control ps-5" rows="4"
-                                                                placeholder="Gunakan template di bawah atau tulis manual..." required>{{ old('content') }}</textarea>
+                                                            <input name="content" id="content_textarea"
+                                                                class="form-control ps-5" rows="4"
+                                                                placeholder="Gunakan template di bawah atau tulis manual..."
+                                                                value="{{ old('content') }}" required></input>
                                                             <i
                                                                 class="ri-file-text-line position-absolute top-0 start-0 fs-20 text-gray-light ps-20 pt-3"></i>
                                                         </div>
@@ -404,20 +406,6 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Catatan Perbandingan -->
-                                                <div class="col-lg-12">
-                                                    <div class="form-group mb-4">
-                                                        <label class="label fs-16">
-                                                            Catatan Perbandingan (Opsional)
-                                                        </label>
-                                                        <div class="form-group position-relative">
-                                                            <textarea name="comparison_note" class="form-control ps-5" rows="3"
-                                                                placeholder="Catatan tambahan mengenai perbedaan data...">{{ old('comparison_note') }}</textarea>
-                                                            <i
-                                                                class="ri-sticky-note-line position-absolute top-0 start-0 fs-20 text-gray-light ps-20 pt-3"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                                 <!-- Catatan Penting -->
                                                 <div class="col-lg-12">
@@ -624,14 +612,14 @@
     <script>
         function setTemplate(type) {
             const templates = {
-                'nama-siswa': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Nama Siswa di Ijazah dan Akte Kelahiran.',
-                'nama-orangtua': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Nama Orang Tua di Ijazah dan Akte Kelahiran.',
-                'tanggal-lahir': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Tanggal Lahir di Ijazah dan Akte Kelahiran.',
-                'tempat-lahir': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Tempat Lahir di Ijazah dan Akte Kelahiran.',
-                'nomor-ijazah': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan Penulisan Nomor Ijazah di dokumen sekolah dan dokumen asli.',
-                'tahun-lulus': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga dengan Kompetensi Keahlian [Jurusan], namun terdapat perbedaan Penulisan Tahun Kelulusan di Ijazah dan dokumen arsip sekolah.',
-                'kompetensi-keahlian': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun], namun terdapat perbedaan Penulisan Kompetensi Keahlian di Ijazah dan dokumen sekolah.',
-                'umum-koreksi': 'Bahwa nama tersebut benar siswa SMK Negeri 1 Talaga Lulusan Tahun [Tahun] Jurusan [Jurusan], namun terdapat perbedaan penulisan data di Ijazah dan dokumen resmi lainnya.'
+                'nama-siswa': 'Perbedaan Nama Siswa pada Ijazah & Akte.',
+                'nama-orangtua': 'Perbedaan Nama Orang Tua pada Ijazah & Akte.',
+                'tanggal-lahir': 'Perbedaan Tanggal Lahir pada Ijazah & Akte.',
+                'tempat-lahir': 'Perbedaan Tempat Lahir pada Ijazah & Akte.',
+                'nomor-ijazah': 'Perbedaan Nomor Ijazah pada Arsip & Dokumen Asli.',
+                'tahun-lulus': 'Perbedaan Tahun Lulus pada Ijazah & Arsip.',
+                'kompetensi-keahlian': 'Perbedaan Jurusan pada Ijazah & Arsip.',
+                'umum-koreksi': 'Perbedaan data antara Ijazah dan dokumen resmi lainnya.'
             };
 
             const fieldMappings = {

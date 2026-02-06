@@ -104,8 +104,12 @@
                                             <span class="badge bg-warning">Koreksi Tanggal Lahir</span>
                                         @elseif($correction->correction_type == 'birth_place')
                                             <span class="badge bg-success">Koreksi Tempat Lahir</span>
-                                        @elseif($correction->correction_type == 'diploma_number')
+                                        @elseif($correction->correction_type == 'other')
                                             <span class="badge bg-danger">Koreksi Nomor Ijazah</span>
+                                        @elseif($correction->correction_type == 'diploma_number')
+                                            <span class="badge bg-black">Koreksi Tahun Lulus</span>
+                                        @elseif($correction->correction_type == 'diploma_number')
+                                            <span class="badge bg-white">Koreksi Kompetensi Keahlian</span>
                                         @else
                                             <span class="badge bg-secondary">Koreksi Umum</span>
                                         @endif
