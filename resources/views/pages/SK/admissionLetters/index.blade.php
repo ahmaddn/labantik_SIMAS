@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Surat Keterangan Siswa')
+@section('title', 'Surat Keterangan Penerimaan Siswa')
 @section('content')
     <div class="main-content-container overflow-hidden">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4 mt-1">
@@ -9,7 +9,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb align-items-center mb-0 lh-1">
                     <li class="breadcrumb-item">
-                        <a class="d-flex align-items-center text-decoration-none" href="{{ route('dashboard')}}">
+                        <a class="d-flex align-items-center text-decoration-none" href="{{ route('dashboard') }}">
                             <i class="ri-home-8-line fs-15 text-primary me-1">
                             </i>
                             <span class="text-body fs-14 hover">
@@ -24,7 +24,7 @@
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
                         <span>
-                            Siswa
+                            Penerimanaan Siswa
                         </span>
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
@@ -48,7 +48,7 @@
                     Surat Keterangan
                 </h3>
                 <div class="dropdown select-dropdown without-border">
-                    <a href="{{ route('sk.generalLetters.create') }}">
+                    <a href="{{ route('sk.admissionLetters.create') }}">
                         <button type="button" class="btn bg-primary bg-opacity-10 fw-normal fs-16 text-primary">+ Tambah
                             Surat</button>
                     </a>
@@ -66,7 +66,7 @@
                                     Nama Siswa
                                 </th>
                                 <th class="fw-medium" scope="col">
-                                    NIS
+                                    NISN
                                 </th>
                                 <th class="fw-medium" scope="col">
                                     Kelas
@@ -83,32 +83,32 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($letters as $letter)
+                            @forelse($admissions as $admission)
                                 <tr>
 
                                     <td class="text-body">
-                                        {{ $letter->letter_number ?? '-' }}
+                                        {{ $admission->letter_number ?? '-' }}
                                     </td>
                                     <td class="text-body">
-                                        {{ $letter->student->student->full_name ?? '-' }}
+                                        {{ $admission->student->student->full_name ?? '-' }}
                                     </td>
                                     <td class="text-body">
-                                        {{ $letter->student->student->student_number ?? '-' }}
+                                        {{ $admission->student->student->student_national_number ?? '-' }}
                                     </td>
                                     <td class="text-body">
-                                        {{ $letter->student->class->academic_level ?? '-' }}
-                                        {{ $letter->student->class->name ?? '-' }}
+                                        {{ $admission->student->class->academic_level ?? '-' }}
+                                        {{ $admission->student->class->name ?? '-' }}
                                     </td>
                                     <td class="text-body">
                                         <span
                                             class="text-success bg-success bg-opacity-10 fs-15 fw-normal d-inline-block default-badge">
 
-                                            {{ $letter->createdBy->name ?? '-' }}
+                                            {{ $admission->createdBy->name ?? '-' }}
                                         </span>
                                     </td>
                                     <td class="text-body">
-                                        @if ($letter->issue_date)
-                                            {{ \Carbon\Carbon::parse($letter->issue_date)->format('d/m/Y') }}
+                                        @if ($admission->admission_date)
+                                            {{ \Carbon\Carbon::parse($admission->admission_date)->format('d/m/Y') }}
                                         @else
                                             -
                                         @endif
@@ -116,8 +116,8 @@
                                     <td>
                                         <div class="d-flex justify-content-end" style="gap: 12px;">
                                             <!-- Tombol Preview -->
-                                             <a class="bg-transparent p-0 border-0 hover-text-secondary"
-                                                href="{{ route('sk.generalLetters.preview', $letter->id) }}"
+                                            <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                                href="{{ route('sk.admissionLetters.preview', $admission->id) }}"
                                                 data-bs-placement="top" data-bs-title="View" data-bs-toggle="tooltip">
                                                 <i class="material-symbols-outlined fs-16 fw-normal text-secondary">
                                                     print
@@ -125,7 +125,7 @@
                                             </a>
 
                                             <!-- Tombol Edit -->
-                                            <a href="{{ route('sk.generalLetters.edit', $letter->id) }}"
+                                            <a href="{{ route('sk.admissionLetters.edit', $admission->id) }}"
                                                 class="bg-transparent p-0 border-0 hover-text-success"
                                                 data-bs-placement="top" data-bs-title="Edit" data-bs-toggle="tooltip">
                                                 <i class="material-symbols-outlined fs-16 fw-normal text-body">
@@ -135,13 +135,13 @@
 
                                             <!-- Tombol Hapus -->
                                             <button class="bg-transparent p-0 border-0 hover-text-danger" type="button"
-                                                data-bs-toggle="modal" data-bs-target="#deleteletter{{ $letter->id }}">
+                                                data-bs-toggle="modal" data-bs-target="#deleteletter{{ $admission->id }}">
                                                 <i class="material-symbols-outlined fs-16 fw-normal text-body">
                                                     delete
                                                 </i>
                                             </button>
 
-                                            <div class="modal fade" id="deleteletter{{ $letter->id }}" tabindex="-1"
+                                            <div class="modal fade" id="deleteletter{{ $admission->id }}" tabindex="-1"
                                                 aria-labelledby="deleteletterLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
@@ -159,12 +159,13 @@
                                                             </div>
                                                             <h5 class="mb-2">Apakah Anda yakin?</h5>
                                                             <p class="text-muted mb-0">
-                                                                Data Surat Keterangan Siswa ini akan dihapus secara
+                                                                Data Surat Keterangan Penerimaan Siswa ini akan dihapus
+                                                                secara
                                                                 permanen dan tidak dapat dikembalikan.
                                                             </p>
                                                             <p class="text-muted mt-2 mb-0">
                                                                 <strong>Nomor Surat:
-                                                                    <span>{{ $letter->letter_number }}</span></strong>
+                                                                    <span>{{ $admission->letter_number }}</span></strong>
                                                             </p>
                                                         </div>
                                                         <div class="modal-footer border-0 justify-content-center">
@@ -173,7 +174,7 @@
                                                                 <i class="ri-close-line me-1"></i>Batal
                                                             </button>
                                                             <form
-                                                                action="{{ route('sk.generalLetters.destroy', $letter->id) }}"
+                                                                action="{{ route('sk.admissionLetters.destroy', $admission->id) }}"
                                                                 method="POST" style="display: inline;">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -191,7 +192,7 @@
                             @empty
                                 <tr>
                                     <td class="text-body text-center" colspan="7">
-                                        Tidak Ada Data SK Siswa
+                                        Tidak Ada Data SKPS
                                     </td>
                                 </tr>
                             @endforelse

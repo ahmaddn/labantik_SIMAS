@@ -12,8 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-use function Illuminate\Support\years;
-
 class GeneralLettersController extends Controller
 {
     public function index()

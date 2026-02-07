@@ -79,6 +79,11 @@ Route::middleware(['auth'])->group(function () {
 
         // Penerimaan Siswa
         Route::resource('admissionLetters', AdmissionLettersController::class);
+        Route::get('/admissionLetters/refstudents/search', [AdmissionLettersController::class, 'search'])
+            ->name('student.search');
+        Route::get('/admissionLetters/preview/{id}', [AdmissionLettersController::class, 'preview'])->name('admissionLetters.preview');
+        Route::post('/admissionLetters/{id}/increment-download', [AdmissionLettersController::class, 'incrementDownload'])
+            ->name('admissionLetters.increment-download');
 
         // Kesalahan Penulisan Ijazah
         Route::resource('dataCorrections', DataCorrectionsController::class);
