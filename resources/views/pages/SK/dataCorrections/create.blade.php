@@ -139,7 +139,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Kelas <span class="text-danger">*</span>
+                                                            Kelas <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <select name="class_id" id="class_id"
@@ -161,7 +161,7 @@
                                                 <div class="col-lg-6" id="siswa-container" style="display: none;">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Nama Siswa : <span class="text-danger">*</span>
+                                                            Nama Siswa : <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <select name="student_id" id="siswa" required>
@@ -190,7 +190,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Nomor Surat <span class="text-danger">*</span>
+                                                            Nomor Surat <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="letter_number"
@@ -206,7 +206,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Tahun Kelulusan <span class="text-danger">*</span>
+                                                            Tahun Kelulusan <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="graduation_year"
@@ -223,7 +223,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Tanggal Surat <span class="text-danger">*</span>
+                                                            Tanggal Surat <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="date" name="issue_date"
@@ -239,7 +239,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Kompetensi Keahlian <span class="text-danger">*</span>
+                                                            Kompetensi Keahlian <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="kompetensi_keahlian"
@@ -264,7 +264,7 @@
                                                 <div class="col-lg-12">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Isi Koreksi / Keterangan <span class="text-danger">*</span>
+                                                            Isi Koreksi / Keterangan <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input name="content" id="content_textarea"
@@ -334,7 +334,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Nama Field yang Dikoreksi <span class="text-danger">*</span>
+                                                            Nama Field yang Dikoreksi <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="field_name"
@@ -368,7 +368,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Data yang SALAH (di Ijazah) <span class="text-danger">*</span>
+                                                            Data yang SALAH (di Ijazah) <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="incorrect_data"
@@ -389,7 +389,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Data yang BENAR (Seharusnya) <span class="text-danger">*</span>
+                                                            Data yang BENAR (Seharusnya) <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="correct_data"

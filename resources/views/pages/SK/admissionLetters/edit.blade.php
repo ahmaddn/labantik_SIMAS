@@ -137,7 +137,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Kelas <span class="text-danger">*</span>
+                                                            Kelas <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <select name="class_id" id="class_id"
@@ -161,7 +161,7 @@
                                                     style="display: {{ $admission->student_id ? 'block' : 'none' }}">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Nama Siswa : <span class="text-danger">*</span>
+                                                            Nama Siswa : <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <select name="student_id" id="siswa" required>
@@ -233,7 +233,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Tahun Ajaran <span class="text-danger">*</span>
+                                                            Tahun Ajaran <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="academic_year"
@@ -250,7 +250,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Tanggal Penerimaan <span class="text-danger">*</span>
+                                                            Tanggal Penerimaan <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="date" name="admission_date"

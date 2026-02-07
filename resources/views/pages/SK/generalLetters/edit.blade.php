@@ -135,7 +135,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Kelas <span class="text-danger">*</span>
+                                                            Kelas <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <select name="class_id" id="class_id"
@@ -159,7 +159,7 @@
                                                     style="display: {{ $letter->student_id ? 'block' : 'none' }}">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Nama Siswa : <span class="text-danger">*</span>
+                                                            Nama Siswa : <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <select name="student_id" id="siswa" required>
@@ -198,7 +198,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Nomor Surat <span class="text-danger">*</span>
+                                                            Nomor Surat <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="letter_number"
@@ -214,7 +214,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Tanggal Surat <span class="text-danger">*</span>
+                                                            Tanggal Surat <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="date" name="issue_date"
@@ -231,7 +231,7 @@
                                                 <div class="col-lg-12">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Keterangan / Isi Surat <span class="text-danger">*</span>
+                                                            Keterangan / Isi Surat <span class="text-danger"></span>
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <textarea name="content" class="form-control ps-5" rows="4"
