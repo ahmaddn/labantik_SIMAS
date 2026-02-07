@@ -76,6 +76,11 @@ Route::middleware(['auth'])->group(function () {
 
         // Kelakuan Baik
         Route::resource('goodConducts', GoodConductsController::class);
+        Route::get('/goodConducts/refstudents/search', [GoodConductsController::class, 'search'])
+            ->name('student.search');
+        Route::get('/goodConducts/preview/{id}', [GoodConductsController::class, 'preview'])->name('goodConducts.preview');
+        Route::post('/goodConducts/{id}/increment-download', [GoodConductsController::class, 'incrementDownload'])
+            ->name('goodConducts.increment-download');
 
         // Penerimaan Siswa
         Route::resource('admissionLetters', AdmissionLettersController::class);
