@@ -21,7 +21,7 @@
                         <span>Pengembalian Siswa</span>
                     </li>
                     <li aria-current="page" class="breadcrumb-item active">
-                        <span class="text-secondary">Tambah Data</span>
+                        <span class="text-secondary">Tambah Data Pengembalian Siswa</span>
                     </li>
                 </ol>
             </nav>
