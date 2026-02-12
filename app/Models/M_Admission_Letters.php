@@ -21,7 +21,8 @@ class M_Admission_Letters extends Model
         'admission_date',
         'academic_year',
         'previous_school',
-        'created_by'
+        'created_by',
+        'download_count'
     ];
 
     protected static function boot()

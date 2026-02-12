@@ -21,7 +21,8 @@ class M_School_Transfer_Letters extends Model
         'destination_school',
         'reason',
         'issue_date',
-        'created_by'
+        'created_by',
+        'download_count'
     ];
 
     protected static function boot()

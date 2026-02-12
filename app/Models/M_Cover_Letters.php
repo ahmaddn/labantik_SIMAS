@@ -20,6 +20,7 @@ class M_Cover_Letters extends Model
         'issue_date',
         'towards',
         'created_by',
+        'download_count'
     ];
 
     protected static function boot()
