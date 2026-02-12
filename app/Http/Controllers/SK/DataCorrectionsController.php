@@ -274,7 +274,7 @@ class DataCorrectionsController extends Controller
     /**
      * Download surat koreksi (increment download count)
      */
-    public function download(string $id)
+    public function incrementDownload(string $id)
     {
         $correction = M_Data_Correction_Letters::findOrFail($id);
 

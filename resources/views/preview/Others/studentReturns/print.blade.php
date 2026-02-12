@@ -276,7 +276,7 @@
         <a href="{{ route('others.studentReturns.edit', $studentReturn->id) }}" class="btn btn-edit">
             <i class="fa-solid fa-edit"></i> Edit
         </a>
-        <button onclick="window.print()" class="btn btn-print">
+        <button onclick="handlePrint()" class="btn btn-print">
             <i class="fa-solid fa-print"></i> Print
         </button>
     </div>
@@ -519,6 +519,30 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function handlePrint() {
+            // Kirim request untuk increment download count
+            fetch("{{ route('sk.dataCorrections.increment-download', $correction->id) }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Download count updated:', data);
+                    // Jalankan print setelah berhasil update
+                    window.print();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Tetap print meskipun ada error
+                    window.print();
+                });
+        }
+    </script>
 
 </body>
 

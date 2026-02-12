@@ -288,7 +288,7 @@
             <a href="{{ route('sk.generalLetters.edit', $letter->id) }}" class="btn btn-edit">
                 <i class="fa-solid fa-pen-to-square"></i> Edit Data
             </a>
-            <button onclick="window.print()" class="btn btn-print">
+            <button onclick="handlePrint()" class="btn btn-print">
                 <i class="fa-solid fa-print"></i> Cetak
             </button>
         </div>
@@ -386,7 +386,7 @@
                     <td class="col-label">Kelas</td>
                     <td class="col-sep">:</td>
                     <td class="col-value">
-                        {{ $letter->student->class->academic_level  }}
+                        {{ $letter->student->class->academic_level }}
                         {{ $letter->student->class->name }}</td>
                 </tr>
                 <tr>
@@ -415,6 +415,30 @@
             <div class="ttd-nip">NIP. 197610012006041011</div>
         </div>
     </div>
+
+    <script>
+        function handlePrint() {
+            // Kirim request untuk increment download count
+            fetch("{{ route('sk.dataCorrections.increment-download', $correction->id) }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Download count updated:', data);
+                    // Jalankan print setelah berhasil update
+                    window.print();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Tetap print meskipun ada error
+                    window.print();
+                });
+        }
+    </script>
 </body>
 
 </html>

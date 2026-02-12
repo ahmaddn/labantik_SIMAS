@@ -19,7 +19,7 @@ class DashboardController extends Controller
     {
         $letterStats = [
             [
-                'name' => 'Surat Penerimaan',
+                'name' => 'Surat Penerimaan Siswa',
                 'count' => M_Admission_Letters::count(),
                 'download_count' => M_Admission_Letters::sum('download_count'),
                 'route' => route('sk.admissionLetters.create'),
@@ -35,7 +35,7 @@ class DashboardController extends Controller
                 'color' => 'info'
             ],
             [
-                'name' => 'Surat Koreksi Data',
+                'name' => 'Surat Keterangan Kesalahan Penulisan Ijazah',
                 'count' => M_Data_Correction_Letters::count(),
                 'download_count' => M_Data_Correction_Letters::sum('download_count'),
                 'route' => route('sk.dataCorrections.create'),
@@ -43,7 +43,7 @@ class DashboardController extends Controller
                 'color' => 'warning'
             ],
             [
-                'name' => 'Surat Umum',
+                'name' => 'Surat Keterangan Umum',
                 'count' => M_General_Letters::count(),
                 'download_count' => M_General_Letters::sum('download_count'),
                 'route' => route('sk.generalLetters.create'),
@@ -51,7 +51,7 @@ class DashboardController extends Controller
                 'color' => 'success'
             ],
             [
-                'name' => 'Surat Kelakuan Baik',
+                'name' => 'Surat Keterangan Kelakuan Baik',
                 'count' => M_Good_Conduct_Letters::count(),
                 'download_count' => M_Good_Conduct_Letters::sum('download_count'),
                 'route' => route('sk.goodConducts.create'),
@@ -59,7 +59,7 @@ class DashboardController extends Controller
                 'color' => 'primary-50'
             ],
             [
-                'name' => 'Surat Perjalanan Dinas',
+                'name' => 'Surat Perintah Perjalanan Dinas',
                 'count' => M_Official_Travel_Orders::count(),
                 'download_count' => M_Official_Travel_Orders::sum('download_count'),
                 'route' => route('sp.travelOrders.create'),
@@ -75,7 +75,7 @@ class DashboardController extends Controller
                 'color' => 'info'
             ],
             [
-                'name' => 'Surat Pindah Sekolah',
+                'name' => 'Surat Pengantar Pindah Sekolah',
                 'count' => M_School_Transfer_Letters::count(),
                 'download_count' => M_School_Transfer_Letters::sum('download_count'),
                 'route' => route('s_peng.schoolTransfers.create'),
@@ -83,7 +83,7 @@ class DashboardController extends Controller
                 'color' => 'warning'
             ],
             [
-                'name' => 'Surat Kembali Siswa',
+                'name' => 'Surat Pengembalian Siswa',
                 'count' => M_Student_Return_Letters::count(),
                 'download_count' => M_Student_Return_Letters::sum('download_count'),
                 'route' => route('others.studentReturns.create'),

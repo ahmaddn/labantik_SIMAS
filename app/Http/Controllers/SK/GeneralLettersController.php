@@ -226,7 +226,7 @@ class GeneralLettersController extends Controller
     /**
      * Download surat
      */
-    public function download(string $id)
+    public function incrementDownload(string $id)
     {
         $letter = M_General_Letters::findOrFail($id);
 

@@ -387,7 +387,7 @@
         <a href="{{ route('sp.travelOrders.edit', $travelOrder->id) }}" class="btn btn-edit">
             <i class="fa-solid fa-edit"></i> Edit
         </a>
-        <button onclick="window.print()" class="btn btn-print">
+        <button onclick="handlePrint()" class="btn btn-print">
             <i class="fa-solid fa-print"></i> Print
         </button>
     </div>

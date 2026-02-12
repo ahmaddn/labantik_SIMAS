@@ -8,80 +8,75 @@
             <p class="text-secondary mb-0 fs-15">Kelola dan pantau semua jenis surat</p>
         </div>
 
-        <!-- Letter Stats Grid -->
         <div class="row">
-
             <!-- Summary Section -->
-            <div class="row">
-                <!-- Total Surat -->
-                <div class="col-lg-4">
-                    <div class="card bg-white p-20 rounded-10 border border-white mb-4">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="d-flex align-items-center justify-content-center bg-light rounded-10"
-                                    style="width: 50px; height: 50px;">
-                                    <i class="material-symbols-outlined fs-28 text-secondary">description</i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-secondary fs-12 mb-1 text-uppercase fw-medium"
-                                    style="letter-spacing: 0.5px;">
-                                    Total Surat</p>
-                                <h3 class="fs-28 fw-bold mb-0">{{ array_sum(array_column($letterStats, 'count')) }}</h3>
+            <!-- Total Surat -->
+            <div class="col-lg-4">
+                <div class="card bg-white p-20 rounded-10 border border-white mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+                            <div class="d-flex align-items-center justify-content-center rounded-10"
+                                style="width: 50px; height: 50px; background-color: #E8F0FE;">
+                                <i class="material-symbols-outlined fs-28 text-primary">description</i>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Total Unduhan -->
-                <div class="col-lg-4">
-                    <div class="card bg-white p-20 rounded-10 border border-white mb-4">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="d-flex align-items-center justify-content-center bg-light rounded-10"
-                                    style="width: 50px; height: 50px;">
-                                    <i class="material-symbols-outlined fs-28 text-primary">cloud_download</i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-secondary fs-12 mb-1 text-uppercase fw-medium"
-                                    style="letter-spacing: 0.5px;">
-                                    Total Unduhan</p>
-                                <h3 class="fs-28 fw-bold mb-0">
-                                    {{ array_sum(array_column($letterStats, 'download_count')) }}</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Jenis Surat -->
-                <div class="col-lg-4">
-                    <div class="card bg-white p-20 rounded-10 border border-white mb-4">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="d-flex align-items-center justify-content-center bg-light rounded-10"
-                                    style="width: 50px; height: 50px;">
-                                    <i class="material-symbols-outlined fs-28 text-success">category</i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <p class="text-secondary fs-12 mb-1 text-uppercase fw-medium"
-                                    style="letter-spacing: 0.5px;">
-                                    Jenis Surat</p>
-                                <h3 class="fs-28 fw-bold mb-0">{{ count($letterStats) }}</h3>
-                            </div>
+                        <div class="flex-grow-1">
+                            <p class="text-secondary fs-12 mb-1 text-uppercase fw-medium" style="letter-spacing: 0.5px;">
+                                Total Surat</p>
+                            <h3 class="fs-28 fw-bold mb-0">{{ array_sum(array_column($letterStats, 'count')) }}</h3>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Total Unduhan -->
+            <div class="col-lg-4">
+                <div class="card bg-white p-20 rounded-10 border border-white mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+                            <div class="d-flex align-items-center justify-content-center rounded-10"
+                                style="width: 50px; height: 50px; background-color: #E1F5FE;">
+                                <i class="material-symbols-outlined fs-28 text-info">cloud_download</i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="text-secondary fs-12 mb-1 text-uppercase fw-medium" style="letter-spacing: 0.5px;">
+                                Total Unduhan</p>
+                            <h3 class="fs-28 fw-bold mb-0">
+                                {{ array_sum(array_column($letterStats, 'download_count')) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jenis Surat -->
+            <div class="col-lg-4">
+                <div class="card bg-white p-20 rounded-10 border border-white mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+                            <div class="d-flex align-items-center justify-content-center rounded-10"
+                                style="width: 50px; height: 50px; background-color: #E8F5E9;">
+                                <i class="material-symbols-outlined fs-28 text-success">category</i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="text-secondary fs-12 mb-1 text-uppercase fw-medium" style="letter-spacing: 0.5px;">
+                                Jenis Surat</p>
+                            <h3 class="fs-28 fw-bold mb-0">{{ count($letterStats) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Letter Stats Cards -->
             @foreach ($letterStats as $stat)
                 <div class="col-lg-4 col-md-6">
                     <div class="card bg-white p-20 rounded-10 border border-white mb-4">
                         <!-- Icon -->
                         <div class="mb-3">
-                            <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-10"
-                                style="width: 50px; height: 50px;">
-                                <i class="material-symbols-outlined fs-28 text-secondary">{{ $stat['icon'] }}</i>
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-10"
+                                style="width: 50px; height: 50px; background-color: #F5F5F5;">
+                                <i class="material-symbols-outlined fs-28 text-primary">{{ $stat['icon'] }}</i>
                             </div>
                         </div>
 
@@ -101,7 +96,7 @@
 
                         <!-- Action Button -->
                         <a href="{{ $stat['route'] }}"
-                            class="btn btn-dark btn-sm w-100 d-flex align-items-center justify-content-center gap-2">
+                            class="btn bg-primary bg-opacity-10 fw-normal fs-16 text-primary btn-sm w-100 d-flex align-items-center justify-content-center gap-2">
                             <i class="material-symbols-outlined fs-18">add</i>
                             <span>Buat Surat</span>
                         </a>
@@ -109,7 +104,6 @@
                 </div>
             @endforeach
         </div>
-
     </div>
 
     <div class="flex-grow-1"></div>
@@ -118,19 +112,6 @@
         /* Material Icons */
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-        }
-
-        /* Custom Button Dark */
-        .btn-dark {
-            background-color: #1a1a1a;
-            border-color: #1a1a1a;
-            color: #ffffff;
-        }
-
-        .btn-dark:hover {
-            background-color: #000000;
-            border-color: #000000;
-            color: #ffffff;
         }
 
         /* Hover effect untuk card */

@@ -15,7 +15,7 @@
 
         body {
             background-color: #f0f0f0;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Arial;
             font-size: 11pt;
             line-height: 1.6;
             margin: 0;
@@ -326,7 +326,7 @@
             <a href="{{ route('sk.dataCorrections.edit', $correction->id) }}" class="btn btn-edit">
                 <i class="fa-solid fa-pen-to-square"></i> Edit Data
             </a>
-            <button onclick="window.print()" class="btn btn-print">
+            <button onclick="handlePrint()" class="btn btn-print">
                 <i class="fa-solid fa-print"></i> Cetak
             </button>
         </div>
