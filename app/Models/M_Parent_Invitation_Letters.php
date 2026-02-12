@@ -27,7 +27,8 @@ class M_Parent_Invitation_Letters extends Model
         'meeting_place',
         'meeting_with',
         'issue_date',
-        'created_by'
+        'created_by',
+        'download_count'
     ];
 
     protected static function boot()

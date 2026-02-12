@@ -27,6 +27,7 @@ class M_Data_Correction_Letters extends Model
         'comparison_note',
         'issue_date',
         'created_by',
+        'download_count'
     ];
 
     protected static function boot()

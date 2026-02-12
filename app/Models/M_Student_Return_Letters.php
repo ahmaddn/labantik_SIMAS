@@ -19,7 +19,8 @@ class M_Student_Return_Letters extends Model
         'student_id',
         'letter_number',
         'return_date',
-        'created_by'
+        'created_by',
+        'download_count'
     ];
 
     protected static function boot()

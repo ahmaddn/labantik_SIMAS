@@ -29,7 +29,8 @@ class M_Official_Travel_Orders extends Model
         'budget_resource',
         'code',
         'acc',
-        'created_by'
+        'created_by',
+        'download_count'
     ];
 
     protected static function boot()

@@ -77,7 +77,8 @@
                                     <li>
                                         <form action="{{ route('logout') }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="dropdown-item admin-item-link d-flex align-items-center text-body">
+                                            <button type="submit"
+                                                class="dropdown-item admin-item-link d-flex align-items-center text-body">
                                                 <i class="material-symbols-outlined">
                                                     logout
                                                 </i>

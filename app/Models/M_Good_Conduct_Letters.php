@@ -20,7 +20,8 @@ class M_Good_Conduct_Letters extends Model
         'letter_number',
         'content',
         'issue_date',
-        'created_by'
+        'created_by',
+        'download_count'
     ];
 
     protected static function boot()
