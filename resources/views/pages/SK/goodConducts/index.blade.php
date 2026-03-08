@@ -9,7 +9,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb align-items-center mb-0 lh-1">
                     <li class="breadcrumb-item">
-                        <a class="d-flex align-items-center text-decoration-none" href="{{ route('dashboard')}}">
+                        <a class="d-flex align-items-center text-decoration-none" href="{{ route('dashboard') }}">
                             <i class="ri-home-8-line fs-15 text-primary me-1">
                             </i>
                             <span class="text-body fs-14 hover">
@@ -116,7 +116,7 @@
                                     <td>
                                         <div class="d-flex justify-content-end" style="gap: 12px;">
                                             <!-- Tombol Preview -->
-                                             <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                            <a class="bg-transparent p-0 border-0 hover-text-secondary"
                                                 href="{{ route('sk.goodConducts.preview', $good->id) }}"
                                                 data-bs-placement="top" data-bs-title="View" data-bs-toggle="tooltip">
                                                 <i class="material-symbols-outlined fs-16 fw-normal text-secondary">
@@ -192,6 +192,24 @@
                                 <tr>
                                     <td class="text-body text-center" colspan="7">
                                         Tidak Ada Data Kelakuan Baik
+                                    </td>
+                                    <td class="text-body text-center" colspan="7">
+
+                                    </td>
+                                    <td class="text-body text-center" colspan="7">
+
+                                    </td>
+                                    <td class="text-body text-center" colspan="7">
+
+                                    </td>
+                                    <td class="text-body text-center" colspan="7">
+
+                                    </td>
+                                    <td class="text-body text-center" colspan="7">
+
+                                    </td>
+                                    <td class="text-body text-center" colspan="7">
+
                                     </td>
                                 </tr>
                             @endforelse

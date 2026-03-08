@@ -351,7 +351,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
-                                                            Dokumen Referensi (Opsional)
+                                                            Dokumen Referensi
                                                         </label>
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="reference_document"

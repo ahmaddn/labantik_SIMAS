@@ -408,7 +408,7 @@
         <!-- TTD -->
         <div class="ttd-container">
             <div class="ttd-tanggal">Talaga,
-                {{ \Carbon\Carbon::parse($letter->issue_date)->locale('id')->translatedFormat('d F Y') }}
+                {{ \Carbon\Carbon::parse($letter->issue_date)->locale('id')->isoFormat('D MMMM YYYY') }}
             </div>
             <div class="ttd-jabatan">Kepala Sekolah</div>
             <div class="ttd-nama">MUCHAMAD EKI S.A., S.Kom</div>
@@ -419,7 +419,7 @@
     <script>
         function handlePrint() {
             // Kirim request untuk increment download count
-            fetch("{{ route('sk.dataCorrections.increment-download', $correction->id) }}", {
+            fetch("{{ route('sk.generalLetters.increment-download', $letter->id) }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

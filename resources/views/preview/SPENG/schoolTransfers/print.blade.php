@@ -189,11 +189,11 @@
         }
 
         .header-kiri {
-            width: 60%;
+            width: 80%;
         }
 
         .header-kanan {
-            width: 35%;
+            width: 21%;
         }
 
         .nomor-lampiran-table {
@@ -378,9 +378,21 @@
 
             <div class="header-kanan">
                 Kepada<br>
-                Yth. Kepala {{ $schoolTransfers->destination_school }}<br>
-                <span style="padding-left: 25px;">di</span><br>
-                <span style="padding-left: 25px;" class="italic">Tempat</span>
+                <table style="border:none; margin:0; padding:0; width:100%;">
+                    <tr>
+                        <td style="padding:0; vertical-align:top; white-space:nowrap;">Yth.&nbsp;</td>
+                        <td style="padding:0; vertical-align:top;">Kepala {{ $schoolTransfers->destination_school }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0;"></td>
+                        <td style="padding:0;">di</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0;"></td>
+                        <td style="padding:0;" class="italic">Tempat</td>
+                    </tr>
+                </table>
             </div>
         </div>
 

@@ -24,7 +24,6 @@ class M_Data_Correction_Letters extends Model
         'incorrect_data',
         'correct_data',
         'reference_document',
-        'comparison_note',
         'issue_date',
         'created_by',
         'download_count'

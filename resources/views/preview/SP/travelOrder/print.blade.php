@@ -431,7 +431,7 @@
                 <tr>
                     <td style="width: 80px">Dasar</td>
                     <td style="width: 10px">:</td>
-                    <td>-</td>
+                    <td>{{ $travelOrder->base }}</td>
                 </tr>
             </table>
             <div style="text-align: center; font-weight: bold; margin: 15px 0">
@@ -472,34 +472,36 @@
                 <tr>
                     <td style="width: 20px; vertical-align: top;">Untuk</td>
                     <td>: {{ $travelOrder->purpose }}</td>
-                    <td style="vertical-align: top;">
-                        <table class="no-border" style="margin-top: 50px; margin-left: 20px; border-spacing: 0;">
-                            <tr>
-                                <td style="width: 70px; padding: 1px 0;">Hari</td>
-                                <td style="width: 10px; padding: 1px 5px;">:</td>
-                                <td style="padding: 1px 0;">
-                                    {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->translatedFormat('l') }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 1px 0;">Tanggal</td>
-                                <td style="padding: 1px 5px;">:</td>
-                                <td style="padding: 1px 0;">
-                                    {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->translatedFormat('d F Y') }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 1px 0;">Waktu</td>
-                                <td style="padding: 1px 5px;">:</td>
-                                <td style="padding: 1px 0;">{{ $travelOrder->departure_time }} WIB</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 1px 0;">Tempat</td>
-                                <td style="padding: 1px 5px;">:</td>
-                                <td style="padding: 1px 0;">{{ $travelOrder->departure_place }}</td>
-                            </tr>
-                        </table>
-                    </td>
+                </tr>
+                <tr>
+                    <table class="no-border" style="margin-top: 10px; margin-left: 52px; border-spacing: 0;">
+                        <tr>
+                            <td style="width: 70px; padding: 1px 0;">Hari</td>
+                            <td style="width: 10px; padding: 1px 5px;">:</td>
+                            <td style="padding: 1px 0;">
+                                {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->isoFormat('dddd') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1px 0;">Tanggal</td>
+                            <td style="padding: 1px 5px;">:</td>
+                            <td style="padding: 1px 0;">
+                                {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->isoFormat('D MMMM YYYY') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1px 0;">Waktu</td>
+                            <td style="padding: 1px 5px;">:</td>
+                            <td style="padding: 1px 0;">
+                                {{ \Carbon\Carbon::parse($travelOrder->departure_time)->format('H:i') }} WIB
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1px 0;">Tempat</td>
+                            <td style="padding: 1px 5px;">:</td>
+                            <td style="padding: 1px 0;">{{ $travelOrder->departure_place }}</td>
+                        </tr>
+                    </table>
                 </tr>
             </table>
 
@@ -517,7 +519,7 @@
                         width: 220px;
                     ">
                     Dikeluarkan di : {{ $travelOrder->departure_from }}<br />Pada Tanggal :
-                    {{ \Carbon\Carbon::parse($travelOrder->issue_date)->locale('id')->translatedFormat('d F Y') }}
+                    {{ \Carbon\Carbon::parse($travelOrder->issue_date)->locale('id')->isoFormat('D MMMM YYYY') }}
                     <br />Kepala Sekolah <br /><br /><br /><br />
                     <div style="font-weight: bold; text-decoration: underline">
                         MUCHAMAD EKI S.A., S.Kom.
@@ -624,8 +626,8 @@
                                     c. Tingkat Biaya Perjalanan Dinas
                                 </td>
                                 <td colspan="2" style="vertical-align: top;">
-                                    a. {{ $employ->employee->rank_start ?? '-' }},
-                                    {{ $employ->employee->golongan ?? '-' }}<br>
+                                    a. {{ $employ->employee->pns_type ?? '-' }},
+                                    {{ $employ->employee->job_position ?? '-' }}<br>
                                     b. {{ $employ->employee->position->name ?? '-' }} / SMKN 1 Talaga<br>
                                     c. -
                                 </td>
@@ -670,9 +672,9 @@
                                 <td colspan="2" style="vertical-align: top;">
                                     a. {{ $travelOrder->duration }} Hari<br>
                                     b.
-                                    {{ \Carbon\Carbon::parse($travelOrder->start_date)->translatedFormat('d F Y') }}<br>
+                                    {{ \Carbon\Carbon::parse($travelOrder->start_date)->locale('id')->isoFormat('D MMMM YYYY') }}<br>
                                     c.
-                                    {{ \Carbon\Carbon::parse($travelOrder->end_date)->translatedFormat('d F Y') }}
+                                    {{ \Carbon\Carbon::parse($travelOrder->end_date)->locale('id')->isoFormat('D MMMM YYYY') }}
                                 </td>
                             </tr>
 
@@ -725,7 +727,7 @@
                                 <td colspan="2" style="vertical-align: top;">
                                     <br>
                                     a. SMK Negeri 1 Talaga<br>
-                                    b. {{ $travelOrder->account ?? '-' }}
+                                    b. {{ $travelOrder->acc ?? '-' }}
                                 </td>
                             </tr>
 
@@ -742,7 +744,7 @@
                         <div style="text-align: left; margin-left: 55%; font-size: 8pt; margin-top: 10px;">
                             Dikeluarkan di : Talaga<br>
                             Pada Tanggal :
-                            {{ \Carbon\Carbon::parse($travelOrder->issue_date ?? $travelOrder->departure_date)->locale('id')->translatedFormat('d F Y') }}<br>
+                            {{ \Carbon\Carbon::parse($travelOrder->issue_date ?? $travelOrder->departure_date)->locale('id')->isoFormat('D MMMM YYYY') }}<br>
                             Kuasa Pengguna Anggaran
                             <br><br><br><br>
                             <strong><u>MUCHAMAD EKI S.A., S.Kom.</u></strong><br>
@@ -763,7 +765,7 @@
                                     (Tempat Kedudukan)<br />
                                     Ke: {{ $travelOrder->destination }}<br />
                                     Pada Tanggal:
-                                    {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->translatedFormat('d F Y') }}
+                                    {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->isoFormat('D MMMM YYYY') }}
                                 </td>
                             </tr>
                             <!-- Baris II -->
@@ -804,7 +806,7 @@
                                 <td colspan="2">
                                     Tiba di : {{ $travelOrder->departure_place }}<br />
                                     Pada Tanggal :
-                                    {{ \Carbon\Carbon::parse($travelOrder->return_date)->locale('id')->translatedFormat('d F Y') }}<br /><br />
+                                    {{ \Carbon\Carbon::parse($travelOrder->return_date)->locale('id')->isoFormat('D MMMM YYYY') }}<br /><br />
                                     <div style="text-align: justify">
                                         Telah diperiksa dengan keterangan bahwa
                                         perjalanan tersebut atas perintahnya dan

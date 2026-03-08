@@ -82,7 +82,7 @@ class GoodConductsController extends Controller
         }
 
         $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
-        $letterNumber = $formattedNumber . '/TU.01,02/SMK-Tlg.CADISWIL.IX/';
+        $letterNumber = $formattedNumber . '/TU.01.02/SMK-Tlg.CADISWIL.IX/' . $year;
         return view('pages.SK.goodConducts.create', compact('headmaster', 'classes', 'letterNumber'));
     }
 

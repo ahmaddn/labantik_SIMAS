@@ -462,7 +462,8 @@
                 <span
                     class="bold">{{ \Carbon\Carbon::parse($studentReturn->return_date)->locale('id')->isoFormat('dddd') }}</span>
                 Tanggal
-                <span class="bold">{{ \Carbon\Carbon::parse($studentReturn->return_date)->format('d') }}</span>
+                <span
+                    class="bold">{{ \Carbon\Carbon::parse($studentReturn->return_date)->locale('id')->isoFormat('D') }}</span>
                 Bulan
                 <span
                     class="bold">{{ \Carbon\Carbon::parse($studentReturn->return_date)->locale('id')->isoFormat('MMMM') }}</span>
@@ -523,7 +524,7 @@
     <script>
         function handlePrint() {
             // Kirim request untuk increment download count
-            fetch("{{ route('sk.dataCorrections.increment-download', $correction->id) }}", {
+            fetch("{{ route('others.studentReturns.increment-download', $studentReturn->id) }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

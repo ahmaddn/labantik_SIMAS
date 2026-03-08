@@ -166,7 +166,21 @@
                                                                 class="ri-todo-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
                                                         </div>
                                                     </div>
-
+                                                </div>
+                                                {{-- BARU: Dasar --}}
+                                                <div class="col-lg-12">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">Dasar</label>
+                                                        <div class="position-relative">
+                                                            <textarea name="base" rows="3" class="form-control ps-5 text-gray-light @error('base') is-invalid @enderror"
+                                                                placeholder="Isi Dasar Surat Perintah, contoh: Surat Dinas No. 001/2025...">{{ old('base') }}</textarea>
+                                                            <i
+                                                                class="ri-file-list-3-line position-absolute top-0 mt-3 start-0 fs-20 text-gray-light ps-20"></i>
+                                                            @error('base')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <div class="form-group mb-4">
@@ -199,10 +213,10 @@
                                                 </div>
                                                 <div class="col-lg-12">
                                                     <div class="form-group d-flex gap-3">
-                                                        <button
+                                                        <a href="{{ route('sp.travelOrders.index') }}"
                                                             class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
                                                             Back
-                                                        </button>
+                                                        </a>
                                                     </div>
 
 
@@ -290,7 +304,22 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group mb-4">
+                                                        <label class="label fs-16">
+                                                            Waktu
+                                                        </label>
+                                                        <div class="form-group position-relative">
+                                                            <input name="departure_time" type="time"
+                                                                class="form-control ps-5 text-gray-light h-55">
+                                                            </input>
+                                                            <i
+                                                                class="ri-time-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">
+                                                            </i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
                                                     <div class="form-group mb-4">
                                                         <label class="label fs-16">
                                                             Lama Perjalanan Dinas

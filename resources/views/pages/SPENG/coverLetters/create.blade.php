@@ -186,6 +186,12 @@
                                                     </div>
                                                 </div> --}}
                                             </div>
+                                            <div class="d-flex justify-content-start">
+                                                <a href="{{ route('s_peng.coverLetters.index') }}"
+                                                    class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
+                                                    <i class="ri-arrow-left-line me-1"></i> Kembali
+                                                </a>
+                                            </div>
                                         </div>
 
                                         {{-- ===== STEP 2: Detail Naskah ===== --}}
@@ -193,11 +199,11 @@
                                             role="tabpanel" tabindex="0">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h5 class="fs-16 fw-semibold mb-0">
-                                                    <i class="ri-file-list-3-line me-2"></i>Detail Naskah/Surat yang
+                                                    <i class="ri-file-list-3-line me-2"></i>Detail Surat yang
                                                     Dikirim
                                                 </h5>
                                                 <span class="badge bg-primary">
-                                                    Total: {{ $jumlahNaskah }} Naskah
+                                                    Total: {{ $jumlahNaskah }} Surat
                                                 </span>
                                             </div>
 
@@ -206,7 +212,7 @@
                                                     <div class="card border mb-3 naskah-item">
                                                         <div class="card-header bg-white">
                                                             <h6 class="mb-0 fw-semibold">
-                                                                <i class="ri-file-text-line me-2"></i>Naskah
+                                                                <i class="ri-file-text-line me-2"></i>Surat
                                                                 ke-{{ $i }}
                                                             </h6>
                                                         </div>
@@ -286,24 +292,14 @@
                                                     </div>
                                                 @endfor
                                             </div>
-                                        </div>
-
-                                    </div>
-
-                                    {{-- Tombol Aksi di Bawah Form --}}
-                                    <div class="row mt-4">
-                                        <div class="col-lg-12">
-                                            <div class="form-group d-flex justify-content-between gap-3">
-                                                <a href="{{ route('s_peng.coverLetters.index') }}"
-                                                    class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
-                                                    <i class="ri-arrow-left-line me-1"></i> Kembali
-                                                </a>
+                                            <div class="d-flex justify-content-end">
                                                 <button type="submit"
                                                     class="btn btn-primary py-3 px-5 fw-semibold text-white">
                                                     <i class="ri-save-line me-1"></i> Submit
                                                 </button>
                                             </div>
                                         </div>
+
                                     </div>
                                 </form>
                             </div>

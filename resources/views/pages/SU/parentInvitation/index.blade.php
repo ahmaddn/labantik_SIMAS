@@ -202,6 +202,24 @@
                                                     <td class="text-body text-center" colspan="7">
                                                         Tidak Ada Data Surat Undangan Individual
                                                     </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
                                                 </tr>
                                             @endforelse
                                         </tbody>
@@ -343,6 +361,24 @@
                                                 <tr>
                                                     <td class="text-body text-center" colspan="7">
                                                         Tidak Ada Data Surat Undangan Umum
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
+                                                    </td>
+                                                    <td class="text-body text-center" colspan="7">
+
                                                     </td>
                                                 </tr>
                                             @endforelse

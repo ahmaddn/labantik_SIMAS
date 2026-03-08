@@ -12,6 +12,8 @@ use App\Http\Controllers\SU\ParentInvitationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SP\TravelCostCategoriesController;
+use App\Http\Controllers\SP\TravelCostsController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -30,12 +32,41 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('sp')->name('sp.')->group(function () {
 
         // Perjalanan Dinas
-        Route::resource('travelOrders', TravelOrdersController::class);
+        Route::get('/travelOrders/export-excel', [TravelOrdersController::class, 'exportExcel'])
+            ->name('travelOrders.export-excel');
+
+        Route::resource('travelOrders', TravelOrdersController::class)->except(['show']);
+
         Route::get('/travelOrders/employees/search', [TravelOrdersController::class, 'search'])
             ->name('employees.search');
-        Route::get('/travelOrders/preview/{id}', [TravelOrdersController::class, 'preview'])->name('travelOrders.preview');
+
+        Route::get('/travelOrders/preview/{id}', [TravelOrdersController::class, 'preview'])
+            ->name('travelOrders.preview');
+
         Route::post('/travelOrders/{id}/increment-download', [TravelOrdersController::class, 'incrementDownload'])
             ->name('travelOrders.increment-download');
+
+        Route::get('travel-costs/{travelOrderId}/create', [TravelCostsController::class, 'create'])
+            ->name('travelCosts.create');
+        Route::post('travel-costs', [TravelCostsController::class, 'store'])
+            ->name('travelCosts.store');
+        Route::get('travel-costs/{travelOrderId}/edit', [TravelCostsController::class, 'edit'])
+            ->name('travelCosts.edit');
+        Route::put('travel-costs/{travelOrderId}', [TravelCostsController::class, 'update'])
+            ->name('travelCosts.update');
+        Route::delete('travel-costs/{travelOrderId}', [TravelCostsController::class, 'destroy'])
+            ->name('travelCosts.destroy');
+        Route::get('travel-costs/{travelOrderId}/preview', [TravelCostsController::class, 'preview'])
+            ->name('travelCosts.preview');
+
+        // Travel Cost Categories
+        // =============================================
+        Route::resource('travel-cost-categories', TravelCostCategoriesController::class)
+            ->names('travelCostCategories');
+
+        // Route tambahan: toggle aktif/nonaktif
+        Route::patch('travel-cost-categories/{id}/toggle', [TravelCostCategoriesController::class, 'toggle'])
+            ->name('travelCostCategories.toggle');
     });
 
 
@@ -59,6 +90,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Surat Pengantar
         Route::resource('coverLetters', CoverLettersController::class);
+        Route::get('/coverLetters/{id}/preview', [CoverLettersController::class, 'print'])->name('coverLetters.print');
+        Route::get('/coverLetters/{id}/increment-download', [CoverLettersController::class, 'incrementDownload'])->name('coverLetters.increment-download');
 
         // Pengantar Pindah
         Route::resource('schoolTransfers', SchoolTransfersController::class);
