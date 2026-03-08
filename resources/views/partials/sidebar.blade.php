@@ -50,9 +50,10 @@
                      Surat Perintah (SP)
                  </span>
              </li>
-             <li class="menu-item open">
-                 <a class="menu-link {{ request()->routeIs('sp.travelOrders.index') ? 'active' : '' }}"
-                     href="{{ route('sp.travelOrders.index') }}">
+
+             <li class="menu-item {{ request()->routeIs('sp.*') ? 'open' : '' }}">
+                 <a class="menu-link menu-toggle {{ request()->routeIs('sp.*') ? 'active' : '' }}"
+                     href="javascript:void(0);">
                      <span class="material-symbols-outlined menu-icon">
                          quick_reorder
                      </span>
@@ -60,6 +61,22 @@
                          Perjalanan Dinas
                      </span>
                  </a>
+
+                 <ul class="menu-sub">
+                     <li class="menu-item">
+                         <a class="menu-link {{ request()->routeIs('sp.travelOrders.index') ? 'active' : '' }}"
+                             href="{{ route('sp.travelOrders.index') }}">
+                             Index
+                         </a>
+                     </li>
+
+                     <li class="menu-item">
+                         <a class="menu-link {{ request()->routeIs('sp.travelCostCategories.index') ? 'active' : '' }}"
+                             href="{{ route('sp.travelCostCategories.index') }}">
+                             Kategori Biaya SPPD
+                         </a>
+                     </li>
+                 </ul>
              </li>
              <li class="menu-title small text-uppercase">
                  <span class="menu-title-text">

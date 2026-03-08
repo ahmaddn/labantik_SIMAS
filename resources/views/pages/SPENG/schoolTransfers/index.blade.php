@@ -178,6 +178,24 @@
                                             <td class="text-body text-center" colspan="7">
                                                 Tidak Ada Data Surat Pindah Sekolah
                                             </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
                                         </tr>
                                     @endforelse
                                 </tbody>

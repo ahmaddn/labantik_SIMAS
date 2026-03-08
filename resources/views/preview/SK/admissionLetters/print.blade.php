@@ -366,7 +366,7 @@
                 Anak tersebut telah diterima di SMK Negeri 1 Talaga Kelas
                 {{ $admission->student->class->academic_level ?? 'X' }} Tahun Ajaran {{ $admission->academic_year }}
                 Pada Tanggal
-                {{ \Carbon\Carbon::parse($admission->admission_date)->locale('id')->translatedFormat('d F Y') }}.
+                {{ \Carbon\Carbon::parse($admission->admission_date)->locale('id')->isoFormat('D MMMM YYYY') }}.
             </p>
 
             <p>
@@ -377,7 +377,7 @@
         <!-- TTD -->
         <div class="ttd-container">
             <div class="ttd-tanggal">Talaga,
-                {{ \Carbon\Carbon::parse($admission->admission_date)->locale('id')->translatedFormat('d F Y') }}
+                {{ \Carbon\Carbon::parse($admission->admission_date)->locale('id')->isoFormat('D MMMM YYYY') }}
             </div>
             <div class="ttd-jabatan">Kepala Sekolah</div>
             <div class="ttd-nama">MUCHAMAD EKI S.A., S.Kom</div>

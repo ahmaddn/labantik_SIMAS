@@ -82,7 +82,7 @@ class GoodConductsController extends Controller
         }
 
         $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
-        $letterNumber = $formattedNumber . '/TU.01,02/SMK-Tlg.CADISWIL.IX/';
+        $letterNumber = $formattedNumber . '/TU.01.02/SMK-Tlg.CADISWIL.IX/' . $year;
         return view('pages.SK.goodConducts.create', compact('headmaster', 'classes', 'letterNumber'));
     }
 
@@ -98,7 +98,7 @@ class GoodConductsController extends Controller
 
         $headmaster = CoreEmployee::where('job_name', 'like', '%kepala sekolah%')->first();
 
-         $good = M_Good_Conduct_Letters::create([
+        $good = M_Good_Conduct_Letters::create([
             'id' => Str::uuid()->toString(),
             'student_academic_year_id' => $validated['student_id'],
             'student_id' => $validated['student_id'],
@@ -109,12 +109,12 @@ class GoodConductsController extends Controller
             'created_by' => auth()->id(),
         ]);
 
-         return redirect()->route('sk.goodConducts.preview', $good->id)
+        return redirect()->route('sk.goodConducts.preview', $good->id)
             ->with('success', 'Surat Keterangan berhasil dibuat.');
     }
 
 
-        public function show(string $id)
+    public function show(string $id)
     {
         $good = M_Good_Conduct_Letters::with([
             'headmaster',
@@ -125,7 +125,7 @@ class GoodConductsController extends Controller
     }
 
 
-        public function edit(string $id)
+    public function edit(string $id)
     {
         $good = M_Good_Conduct_Letters::findOrFail($id);
 
@@ -161,7 +161,7 @@ class GoodConductsController extends Controller
     }
 
 
-     public function update(Request $request, string $id)
+    public function update(Request $request, string $id)
     {
         $good = M_Good_Conduct_Letters::findOrFail($id);
 
@@ -179,7 +179,7 @@ class GoodConductsController extends Controller
     }
 
 
-        public function destroy(string $id)
+    public function destroy(string $id)
     {
         $good = M_Good_Conduct_Letters::findOrFail($id);
         $good->delete();
@@ -189,7 +189,7 @@ class GoodConductsController extends Controller
     }
 
 
-        public function preview(string $id)
+    public function preview(string $id)
     {
         $good = M_Good_Conduct_Letters::with([
             'headmaster',
@@ -200,7 +200,7 @@ class GoodConductsController extends Controller
     }
 
 
-    public function download(string $id)
+    public function incrementDownload(string $id)
     {
         $good = M_Good_Conduct_Letters::findOrFail($id);
 

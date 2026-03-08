@@ -7,11 +7,13 @@ use App\Models\CoreEmployee;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\M_Official_Travel_Orders;
+use App\Exports\PerjalananDinasExport;
 use Carbon\Carbon;
 use App\Models\M_Travel_Order_Participans;
 use App\Models\M_Travel_Order_Followers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Exception;
 
 class TravelOrdersController extends Controller
@@ -19,7 +21,25 @@ class TravelOrdersController extends Controller
     public function index()
     {
         $travelOrders = M_Official_Travel_Orders::with('employees.employee')->get();
-        return view('pages.SP.travelOrders.index', compact('travelOrders'));
+
+        $travelCosts = M_Official_Travel_Orders::with([
+            'employees.employee',
+            'pocketMoney',
+            'dailyAllowances',
+            'representativeAllowance',
+            'transports',
+            'accommodations',
+        ])
+            ->where(function ($query) {
+                $query->whereHas('pocketMoney')
+                    ->orWhereHas('dailyAllowances')
+                    ->orWhereHas('representativeAllowance')
+                    ->orWhereHas('transports')
+                    ->orWhereHas('accommodations');
+            })
+            ->get();
+
+        return view('pages.SP.travelOrders.index', compact('travelOrders', 'travelCosts'));
     }
 
     public function search(Request $request)
@@ -47,8 +67,6 @@ class TravelOrdersController extends Controller
         ]);
     }
 
-
-
     public function create()
     {
         $year = now()->year;
@@ -65,8 +83,7 @@ class TravelOrdersController extends Controller
         }
 
         $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
-
-        $letterNumber = $formattedNumber . '/KPG.11.01/SMKN1Tlg/CADISDIKWIL.IX/' . $year;
+        $letterNumber    = $formattedNumber . '/KPG.11.01/SMKN1Tlg/CADISDIKWIL.IX/' . $year;
 
         return view('pages.SP.travelOrders.create', compact('letterNumber'));
     }
@@ -74,56 +91,60 @@ class TravelOrdersController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'letter_number' => 'required|string|max:255|unique:m_official_travel_orders,letter_number',
-            'petugas_id' => 'required|array|min:1',
-            'petugas_id.*' => 'required|exists:core_employees,id',
-            'pengikut_ids' => 'nullable|array',
-            'pengikut_ids.*' => 'exists:core_employees,id',
-            'purpose' => 'nullable|string|max:255',
-            'departure_from' => 'nullable|string|max:255',
-            'departure_place' => 'nullable|string|max:255',
-            'departure_to' => 'nullable|string|max:255',
-            'departure_date' => 'nullable|date',
-            'return_date' => 'nullable|date|after_or_equal:departure_date',
-            'duration_days' => 'nullable|string|max:100',
+            'letter_number'    => 'required|string|max:255|unique:m_official_travel_orders,letter_number',
+            'petugas_id'       => 'required|array|min:1',
+            'petugas_id.*'     => 'required|exists:core_employees,id',
+            'pengikut_ids'     => 'nullable|array',
+            'pengikut_ids.*'   => 'exists:core_employees,id',
+            'base'             => 'nullable|string|max:500',
+            'purpose'          => 'nullable|string|max:255',
+            'departure_from'   => 'nullable|string|max:255',
+            'departure_place'  => 'nullable|string|max:255',
+            'departure_to'     => 'nullable|string|max:255',
+            'departure_date'   => 'nullable|date',
+            'departure_time'   => 'nullable',
+            'return_date'      => 'nullable|date|after_or_equal:departure_date',
+            'duration_days'    => 'nullable|string|max:100',
             'budget_resources' => 'nullable|string|max:255',
-            'acc' => 'nullable|string|max:100',
-            'code' => 'nullable|string|max:100',
-            'issue_date' => 'nullable|date',
+            'acc'              => 'nullable|string|max:100',
+            'code'             => 'nullable|string|max:100',
+            'issue_date'       => 'nullable|date',
         ], [
-            'letter_number.required' => 'Nomor surat wajib diisi',
-            'letter_number.unique' => 'Nomor surat sudah digunakan',
-            'petugas_id.required' => 'Minimal satu petugas harus dipilih',
-            'petugas_id.min' => 'Minimal satu petugas harus dipilih',
-            'petugas_id.*.exists' => 'Petugas yang dipilih tidak valid',
-            'pengikut_ids.*.exists' => 'Pengikut yang dipilih tidak valid',
-            'return_date.after_or_equal' => 'Tanggal kembali harus setelah atau sama dengan tanggal keberangkatan',
+            'letter_number.required'          => 'Nomor surat wajib diisi',
+            'letter_number.unique'            => 'Nomor surat sudah digunakan',
+            'petugas_id.required'             => 'Minimal satu petugas harus dipilih',
+            'petugas_id.min'                  => 'Minimal satu petugas harus dipilih',
+            'petugas_id.*.exists'             => 'Petugas yang dipilih tidak valid',
+            'pengikut_ids.*.exists'           => 'Pengikut yang dipilih tidak valid',
+            'return_date.after_or_equal'      => 'Tanggal kembali harus setelah atau sama dengan tanggal keberangkatan',
         ]);
 
         DB::beginTransaction();
 
         try {
             $travelOrder = M_Official_Travel_Orders::create([
-                'headmaster_id' => Auth::id(),
-                'letter_number' => $validated['letter_number'],
-                'purpose' => $request->purpose,
-                'departure_from' => $request->departure_from,
+                'headmaster_id'   => Auth::id(),
+                'letter_number'   => $validated['letter_number'],
+                'base'            => $request->base,
+                'purpose'         => $request->purpose,
+                'departure_from'  => $request->departure_from,
                 'departure_place' => $request->departure_place,
-                'departure_to' => $request->departure_to,
-                'departure_date' => $request->departure_date,
-                'return_date' => $request->return_date,
-                'duration_days' => $request->duration_days,
-                'issue_date' => $request->issue_date,
+                'departure_to'    => $request->departure_to,
+                'departure_date'  => $request->departure_date,
+                'departure_time'  => $request->departure_time,
+                'return_date'     => $request->return_date,
+                'duration_days'   => $request->duration_days,
+                'issue_date'      => $request->issue_date,
                 'budget_resource' => $request->budget_resources,
-                'code' => $request->code,
-                'acc' => $request->acc,
-                'created_by' => Auth::id(),
+                'code'            => $request->code,
+                'acc'             => $request->acc,
+                'created_by'      => Auth::id(),
             ]);
 
             foreach ($validated['petugas_id'] as $petugasId) {
                 M_Travel_Order_Participans::create([
                     'travel_order_id' => $travelOrder->id,
-                    'employee_id' => $petugasId,
+                    'employee_id'     => $petugasId,
                 ]);
             }
 
@@ -131,7 +152,7 @@ class TravelOrdersController extends Controller
                 foreach ($request->pengikut_ids as $pengikutId) {
                     M_Travel_Order_Followers::create([
                         'travel_order_id' => $travelOrder->id,
-                        'follower_id' => $pengikutId,
+                        'follower_id'     => $pengikutId,
                     ]);
                 }
             }
@@ -143,11 +164,7 @@ class TravelOrdersController extends Controller
                 ->with('success', 'Data Surat Perintah Perjalanan Dinas berhasil ditambahkan');
         } catch (Exception $e) {
             DB::rollBack();
-
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -156,20 +173,11 @@ class TravelOrdersController extends Controller
         $travelOrder = M_Official_Travel_Orders::with(['employees.employee', 'followers.follower'])
             ->findOrFail($id);
 
-        // Get selected petugas IDs
         $selectedPetugas = $travelOrder->employees->pluck('employee_id')->toArray();
-
-        // Get selected pengikut IDs
         $selectedPengikut = $travelOrder->followers->pluck('follower_id')->toArray();
 
-        // Get employee details for pre-selected options
-        $petugasData = CoreEmployee::whereIn('id', $selectedPetugas)
-            ->select('id', 'full_name')
-            ->get();
-
-        $pengikutData = CoreEmployee::whereIn('id', $selectedPengikut)
-            ->select('id', 'full_name')
-            ->get();
+        $petugasData = CoreEmployee::whereIn('id', $selectedPetugas)->select('id', 'full_name')->get();
+        $pengikutData = CoreEmployee::whereIn('id', $selectedPengikut)->select('id', 'full_name')->get();
 
         return view('pages.SP.travelOrders.edit', compact(
             'travelOrder',
@@ -185,69 +193,68 @@ class TravelOrdersController extends Controller
         $travelOrder = M_Official_Travel_Orders::findOrFail($id);
 
         $validated = $request->validate([
-            'letter_number' => 'required|string|max:255|unique:m_official_travel_orders,letter_number,' . $id,
-            'petugas_id' => 'required|array|min:1',
-            'petugas_id.*' => 'required|exists:core_employees,id',
-            'pengikut_ids' => 'nullable|array',
-            'pengikut_ids.*' => 'exists:core_employees,id',
-            'purpose' => 'nullable|string|max:255',
-            'departure_from' => 'nullable|string|max:255',
-            'departure_place' => 'nullable|string|max:255',
-            'departure_to' => 'nullable|string|max:255',
-            'departure_date' => 'nullable|date',
-            'return_date' => 'nullable|date|after_or_equal:departure_date',
-            'duration_days' => 'nullable|string|max:100',
+            'letter_number'    => 'required|string|max:255|unique:m_official_travel_orders,letter_number,' . $id,
+            'petugas_id'       => 'required|array|min:1',
+            'petugas_id.*'     => 'required|exists:core_employees,id',
+            'pengikut_ids'     => 'nullable|array',
+            'pengikut_ids.*'   => 'exists:core_employees,id',
+            'base'             => 'nullable|string|max:500',
+            'purpose'          => 'nullable|string|max:255',
+            'departure_from'   => 'nullable|string|max:255',
+            'departure_place'  => 'nullable|string|max:255',
+            'departure_to'     => 'nullable|string|max:255',
+            'departure_date'   => 'nullable|date',
+            'departure_time'   => 'nullable',
+            'return_date'      => 'nullable|date|after_or_equal:departure_date',
+            'duration_days'    => 'nullable|string|max:100',
             'budget_resources' => 'nullable|string|max:255',
-            'acc' => 'nullable|string|max:100',
-            'code' => 'nullable|string|max:100',
-            'issue_date' => 'nullable|date',
+            'acc'              => 'nullable|string|max:100',
+            'code'             => 'nullable|string|max:100',
+            'issue_date'       => 'nullable|date',
         ], [
-            'letter_number.required' => 'Nomor surat wajib diisi',
-            'letter_number.unique' => 'Nomor surat sudah digunakan',
-            'petugas_id.required' => 'Minimal satu petugas harus dipilih',
-            'petugas_id.min' => 'Minimal satu petugas harus dipilih',
-            'petugas_id.*.exists' => 'Petugas yang dipilih tidak valid',
-            'pengikut_ids.*.exists' => 'Pengikut yang dipilih tidak valid',
-            'return_date.after_or_equal' => 'Tanggal kembali harus setelah atau sama dengan tanggal keberangkatan',
+            'letter_number.required'      => 'Nomor surat wajib diisi',
+            'letter_number.unique'        => 'Nomor surat sudah digunakan',
+            'petugas_id.required'         => 'Minimal satu petugas harus dipilih',
+            'petugas_id.min'              => 'Minimal satu petugas harus dipilih',
+            'petugas_id.*.exists'         => 'Petugas yang dipilih tidak valid',
+            'pengikut_ids.*.exists'       => 'Pengikut yang dipilih tidak valid',
+            'return_date.after_or_equal'  => 'Tanggal kembali harus setelah atau sama dengan tanggal keberangkatan',
         ]);
 
         DB::beginTransaction();
 
         try {
-            // Update travel order
             $travelOrder->update([
-                'letter_number' => $validated['letter_number'],
-                'purpose' => $request->purpose,
-                'departure_from' => $request->departure_from,
+                'letter_number'   => $validated['letter_number'],
+                'base'            => $request->base,
+                'purpose'         => $request->purpose,
+                'departure_from'  => $request->departure_from,
                 'departure_place' => $request->departure_place,
-                'departure_to' => $request->departure_to,
-                'departure_date' => $request->departure_date,
-                'return_date' => $request->return_date,
-                'duration_days' => $request->duration_days,
-                'issue_date' => $request->issue_date,
+                'departure_to'    => $request->departure_to,
+                'departure_date'  => $request->departure_date,
+                'departure_time'  => $request->departure_time,
+                'return_date'     => $request->return_date,
+                'duration_days'   => $request->duration_days,
+                'issue_date'      => $request->issue_date,
                 'budget_resource' => $request->budget_resource,
-                'code' => $request->code,
-                'acc' => $request->acc,
+                'code'            => $request->code,
+                'acc'             => $request->acc,
             ]);
 
-            // Delete existing participants and insert new ones
             M_Travel_Order_Participans::where('travel_order_id', $travelOrder->id)->delete();
-
             foreach ($validated['petugas_id'] as $petugasId) {
                 M_Travel_Order_Participans::create([
                     'travel_order_id' => $travelOrder->id,
-                    'employee_id' => $petugasId,
+                    'employee_id'     => $petugasId,
                 ]);
             }
 
-            // Delete existing followers and insert new ones
             M_Travel_Order_Followers::where('travel_order_id', $travelOrder->id)->delete();
-
             if (!empty($request->pengikut_ids)) {
                 foreach ($request->pengikut_ids as $pengikutId) {
                     M_Travel_Order_Followers::create([
                         'travel_order_id' => $travelOrder->id,
-                        'follower_id' => $pengikutId,
+                        'follower_id'     => $pengikutId,
                     ]);
                 }
             }
@@ -259,11 +266,7 @@ class TravelOrdersController extends Controller
                 ->with('success', 'Data Surat Perintah Perjalanan Dinas berhasil diperbarui');
         } catch (Exception $e) {
             DB::rollBack();
-
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -276,7 +279,6 @@ class TravelOrdersController extends Controller
 
             M_Travel_Order_Participans::where('travel_order_id', $id)->delete();
             M_Travel_Order_Followers::where('travel_order_id', $id)->delete();
-
             $travelOrder->delete();
 
             DB::commit();
@@ -286,30 +288,74 @@ class TravelOrdersController extends Controller
                 ->with('success', 'Data Surat Perintah Perjalanan Dinas berhasil dihapus');
         } catch (Exception $e) {
             DB::rollBack();
-
-            return redirect()
-                ->back()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
     public function incrementDownload($id)
     {
         $travelOrder = M_Official_Travel_Orders::findOrFail($id);
-
         $travelOrder->increment('download_count');
 
         return response()->json([
-            'success' => true,
+            'success'        => true,
             'download_count' => $travelOrder->download_count,
-            'message' => 'Download count updated'
+            'message'        => 'Download count updated'
         ]);
     }
 
     public function preview($id)
     {
-        $travelOrder = M_Official_Travel_Orders::with('employees.employee', 'followers.follower')->findOrFail($id);
+        $travelOrder = M_Official_Travel_Orders::with('employees.employee', 'followers.follower')
+            ->findOrFail($id);
 
         return view('preview.SP.travelOrder.print', compact('travelOrder'));
+    }
+
+    // ================================================================
+    // EXPORT EXCEL - Rekap Perjadin berdasarkan rentang tanggal
+    // ================================================================
+
+    /**
+     * Export rekap perjalanan dinas ke Excel sesuai format template
+     * Route: GET /sp/travelOrders/export-excel
+     */
+    public function exportExcel(Request $request)
+    {
+        $request->validate([
+            'date_from' => 'required|date',
+            'date_to'   => 'required|date|after_or_equal:date_from',
+        ], [
+            'date_from.required'     => 'Tanggal mulai wajib diisi',
+            'date_from.date'         => 'Format tanggal mulai tidak valid',
+            'date_to.required'       => 'Tanggal akhir wajib diisi',
+            'date_to.date'           => 'Format tanggal akhir tidak valid',
+            'date_to.after_or_equal' => 'Tanggal akhir harus sama atau setelah tanggal mulai',
+        ]);
+
+        $dateFrom = Carbon::parse($request->date_from)->startOfDay();
+        $dateTo   = Carbon::parse($request->date_to)->endOfDay();
+
+        $travelOrders = M_Official_Travel_Orders::with([
+            'employees.employee',
+            'dailyAllowances',
+            'accommodations',
+            'transports.category',
+            'representativeAllowance',
+        ])
+            ->whereBetween('departure_date', [$dateFrom, $dateTo])
+            ->orderBy('departure_date', 'asc')
+            ->get();
+
+        $filename = 'Rekap_Perjadin_'
+            . $dateFrom->format('dmY')
+            . '_sd_'
+            . $dateTo->format('dmY')
+            . '.xlsx';
+
+        return Excel::download(
+            new PerjalananDinasExport($travelOrders, $dateFrom->format('d/m/Y'), $dateTo->format('d/m/Y')),
+            $filename
+        );
     }
 }

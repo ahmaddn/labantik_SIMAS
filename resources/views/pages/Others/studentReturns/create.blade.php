@@ -172,6 +172,12 @@
                                                 </div>
 
                                             </div>
+                                            <div class="d-flex justify-content-start">
+                                                <a href="{{ route('others.studentReturns.index') }}"
+                                                    class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
+                                                    <i class="ri-arrow-left-line me-1"></i> Kembali
+                                                </a>
+                                            </div>
                                         </div>
 
                                         {{-- ===== STEP 2: Detail Surat ===== --}}
@@ -218,6 +224,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
 
                                         {{-- ===== STEP 3: Alasan Pengembalian ===== --}}
@@ -286,24 +293,14 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                    </div>
-
-                                    {{-- Tombol Aksi di Bawah Form --}}
-                                    <div class="row mt-4">
-                                        <div class="col-lg-12">
-                                            <div class="form-group d-flex justify-content-between gap-3">
-                                                <a href="{{ route('others.studentReturns.index') }}"
-                                                    class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
-                                                    <i class="ri-arrow-left-line me-1"></i> Kembali
-                                                </a>
+                                            <div class="d-flex justify-content-end">
                                                 <button type="submit"
                                                     class="btn btn-primary py-3 px-5 fw-semibold text-white">
                                                     <i class="ri-save-line me-1"></i> Submit
                                                 </button>
                                             </div>
                                         </div>
+
                                     </div>
                                 </form>
                             </div>

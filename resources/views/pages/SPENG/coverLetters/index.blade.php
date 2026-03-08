@@ -156,8 +156,26 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td class="text-body text-center" colspan="6">
+                                            <td class="text-body text-center" colspan="7">
                                                 Tidak Ada Data Surat Pengantar
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
+                                            </td>
+                                            <td class="text-body text-center" colspan="7">
+
                                             </td>
                                         </tr>
                                     @endforelse

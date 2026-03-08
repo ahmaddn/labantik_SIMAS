@@ -127,7 +127,7 @@ class DataCorrectionsController extends Controller
             'field_name' => 'required|string|max:255',
             'incorrect_data' => 'required|string|max:255',
             'correct_data' => 'required|string|max:255|different:incorrect_data',
-            'reference_document' => 'nullable|string|max:255',
+            'reference_document' => 'required|string|max:255',
             'issue_date' => 'required|date',
         ], [
             'correct_data.different' => 'Data benar harus berbeda dengan data yang salah.',
@@ -274,7 +274,7 @@ class DataCorrectionsController extends Controller
     /**
      * Download surat koreksi (increment download count)
      */
-    public function download(string $id)
+    public function incrementDownload(string $id)
     {
         $correction = M_Data_Correction_Letters::findOrFail($id);
 

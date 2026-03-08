@@ -424,7 +424,13 @@
                 <tr>
                     <td class="sch-label">Waktu</td>
                     <td class="sch-colon">:</td>
-                    <td>{{ $invitation->meeting_time ?? '............................................' }}</td>
+                    <td>
+                        @if ($invitation->meeting_time)
+                            {{ \Carbon\Carbon::parse(time: $invitation->meeting_time)->format('H:i') }} WIB
+                        @else
+                            ............................................
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <td class="sch-label">Tempat/Ruang</td>
