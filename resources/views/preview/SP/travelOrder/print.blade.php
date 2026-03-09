@@ -178,7 +178,7 @@
         .page-landscape {
             background-color: white;
             width: 297mm;
-            min-height: 210mm;
+            /* min-height: 210mm; ← HAPUS BARIS INI */
             margin: 0 auto;
             padding: 10mm;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -218,6 +218,7 @@
             .page-portrait,
             .page-landscape {
                 margin: 0;
+                padding: 8mm;
                 box-shadow: none;
                 width: 100%;
                 page-break-inside: avoid;
@@ -228,17 +229,18 @@
             }
 
             .page-landscape-wrapper {
-                page-break-before: always;
+                page-break-inside: avoid;
                 page: landscape-page;
+                /* HAPUS last-page logic, HAPUS page-break-after di sini */
             }
 
-            .page-landscape-wrapper.last-page {
-                page-break-after: always;
+            .page-landscape-wrapper+.page-landscape-wrapper {
+                page-break-before: always;
             }
 
+            /* Halaman laporan yang mengatur pergantian dari landscape ke portrait */
             .page-portrait.laporan-page {
                 page-break-before: always;
-                page-break-after: avoid !important;
                 page: portrait-page;
             }
         }
@@ -637,30 +639,23 @@
         <div class="page-portrait laporan-page">
 
             {{-- KOP SURAT --}}
-            <div
-                style="border-bottom:3px solid #000; padding-bottom:6px; margin-bottom:16px;
-            position:relative; min-height:110px; padding-left:110px;">
+            <div class="header">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Coat_of_arms_of_West_Java.svg/500px-Coat_of_arms_of_West_Java.svg.png"
-                    alt="Logo" style="position:absolute; left:0; top:0; width:100px; height:auto;" />
-                <div style="text-align:center; font-family:Arial,sans-serif;">
-                    <div style="font-size:11pt; font-weight:bold; line-height:1.4;">PEMERINTAH DAERAH PROVINSI JAWA
-                        BARAT</div>
-                    <div style="font-size:11pt; font-weight:bold; line-height:1.4;">CABANG DINAS PENDIDIKAN WILAYAH IX
-                    </div>
-                    <div style="font-size:14pt; font-weight:bold; line-height:1.4;">SEKOLAH MENENGAH KEJURUAN NEGERI 1
-                        TALAGA</div>
-                    <div style="font-family:Tahoma,sans-serif; font-size:8pt; line-height:1.5; margin-top:2px;">
-                        Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan
-                        Manajemen<br>
-                        Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br>
-                        Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br>
-                        Telpon (0233) 319238 &nbsp; FAX (0233) 319238 &nbsp; POS 45463 &nbsp; NPSN: 20213872<br>
-                        Website <a href="http://www.smkn1talaga.sch.id"
-                            style="text-decoration:none;color:black;">www.smkn1talaga.sch.id</a>
-                        &nbsp;&#8211;&nbsp;
-                        Email <a href="mailto:admin@smkn1talaga.sch.id"
-                            style="text-decoration:none;color:black;">admin@smkn1talaga.sch.id</a>
-                    </div>
+                    alt="Logo" />
+                <h4>PEMERINTAH DAERAH PROVINSI JAWA BARAT</h4>
+                <h2>CABANG DINAS PENDIDIKAN WILAYAH IX</h2>
+                <h4>SEKOLAH MENENGAH KEJURUAN NEGERI 1 TALAGA</h4>
+                <div class="address">
+                    Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen<br />
+                    Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br />
+                    Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br />
+                    Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;
+                    FAX <i class="fa-solid fa-fax"></i> (0233) 319238 &nbsp;
+                    POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp; NPSN: 20213872<br />
+                    Website <i class="fa-solid fa-globe"></i>
+                    <a href="http://www.smkn1talaga.sch.id">www.smkn1talaga.sch.id</a>
+                    &nbsp;&#8211;&nbsp; Email <i class="fa-solid fa-envelope"></i>
+                    <a href="mailto:admin@smkn1talaga.sch.id">admin@smkn1talaga.sch.id</a>
                 </div>
             </div>
 
