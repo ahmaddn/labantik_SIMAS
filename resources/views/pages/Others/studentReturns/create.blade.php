@@ -415,6 +415,16 @@
                 'akademik': 'Siswa mengalami penurunan prestasi akademik yang signifikan dan memerlukan pendampingan intensif dari keluarga untuk dapat melanjutkan pembelajaran dengan lebih baik.'
             };
 
+            // Reset semua button template ke outline
+            $('[onclick^="addReasonTemplate"]')
+                .removeClass('btn-primary')
+                .addClass('btn-outline-primary');
+
+            // Set button yang dipilih jadi aktif (biru solid)
+            $(`[onclick="addReasonTemplate('${type}')"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-primary');
+
             const container = document.getElementById('reasons-container');
             const textareas = container.querySelectorAll('textarea[name="reasons[]"]');
             const lastTextarea = textareas[textareas.length - 1];

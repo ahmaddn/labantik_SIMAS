@@ -85,7 +85,8 @@
                                     </li>
                                 </ul>
 
-                                <form action="{{ route('sk.goodConducts.update', $good->id) }}" method="POST" id="mainForm">
+                                <form action="{{ route('sk.goodConducts.update', $good->id) }}" method="POST"
+                                    id="mainForm">
                                     @csrf
                                     @method('PUT')
                                     <div class="tab-content" id="myTabstep2Content">
@@ -185,8 +186,8 @@
                                                         <div class="form-group position-relative">
                                                             <input type="text" name="letter_number"
                                                                 class="form-control text-dark ps-5 h-55"
-                                                                value="{{ old('letter_number', $good->letter_number) }}" required
-                                                                id="letterNumberInput" onfocus="this.select()">
+                                                                value="{{ old('letter_number', $good->letter_number) }}"
+                                                                required id="letterNumberInput" onfocus="this.select()">
                                                             <i
                                                                 class="ri-hashtag position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
                                                         </div>
@@ -202,7 +203,8 @@
                                                         <div class="form-group position-relative">
                                                             <input type="date" name="issue_date"
                                                                 class="form-control ps-5 h-55"
-                                                                value="{{ old('issue_date', $good->issue_date) }}" required>
+                                                                value="{{ old('issue_date', $good->issue_date) }}"
+                                                                required>
                                                             <i
                                                                 class="ri-calendar-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
                                                         </div>
@@ -376,7 +378,16 @@
                 'kelakuan_baik_kerja': 'Yang bersangkutan benar-benar berkelakuan Baik, bertanggung jawab, dan tidak pernah terlibat dalam pelanggaran disiplin maupun tindakan yang melanggar norma.',
                 'kelakuan_baik_kuliah': 'Yang bersangkutan benar-benar berkelakuan Baik, disiplin, dan bermoral baik serta tidak pernah melakukan pelanggaran tata tertib sekolah.'
             };
+            // Reset semua button template ke outline
+            $('[onclick^="setTemplate"]')
+                .removeClass('btn-primary')
+                .addClass('btn-outline-primary');
 
+            // Set button yang dipilih jadi aktif (biru solid)
+            $(`[onclick="setTemplate('${type}')"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-primary');
+                
             $('textarea[name="content"]').val(templates[type] || '');
         }
     </script>

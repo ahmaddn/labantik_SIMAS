@@ -414,7 +414,9 @@
                 <tr>
                     <td class="col-label">Tempat, Tanggal Lahir</td>
                     <td class="col-sep">:</td>
-                    <td class="col-isi">{{ $correction->student->student->birth_place_date ?? '-' }}</td>
+                    <td class="col-isi">{{ $correction->student->student->birth_place_date ?? '-' }},
+                        {{ $correction->student->student->birth_date ?? '-' }}
+                    </td>
                 </tr>
                 <tr>
                     <td class="col-label">Lulusan</td>
