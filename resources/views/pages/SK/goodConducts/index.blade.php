@@ -116,7 +116,7 @@
                                     <td>
                                         <div class="d-flex justify-content-end" style="gap: 12px;">
                                             <!-- Tombol Preview -->
-                                            <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                            <a class="bg-transparent p-0 border-0 hover-text-secondary" target="_blank"
                                                 href="{{ route('sk.goodConducts.preview', $good->id) }}"
                                                 data-bs-placement="top" data-bs-title="View" data-bs-toggle="tooltip">
                                                 <i class="material-symbols-outlined fs-16 fw-normal text-secondary">

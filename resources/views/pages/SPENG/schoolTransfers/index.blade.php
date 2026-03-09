@@ -97,6 +97,7 @@
                                             <td>
                                                 <div class="d-flex justify-content-end" style="gap: 12px;">
                                                     <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                                        target="_blank"
                                                         href="{{ route('s_peng.schoolTransfers.print', $letter->id) }}"
                                                         data-bs-placement="top" data-bs-title="Print"
                                                         data-bs-toggle="tooltip">

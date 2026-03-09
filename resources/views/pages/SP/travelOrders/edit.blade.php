@@ -236,7 +236,7 @@
                                                         <div class="form-group position-relative">
                                                             <input name="departure_date" type="date"
                                                                 class="form-control ps-5 text-gray-light h-55"
-                                                                value="{{ old('departure_date', $travelOrder->departure_date) }}">
+                                                                value="{{ old('departure_date', $travelOrder->departure_date?->format('Y-m-d')) }}">
                                                             <i
                                                                 class="ri-calendar-todo-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
                                                         </div>
@@ -249,7 +249,7 @@
                                                         <div class="form-group position-relative">
                                                             <input name="return_date" type="date"
                                                                 class="form-control ps-5 text-gray-light h-55"
-                                                                value="{{ old('return_date', $travelOrder->return_date) }}">
+                                                                value="{{ old('return_date', $travelOrder->return_date?->format('Y-m-d')) }}">
                                                             <i
                                                                 class="ri-calendar-check-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
                                                         </div>
@@ -340,7 +340,7 @@
                                                         <div class="form-group position-relative">
                                                             <input class="form-control text-dark ps-5 h-55" type="date"
                                                                 name="issue_date"
-                                                                value="{{ old('issue_date', $travelOrder->issue_date) }}" />
+                                                                value="{{ old('issue_date', $travelOrder->issue_date?->format('Y-m-d')) }}" />
                                                             <i
                                                                 class="ri-calendar-schedule-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
                                                         </div>

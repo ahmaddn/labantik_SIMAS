@@ -139,6 +139,7 @@
 
                                                             {{-- Print --}}
                                                             <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                                                target="_blank"
                                                                 href="{{ route('sp.travelOrders.preview', $sppd->id) }}"
                                                                 data-bs-placement="top" data-bs-title="Print"
                                                                 data-bs-toggle="tooltip">
@@ -328,6 +329,7 @@
 
                                                             {{-- Print Biaya --}}
                                                             <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                                                target="_blank"
                                                                 href="{{ route('sp.travelCosts.preview', $cost->id) }}"
                                                                 data-bs-placement="top" data-bs-title="Print"
                                                                 data-bs-toggle="tooltip">

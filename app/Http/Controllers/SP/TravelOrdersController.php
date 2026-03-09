@@ -120,10 +120,14 @@ class TravelOrdersController extends Controller
         ]);
 
         DB::beginTransaction();
+        $headmaster = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Kepala Sekolah')
+                ->orWhere('code', 'kepala-sekolah');
+        })->first();
 
         try {
             $travelOrder = M_Official_Travel_Orders::create([
-                'headmaster_id'   => Auth::id(),
+                'headmaster_id'   => $headmaster?->id,
                 'letter_number'   => $validated['letter_number'],
                 'base'            => $request->base,
                 'purpose'         => $request->purpose,
@@ -306,12 +310,14 @@ class TravelOrdersController extends Controller
 
     public function preview($id)
     {
-        $travelOrder = M_Official_Travel_Orders::with('employees.employee', 'followers.follower')
-            ->findOrFail($id);
+        $travelOrder = M_Official_Travel_Orders::with([
+            'employees.employee',
+            'followers.follower',
+            'headmaster.employee'
+        ])->findOrFail($id);
 
         return view('preview.SP.travelOrder.print', compact('travelOrder'));
     }
-
     // ================================================================
     // EXPORT EXCEL - Rekap Perjadin berdasarkan rentang tanggal
     // ================================================================
