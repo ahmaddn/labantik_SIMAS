@@ -66,7 +66,7 @@
                      <li class="menu-item">
                          <a class="menu-link {{ request()->routeIs('sp.travelOrders.index') ? 'active' : '' }}"
                              href="{{ route('sp.travelOrders.index') }}">
-                             Index
+                             Data SPPD
                          </a>
                      </li>
 

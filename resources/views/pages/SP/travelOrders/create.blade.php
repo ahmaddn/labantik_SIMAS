@@ -8,7 +8,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb align-items-center mb-0 lh-1">
                     <li class="breadcrumb-item">
-                        <a class="d-flex align-items-center text-decoration-none" href="index.html">
+                        <a class="d-flex align-items-center text-decoration-none" href="{{ route('dashboard') }}">
                             <i class="ri-home-8-line fs-15 text-primary me-1">
                             </i>
                             <span class="text-body fs-14 hover">
@@ -327,7 +327,7 @@
                                                         <div class="form-group position-relative">
                                                             <input name="duration_days"
                                                                 class="form-control ps-5 text-gray-light h-55"
-                                                                placeholder="Isi Lama Perjalanan Dinas. Contoh : 5 Hari">
+                                                                placeholder="Isi Lama Perjalanan Dinas. Contoh : 5">
                                                             </input>
                                                             <i
                                                                 class="ri-sun-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20">

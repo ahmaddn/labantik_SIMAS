@@ -112,6 +112,7 @@
                                                     <td>
                                                         <div class="d-flex justify-content-end" style="gap: 12px;">
                                                             <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                                                target="_blank"
                                                                 href="{{ route('su.parentInvitation.print', $pi->id) }}"
                                                                 data-bs-placement="top" data-bs-title="View"
                                                                 data-bs-toggle="tooltip">
@@ -272,6 +273,7 @@
                                                     <td>
                                                         <div class="d-flex justify-content-end" style="gap: 12px;">
                                                             <a class="bg-transparent p-0 border-0 hover-text-secondary"
+                                                                target="_blank"
                                                                 href="{{ route('su.parentInvitation.print', $gi->id) }}"
                                                                 data-bs-placement="top" data-bs-title="View"
                                                                 data-bs-toggle="tooltip">
