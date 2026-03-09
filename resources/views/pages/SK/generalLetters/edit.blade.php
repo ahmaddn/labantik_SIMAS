@@ -180,7 +180,7 @@
                                                     </div>
                                                 </div>
 
-                                               <div class="col-lg-12">
+                                                <div class="col-lg-12">
                                                     <div class="form-group d-flex gap-3">
                                                         <a href="{{ route('sk.generalLetters.index') }}"
                                                             class="btn btn-primary bg-primary bg-opacity-10 text-primary py-3 px-5 fw-semibold border-0">
@@ -396,7 +396,16 @@
                 'aktif': 'Yang bersangkutan adalah benar siswa aktif di SMK Negeri 1 Talaga Tahun Pelajaran 2025/2026.',
                 'prestasi': 'Yang bersangkutan adalah benar siswa di SMK Negeri 1 Talaga Tahun Pelajaran 2025/2026 dan berprestasi dalam bidang akademik/non-akademik.'
             };
+            // Reset semua button template ke outline
+            $('[onclick^="setTemplate"]')
+                .removeClass('btn-primary')
+                .addClass('btn-outline-primary');
 
+            // Set button yang dipilih jadi aktif (biru solid)
+            $(`[onclick="setTemplate('${type}')"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-primary');
+                
             $('textarea[name="content"]').val(templates[type] || '');
         }
     </script>

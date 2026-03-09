@@ -644,6 +644,16 @@
                 'umum-koreksi': 'other'
             };
 
+            // Reset semua button template ke outline
+            $('[onclick^="setTemplate"]')
+                .removeClass('btn-primary')
+                .addClass('btn-outline-primary');
+
+            // Set button yang dipilih jadi aktif (biru solid)
+            $(`[onclick="setTemplate('${type}')"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-primary');
+
             const graduationYear = $('input[name="graduation_year"]').val() || '[Tahun]';
             const kompetensiKeahlian = $('#kompetensi_keahlian').val() || '[Jurusan]';
 

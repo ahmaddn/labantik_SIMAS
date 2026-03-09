@@ -299,8 +299,12 @@
                                                             Isi Koreksi / Keterangan <span class="text-danger">*</span>
                                                         </label>
                                                         <div class="form-group position-relative">
-                                                            <input name="content" id="content_textarea" class="form-control ps-5 @error('content') is-invalid @enderror"
-                                                                rows="4" placeholder="Gunakan template di bawah atau tulis manual..."  value="{{ old('content', $correction->content) }}" required></input>
+                                                            <input name="content" id="content_textarea"
+                                                                class="form-control ps-5 @error('content') is-invalid @enderror"
+                                                                rows="4"
+                                                                placeholder="Gunakan template di bawah atau tulis manual..."
+                                                                value="{{ old('content', $correction->content) }}"
+                                                                required></input>
                                                             <i
                                                                 class="ri-file-text-line position-absolute top-0 start-0 fs-20 text-gray-light ps-20 pt-3"></i>
                                                             @error('content')
@@ -777,6 +781,16 @@
                 'kompetensi-keahlian': 'other',
                 'umum-koreksi': 'other'
             };
+
+            // Reset semua button template ke outline
+            $('[onclick^="setTemplate"]')
+                .removeClass('btn-primary')
+                .addClass('btn-outline-primary');
+
+            // Set button yang dipilih jadi aktif (biru solid)
+            $(`[onclick="setTemplate('${type}')"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-primary');
 
             const graduationYear = $('input[name="graduation_year"]').val() || '[Tahun]';
             const kompetensiKeahlian = $('#kompetensi_keahlian').val() || '[Jurusan]';

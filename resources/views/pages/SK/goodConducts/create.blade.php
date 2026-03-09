@@ -370,6 +370,16 @@
                 'kelakuan_baik_kuliah': 'Yang bersangkutan benar-benar berkelakuan Baik, disiplin, dan bermoral baik serta tidak pernah melakukan pelanggaran tata tertib sekolah.'
             };
 
+            // Reset semua button template ke outline
+            $('[onclick^="setTemplate"]')
+                .removeClass('btn-primary')
+                .addClass('btn-outline-primary');
+
+            // Set button yang dipilih jadi aktif (biru solid)
+            $(`[onclick="setTemplate('${type}')"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-primary');
+
             $('textarea[name="content"]').val(templates[type] || '');
         }
     </script>

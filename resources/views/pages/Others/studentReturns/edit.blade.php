@@ -433,7 +433,6 @@
             });
         }
 
-        // ─── Template Alasan ─────────────────────────────────────────────
         function addReasonTemplate(type) {
             const templates = {
                 'pelanggaran': 'Siswa yang bersangkutan telah melakukan pelanggaran tata tertib sekolah secara berulang dan tidak menunjukkan perbaikan perilaku meskipun telah diberikan pembinaan.',
@@ -441,6 +440,10 @@
                 'keluarga': 'Atas permintaan orang tua/wali siswa dengan pertimbangan kondisi keluarga yang memerlukan kehadiran siswa di rumah untuk jangka waktu yang tidak dapat ditentukan.',
                 'akademik': 'Siswa mengalami penurunan prestasi akademik yang signifikan dan memerlukan pendampingan intensif dari keluarga untuk dapat melanjutkan pembelajaran dengan lebih baik.'
             };
+
+            // Toggle active state pada button yang diklik (tanpa reset yang lain)
+            const $btn = $(`[onclick="addReasonTemplate('${type}')"]`);
+            $btn.toggleClass('btn-outline-primary btn-primary');
 
             const container = document.getElementById('reasons-container');
             const textareas = container.querySelectorAll('textarea[name="reasons[]"]');

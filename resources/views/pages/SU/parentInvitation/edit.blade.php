@@ -581,6 +581,16 @@
                 'umum-jamak': 'Sehubungan ada beberapa hal yang perlu disampaikan dan dimusyawarahkan mengenai kegiatan dan program SMK Negeri 1 Talaga, maka kami mengundang Bapak/Ibu Orang Tua/Wali Siswa/i untuk hadir dalam kegiatan tersebut.'
             };
 
+            // Reset semua button template ke outline
+            $('[onclick^="setTemplate"]')
+                .removeClass('btn-primary')
+                .addClass('btn-outline-primary');
+
+            // Set button yang dipilih jadi aktif (biru solid)
+            $(`[onclick="setTemplate('${type}')"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-primary');
+
             const templates = (kategori === 'Individu') ? individu : jamak;
             $('textarea[name="purpose"]').val(templates[type] || '');
         }

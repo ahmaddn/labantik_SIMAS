@@ -366,7 +366,17 @@
                 'aktif': 'Yang bersangkutan adalah benar siswa aktif di SMK Negeri 1 Talaga Tahun Pelajaran 2025/2026.',
                 'prestasi': 'Yang bersangkutan adalah benar siswa di SMK Negeri 1 Talaga Tahun Pelajaran 2025/2026 dan berprestasi dalam bidang akademik/non-akademik.'
             };
+            // Reset semua button template ke outline
+            $('[onclick^="setTemplate"]')
+                .removeClass('btn-primary')
+                .addClass('btn-outline-primary');
 
+            // Set button yang dipilih jadi aktif (biru solid)
+            $(`[onclick="setTemplate('${type}')"]`)
+                .removeClass('btn-outline-primary')
+                .addClass('btn-primary');
+
+            $('textarea[name="content"]').val(templates[type] || '');
             $('textarea[name="content"]').val(templates[type] || '');
         }
     </script>

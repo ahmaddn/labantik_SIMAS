@@ -364,35 +364,35 @@
                 <tr>
                     <td class="col-label">Nama</td>
                     <td class="col-sep">:</td>
-                    <td class="col-value bold-text">{{ $letter->student->student->full_name }}</td>
+                    <td class="col-value bold-text">{{ $letter->student->student->full_name ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td class="col-label">Tempat, Tanggal Lahir</td>
                     <td class="col-sep">:</td>
-                    <td class="col-value">{{ $letter->student->student->birth_date_place }},
-                        {{ $letter->student->student->birth_order }}</td>
+                    <td class="col-value">{{ $letter->student->student->birth_date_place ?? '-' }},
+                        {{ $letter->student->student->birth_order ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td class="col-label">NIS</td>
                     <td class="col-sep">:</td>
-                    <td class="col-value">{{ $letter->student->student->student_number }}</td>
+                    <td class="col-value">{{ $letter->student->student->student_number ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td class="col-label">NISN</td>
                     <td class="col-sep">:</td>
-                    <td class="col-value">{{ $letter->student->student->national_student_number }}</td>
+                    <td class="col-value">{{ $letter->student->student->national_student_number ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td class="col-label">Kelas</td>
                     <td class="col-sep">:</td>
                     <td class="col-value">
-                        {{ $letter->student->class->academic_level }}
-                        {{ $letter->student->class->name }}</td>
+                        {{ $letter->student->class->academic_level ?? '-' }}
+                        {{ $letter->student->class->name ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td class="col-label">Jurusan</td>
                     <td class="col-sep">:</td>
-                    <td class="col-value">{{ $letter->student->class->expertiseProgram->name }}</td>
+                    <td class="col-value">{{ $letter->student->class->expertiseProgram->name ?? '-' }}</td>
                 </tr>
             </table>
 
