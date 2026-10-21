@@ -300,15 +300,20 @@
                                                             <i class="ri-sun-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
                                                         </div>
                                                         <small id="duration_text_info" class="text-muted d-block mt-1"></small>
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group d-flex justify-content-between gap-3 mt-3">
-                                                            <button type="button" class="btn btn-secondary py-3 px-5 fw-semibold btn-prev-step" data-prev="#step5-tab">
-                                                                <i class="ri-arrow-left-line me-1"></i> Kembali ke Info Personal
-                                                            </button>
-                                                            <button type="button" class="btn btn-primary py-3 px-5 fw-semibold text-white btn-next-step" data-next="#step7-tab">
-                                                                Lanjut ke Info Tambahan <i class="ri-arrow-right-line ms-1"></i>
-                                                            </button>
-                                                        </div>
+                                                        @error('duration_days')
+                                                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12">
+                                                    <div class="form-group d-flex justify-content-between gap-3 mt-3">
+                                                        <button type="button" class="btn btn-secondary py-3 px-5 fw-semibold btn-prev-step" data-prev="#step5-tab">
+                                                            <i class="ri-arrow-left-line me-1"></i> Kembali ke Info Personal
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary py-3 px-5 fw-semibold text-white btn-next-step" data-next="#step7-tab">
+                                                            Lanjut ke Info Tambahan <i class="ri-arrow-right-line ms-1"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>

@@ -67,7 +67,7 @@
                                 <label class="label fs-16">Tipe <span class="text-danger">*</span></label>
                                 <div class="form-group position-relative">
                                     <select name="type"
-                                        class="form-select form-control ps-5 h-55 @error('type') is-invalid @enderror"
+                                        class="form-select text-dark ps-5 h-55 @error('type') is-invalid @enderror"
                                         required>
                                         <option value="">-- Pilih Tipe --</option>
                                         <option value="accommodation"

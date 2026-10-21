@@ -282,6 +282,31 @@
 </head>
 
 <body>
+    @php
+        $headmaster = $travelOrder->headmaster?->employee;
+        if (!$headmaster || empty($headmaster->nip)) {
+            $activeHeadmaster = \App\Models\User::whereHas('roles', function ($query) {
+                    $query->where('name', 'Kepala Sekolah')
+                        ->orWhere('code', 'kepala-sekolah');
+                })
+                ->whereHas('employee', function ($query) {
+                    $query->whereNotNull('nip')->where('nip', '!=', '');
+                })
+                ->with('employee')
+                ->first();
+            if ($activeHeadmaster && $activeHeadmaster->employee) {
+                $headmaster = $activeHeadmaster->employee;
+            }
+        }
+        $headmasterName = $headmaster?->full_name ?? ($travelOrder->headmaster?->name ?? 'Kepala Sekolah');
+        $headmasterNip = $headmaster?->nip ?? '-';
+
+        $recipient = $travelOrder->recipientEmployee ?? $travelOrder->employees->first()?->employee;
+        $recipientName = $recipient?->full_name ?? ($travelOrder->employees->first()?->employee?->full_name ?? '-');
+        $recipientNip = $recipient?->nip ?? ($travelOrder->employees->first()?->employee?->nip ?? '-');
+        $recipientJabatan = $recipient?->job_position ?? ($travelOrder->employees->first()?->employee?->job_position ?? 'Guru');
+    @endphp
+
     <div class="action-buttons">
         <a href="{{ route('sp.travelOrders.index') }}" class="btn btn-back">
             <i class="fa-solid fa-arrow-left"></i> Kembali
@@ -483,9 +508,8 @@
                         Rp {{ number_format($travelOrder->grand_total, 0, ',', '.') }},-<br>
                         Yang Menerima,</p>
                     <div class="ttd-space"></div>
-                    @php $penerima = $travelOrder->employees->first(); @endphp
-                    <p class="bold">{{ optional(optional($penerima)->employee)->name ?? '-' }}</p>
-                    <p>NIP {{ optional(optional($penerima)->employee)->nip ?? '-' }}</p>
+                    <p class="bold">{{ $recipientName }}</p>
+                    <p>NIP {{ $recipientNip }}</p>
                 </div>
             </div>
 
@@ -515,9 +539,9 @@
                             Anggaran,</p>
                         <div class="ttd-space"></div>
                         <p class="bold">
-                            {{ $travelOrder->headmaster?->employee?->full_name ?? ($travelOrder->headmaster?->name ?? '-') }}
+                            {{ $headmasterName }}
                         </p>
-                        <p>NIP: {{ $travelOrder->headmaster?->employee?->nip ?? '-' }}</p>
+                        <p>NIP: {{ $headmasterNip }}</p>
                     </div>
                 </div>
             </div>
@@ -629,14 +653,13 @@
                     <p>Kuasa Pengguna Anggaran,</p>
                     <div class="ttd-space"></div>
                     <p class="bold">
-                        {{ $travelOrder->headmaster?->employee?->full_name ?? ($travelOrder->headmaster?->name ?? '-') }}
+                        {{ $headmasterName }}
                     </p>
-                    <p>NIP: {{ $travelOrder->headmaster?->employee?->nip ?? '-' }}</p>
+                    <p>NIP: {{ $headmasterNip }}</p>
                 </div>
                 <div class="ttd-box">
                     <p>{{ $travelOrder->issue_date?->translatedFormat('d F Y') ?? '-' }}<br>Bendahara</p>
                     <div class="ttd-space"></div>
-                    @php $bendahara2 = $travelOrder->employees->skip(1)->first(); @endphp
                     <p class="bold">
                         {{ $travelOrder->treasurer?->employee?->full_name ?? ($travelOrder->treasurer?->name ?? '-') }}
                     </p>
@@ -694,70 +717,72 @@
                 <tr>
                     <td>Yaitu</td>
                     <td>: {{ $travelOrder->purpose }}
-                        @php $penerimaKuitansi = $travelOrder->employees->first(); @endphp
-                        An {{ optional(optional($penerimaKuitansi)->employee)->name ?? '-' }}
+                        An {{ $recipientName }}
                         tgl {{ $travelOrder->departure_date?->translatedFormat('d F Y') ?? '-' }}
                     </td>
                 </tr>
             </table>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; margin-top: 30px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; margin-top: 30px; border: 1px solid #000;">
 
                 {{-- Kolom 1: KPA --}}
-                <div style="text-align: center; padding: 1px 15px; border: 1px solid #000;">
-                    <p style="margin: 10px 0 112px 0; font-size: 10px; font-style: italic;">
-                        Setuju Dibayar :<br>Kuasa Pengguna Anggaran
-                    </p>
-                    <p style="margin: 0; font-size: 10px; font-weight: bold; font-style: italic;">
-                    <p class="bold">
-                        {{ $travelOrder->headmaster?->employee?->full_name ?? ($travelOrder->headmaster?->name ?? '-') }}
-                    </p>
-                    </p>
-                    <p style="margin: 0; font-size: 10px; font-style: italic;">
-                    <p>NIP: {{ $travelOrder->headmaster?->employee?->nip ?? '-' }}</p>
-                    </p>
+                <div style="text-align: center; padding: 12px 10px; border-right: 1px solid #000; display: flex; flex-direction: column; justify-content: space-between; min-height: 190px;">
+                    <div>
+                        <p style="margin: 0; font-size: 10px; font-style: italic;">
+                            Setuju Dibayar :<br>Kuasa Pengguna Anggaran
+                        </p>
+                    </div>
+                    <div>
+                        <p style="margin: 0; font-size: 10px; font-weight: bold;">
+                            {{ $headmasterName }}
+                        </p>
+                        <p style="margin: 2px 0 0 0; font-size: 10px;">
+                            NIP: {{ $headmasterNip }}
+                        </p>
+                    </div>
                 </div>
 
                 {{-- Kolom 2: Bendahara --}}
-                <div
-                    style="text-align: center; padding: 1px 15px; border: 1px solid #000; border-left: none; border-right: none;">
-                    <p style="margin: 35px 0 100px 0; font-size: 10px; font-style: italic;">Bendahara</p>
-                    @php $bendahara3 = $travelOrder->employees->skip(1)->first(); @endphp
-                    <p style="margin: 0; font-size: 10px; font-weight: bold; font-style: italic;">
-                        {{ $travelOrder->treasurer?->employee?->full_name ?? ($travelOrder->treasurer?->name ?? '-') }}
-                    </p>
-                    <p style="margin: 0; font-size: 10px; font-style: italic;">
-                        NIP: {{ $travelOrder->treasurer?->employee?->nip ?? '-' }}
-                    </p>
+                <div style="text-align: center; padding: 12px 10px; border-right: 1px solid #000; display: flex; flex-direction: column; justify-content: space-between; min-height: 190px;">
+                    <div>
+                        <p style="margin: 0; font-size: 10px; font-style: italic;">
+                            Bendahara
+                        </p>
+                    </div>
+                    <div>
+                        <p style="margin: 0; font-size: 10px; font-weight: bold;">
+                            {{ $travelOrder->treasurer?->employee?->full_name ?? ($travelOrder->treasurer?->name ?? '-') }}
+                        </p>
+                        <p style="margin: 2px 0 0 0; font-size: 10px;">
+                            NIP: {{ $travelOrder->treasurer?->employee?->nip ?? '-' }}
+                        </p>
+                    </div>
                 </div>
 
                 {{-- Kolom 3: Yang Menerima --}}
-                <div style="padding: 10px 15px; border: 1px solid #000;">
-                    <p style="margin: 0 0 5px 0; font-size: 10px;">
-                        {{ $travelOrder->issue_date?->translatedFormat('d F Y') ?? '-' }}<br>Yang menerima
-                    </p>
-                    @php $penerimaKol = $travelOrder->employees->first(); @endphp
-                    <table style="width: 100%; margin: 0; border: none; border-collapse: collapse;">
-                        <tr>
-                            <td style="border: none; padding: 1px 0; width: 50px; font-size: 10px;">Nama</td>
-                            <td style="border: none; padding: 1px 0; font-size: 10px;">:
-                                {{ optional(optional($penerimaKol)->employee)->name ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <td style="border: none; padding: 1px 0; font-size: 10px;">NIP</td>
-                            <td style="border: none; padding: 1px 0; font-size: 10px;">:
-                                {{ optional(optional($penerimaKol)->employee)->nip ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <td style="border: none; padding: 1px 0; font-size: 10px;">Jabatan</td>
-                            <td style="border: none; padding: 1px 0; font-size: 10px;">:
-                                {{ optional(optional($penerimaKol)->employee)->jabatan ?? 'Guru' }}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td style="border: none; padding: 30px 0 0 0; font-size: 10px;">Tanda Tangan</td>
-                        </tr>
-                    </table>
+                <div style="padding: 12px 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 190px;">
+                    <div>
+                        <p style="margin: 0 0 8px 0; font-size: 10px;">
+                            {{ $travelOrder->issue_date?->translatedFormat('d F Y') ?? '-' }}<br>Yang menerima
+                        </p>
+                        <table style="width: 100%; margin: 0; border: none; border-collapse: collapse;">
+                            <tr>
+                                <td style="border: none; padding: 1px 0; width: 48px; font-size: 10px;">Nama</td>
+                                <td style="border: none; padding: 1px 0; font-size: 10px;">: {{ $recipientName }}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; padding: 1px 0; font-size: 10px;">NIP</td>
+                                <td style="border: none; padding: 1px 0; font-size: 10px;">: {{ $recipientNip }}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; padding: 1px 0; font-size: 10px;">Jabatan</td>
+                                <td style="border: none; padding: 1px 0; font-size: 10px;">: {{ $recipientJabatan }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="text-align: center; padding-top: 15px;">
+                        <p style="margin: 0; font-size: 10px;">Tanda Tangan</p>
+                    </div>
                 </div>
 
             </div>

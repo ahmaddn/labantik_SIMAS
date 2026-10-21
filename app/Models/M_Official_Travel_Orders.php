@@ -17,6 +17,7 @@ class M_Official_Travel_Orders extends Model
     protected $fillable = [
         'headmaster_id',
         'treasurer_id',
+        'recipient_employee_id',
         'letter_number',
         'base',
         'purpose',
@@ -62,6 +63,11 @@ class M_Official_Travel_Orders extends Model
     public function headmaster()
     {
         return $this->belongsTo(User::class, 'headmaster_id');
+    }
+
+    public function recipientEmployee()
+    {
+        return $this->belongsTo(CoreEmployee::class, 'recipient_employee_id');
     }
 
     public function createdBy()
