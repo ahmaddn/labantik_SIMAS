@@ -64,16 +64,23 @@
 
                  <ul class="menu-sub">
                      <li class="menu-item">
-                         <a class="menu-link {{ request()->routeIs('sp.travelOrders.index') ? 'active' : '' }}"
+                         <a class="menu-link {{ request()->routeIs('sp.travelOrders.*') ? 'active' : '' }}"
                              href="{{ route('sp.travelOrders.index') }}">
                              Data SPPD
                          </a>
                      </li>
 
                      <li class="menu-item">
-                         <a class="menu-link {{ request()->routeIs('sp.travelCostCategories.index') ? 'active' : '' }}"
+                         <a class="menu-link {{ request()->routeIs('sp.travelCostCategories.*') ? 'active' : '' }}"
                              href="{{ route('sp.travelCostCategories.index') }}">
                              Kategori Biaya SPPD
+                         </a>
+                     </li>
+
+                     <li class="menu-item">
+                         <a class="menu-link {{ request()->routeIs('sp.treasurers.*') ? 'active' : '' }}"
+                             href="{{ route('sp.treasurers.index') }}">
+                             Master Bendahara
                          </a>
                      </li>
                  </ul>

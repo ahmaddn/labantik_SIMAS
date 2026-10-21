@@ -67,6 +67,11 @@ Route::middleware(['auth'])->group(function () {
         // Route tambahan: toggle aktif/nonaktif
         Route::patch('travel-cost-categories/{id}/toggle', [TravelCostCategoriesController::class, 'toggle'])
             ->name('travelCostCategories.toggle');
+
+        // Master Bendahara
+        // =============================================
+        Route::resource('treasurers', \App\Http\Controllers\SP\TreasurersController::class)
+            ->names('treasurers');
     });
 
 

@@ -44,7 +44,19 @@ class M_Official_Travel_Orders extends Model
 
     public function treasurer()
     {
+        return $this->belongsTo(M_Treasurer::class, 'treasurer_id')->withDefault(function () {
+            return $this->belongsTo(User::class, 'treasurer_id')->first();
+        });
+    }
+
+    public function treasurerUser()
+    {
         return $this->belongsTo(User::class, 'treasurer_id');
+    }
+
+    public function treasurerMaster()
+    {
+        return $this->belongsTo(M_Treasurer::class, 'treasurer_id');
     }
 
     public function headmaster()

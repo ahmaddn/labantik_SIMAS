@@ -50,15 +50,23 @@ class TravelOrdersController extends Controller
             ->when($search, function ($query) use ($search) {
                 $query->search($search);
             })
-            ->select('id', 'full_name', 'nip')
+            ->select('id', 'full_name', 'nip', 'pns_position', 'functional_position', 'job_name')
             ->orderBy('full_name')
             ->paginate(10);
 
         return response()->json([
             'results' => $employees->map(function ($employee) {
+                $jabatan = $employee->pns_position ?: ($employee->functional_position ?: ($employee->job_name ?: ''));
+                $text = trim($employee->full_name);
+                if ($employee->nip) {
+                    $text .= ' (NIP: ' . $employee->nip . ')';
+                } elseif ($jabatan) {
+                    $text .= ' (' . $jabatan . ')';
+                }
                 return [
                     'id'   => $employee->id,
-                    'text' => trim($employee->full_name),
+                    'text' => $text,
+                    'name' => trim($employee->full_name),
                 ];
             }),
             'pagination' => [
@@ -94,21 +102,22 @@ class TravelOrdersController extends Controller
             'letter_number'    => 'required|string|max:255|unique:m_official_travel_orders,letter_number',
             'petugas_id'       => 'required|array|min:1',
             'petugas_id.*'     => 'required|exists:core_employees,id',
+            'petugas_positions' => 'nullable|array',
             'pengikut_ids'     => 'nullable|array',
             'pengikut_ids.*'   => 'exists:core_employees,id',
-            'base'             => 'nullable|string|max:500',
-            'purpose'          => 'nullable|string|max:255',
-            'departure_from'   => 'nullable|string|max:255',
-            'departure_place'  => 'nullable|string|max:255',
-            'departure_to'     => 'nullable|string|max:255',
-            'departure_date'   => 'nullable|date',
+            'base'             => 'required|string|max:500',
+            'purpose'          => 'required|string|max:255',
+            'departure_from'   => 'required|string|max:255',
+            'departure_place'  => 'required|string|max:255',
+            'departure_to'     => 'required|string|max:255',
+            'departure_date'   => 'required|date',
             'departure_time'   => 'nullable',
-            'return_date'      => 'nullable|date|after_or_equal:departure_date',
-            'duration_days'    => 'nullable|string|max:100',
+            'return_date'      => 'required|date|after_or_equal:departure_date',
+            'duration_days'    => 'required|string|max:100',
             'budget_resources' => 'nullable|string|max:255',
             'acc'              => 'nullable|string|max:100',
             'code'             => 'nullable|string|max:100',
-            'issue_date'       => 'nullable|date',
+            'issue_date'       => 'required|date',
         ], [
             'letter_number.required'          => 'Nomor surat wajib diisi',
             'letter_number.unique'            => 'Nomor surat sudah digunakan',
@@ -116,14 +125,36 @@ class TravelOrdersController extends Controller
             'petugas_id.min'                  => 'Minimal satu petugas harus dipilih',
             'petugas_id.*.exists'             => 'Petugas yang dipilih tidak valid',
             'pengikut_ids.*.exists'           => 'Pengikut yang dipilih tidak valid',
+            'base.required'                   => 'Dasar surat perintah wajib diisi',
+            'purpose.required'                => 'Tujuan penugasan wajib diisi',
+            'departure_from.required'         => 'Tempat surat dikeluarkan wajib diisi',
+            'departure_place.required'        => 'Tempat keberangkatan wajib diisi',
+            'departure_to.required'           => 'Tempat tujuan wajib diisi',
+            'departure_date.required'         => 'Tanggal keberangkatan wajib diisi',
+            'return_date.required'            => 'Tanggal kembali wajib diisi',
             'return_date.after_or_equal'      => 'Tanggal kembali harus setelah atau sama dengan tanggal keberangkatan',
+            'duration_days.required'          => 'Lama perjalanan dinas wajib diisi',
+            'issue_date.required'             => 'Tanggal surat dikeluarkan wajib diisi',
         ]);
 
         DB::beginTransaction();
+
+        // Cari kepala sekolah aktif yang memiliki NIP
         $headmaster = User::whereHas('roles', function ($query) {
-            $query->where('name', 'Kepala Sekolah')
-                ->orWhere('code', 'kepala-sekolah');
-        })->first();
+                $query->where('name', 'Kepala Sekolah')
+                    ->orWhere('code', 'kepala-sekolah');
+            })
+            ->whereHas('employee', function ($query) {
+                $query->whereNotNull('nip')->where('nip', '!=', '');
+            })
+            ->first();
+
+        if (!$headmaster) {
+            $headmaster = User::whereHas('roles', function ($query) {
+                $query->where('name', 'Kepala Sekolah')
+                    ->orWhere('code', 'kepala-sekolah');
+            })->first();
+        }
 
         try {
             $travelOrder = M_Official_Travel_Orders::create([
@@ -146,9 +177,11 @@ class TravelOrdersController extends Controller
             ]);
 
             foreach ($validated['petugas_id'] as $petugasId) {
+                $position = $request->input("petugas_positions.{$petugasId}");
                 M_Travel_Order_Participans::create([
                     'travel_order_id' => $travelOrder->id,
                     'employee_id'     => $petugasId,
+                    'position'        => $position,
                 ]);
             }
 
@@ -180,15 +213,19 @@ class TravelOrdersController extends Controller
         $selectedPetugas = $travelOrder->employees->pluck('employee_id')->toArray();
         $selectedPengikut = $travelOrder->followers->pluck('follower_id')->toArray();
 
-        $petugasData = CoreEmployee::whereIn('id', $selectedPetugas)->select('id', 'full_name')->get();
-        $pengikutData = CoreEmployee::whereIn('id', $selectedPengikut)->select('id', 'full_name')->get();
+        $petugasData = CoreEmployee::whereIn('id', $selectedPetugas)->select('id', 'full_name', 'nip')->get();
+        $pengikutData = CoreEmployee::whereIn('id', $selectedPengikut)->select('id', 'full_name', 'nip')->get();
+
+        // Siapkan map posisi jabatan yang tersimpan
+        $petugasPositions = $travelOrder->employees->pluck('position', 'employee_id')->toArray();
 
         return view('pages.SP.travelOrders.edit', compact(
             'travelOrder',
             'selectedPetugas',
             'selectedPengikut',
             'petugasData',
-            'pengikutData'
+            'pengikutData',
+            'petugasPositions'
         ));
     }
 
@@ -200,21 +237,22 @@ class TravelOrdersController extends Controller
             'letter_number'    => 'required|string|max:255|unique:m_official_travel_orders,letter_number,' . $id,
             'petugas_id'       => 'required|array|min:1',
             'petugas_id.*'     => 'required|exists:core_employees,id',
+            'petugas_positions' => 'nullable|array',
             'pengikut_ids'     => 'nullable|array',
             'pengikut_ids.*'   => 'exists:core_employees,id',
-            'base'             => 'nullable|string|max:500',
-            'purpose'          => 'nullable|string|max:255',
-            'departure_from'   => 'nullable|string|max:255',
-            'departure_place'  => 'nullable|string|max:255',
-            'departure_to'     => 'nullable|string|max:255',
-            'departure_date'   => 'nullable|date',
+            'base'             => 'required|string|max:500',
+            'purpose'          => 'required|string|max:255',
+            'departure_from'   => 'required|string|max:255',
+            'departure_place'  => 'required|string|max:255',
+            'departure_to'     => 'required|string|max:255',
+            'departure_date'   => 'required|date',
             'departure_time'   => 'nullable',
-            'return_date'      => 'nullable|date|after_or_equal:departure_date',
-            'duration_days'    => 'nullable|string|max:100',
+            'return_date'      => 'required|date|after_or_equal:departure_date',
+            'duration_days'    => 'required|string|max:100',
             'budget_resources' => 'nullable|string|max:255',
             'acc'              => 'nullable|string|max:100',
             'code'             => 'nullable|string|max:100',
-            'issue_date'       => 'nullable|date',
+            'issue_date'       => 'required|date',
         ], [
             'letter_number.required'      => 'Nomor surat wajib diisi',
             'letter_number.unique'        => 'Nomor surat sudah digunakan',
@@ -222,13 +260,32 @@ class TravelOrdersController extends Controller
             'petugas_id.min'              => 'Minimal satu petugas harus dipilih',
             'petugas_id.*.exists'         => 'Petugas yang dipilih tidak valid',
             'pengikut_ids.*.exists'       => 'Pengikut yang dipilih tidak valid',
+            'base.required'               => 'Dasar surat perintah wajib diisi',
+            'purpose.required'            => 'Tujuan penugasan wajib diisi',
+            'departure_from.required'     => 'Tempat surat dikeluarkan wajib diisi',
+            'departure_place.required'    => 'Tempat keberangkatan wajib diisi',
+            'departure_to.required'       => 'Tempat tujuan wajib diisi',
+            'departure_date.required'     => 'Tanggal keberangkatan wajib diisi',
+            'return_date.required'        => 'Tanggal kembali wajib diisi',
             'return_date.after_or_equal'  => 'Tanggal kembali harus setelah atau sama dengan tanggal keberangkatan',
+            'duration_days.required'      => 'Lama perjalanan dinas wajib diisi',
+            'issue_date.required'         => 'Tanggal surat dikeluarkan wajib diisi',
         ]);
 
         DB::beginTransaction();
 
         try {
-            $travelOrder->update([
+            // Update headmaster bila saat ini belum ber-NIP
+            $headmaster = User::whereHas('roles', function ($query) {
+                    $query->where('name', 'Kepala Sekolah')
+                        ->orWhere('code', 'kepala-sekolah');
+                })
+                ->whereHas('employee', function ($query) {
+                    $query->whereNotNull('nip')->where('nip', '!=', '');
+                })
+                ->first();
+
+            $updateData = [
                 'letter_number'   => $validated['letter_number'],
                 'base'            => $request->base,
                 'purpose'         => $request->purpose,
@@ -240,16 +297,24 @@ class TravelOrdersController extends Controller
                 'return_date'     => $request->return_date,
                 'duration_days'   => $request->duration_days,
                 'issue_date'      => $request->issue_date,
-                'budget_resource' => $request->budget_resource,
+                'budget_resource' => $request->budget_resources,
                 'code'            => $request->code,
                 'acc'             => $request->acc,
-            ]);
+            ];
+
+            if ($headmaster) {
+                $updateData['headmaster_id'] = $headmaster->id;
+            }
+
+            $travelOrder->update($updateData);
 
             M_Travel_Order_Participans::where('travel_order_id', $travelOrder->id)->delete();
             foreach ($validated['petugas_id'] as $petugasId) {
+                $position = $request->input("petugas_positions.{$petugasId}");
                 M_Travel_Order_Participans::create([
                     'travel_order_id' => $travelOrder->id,
                     'employee_id'     => $petugasId,
+                    'position'        => $position,
                 ]);
             }
 
