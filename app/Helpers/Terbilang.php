@@ -6,7 +6,7 @@ class Terbilang
 {
     public static function convert($angka)
     {
-        $angka = abs($angka);
+        $angka = abs((int) $angka);
         $huruf = [
             '',
             'satu',
@@ -29,19 +29,21 @@ class Terbilang
         } else if ($angka < 20) {
             $temp = self::convert($angka - 10) . ' belas';
         } else if ($angka < 100) {
-            $temp = self::convert($angka / 10) . ' puluh' . self::convert($angka % 10);
+            $temp = self::convert(intdiv($angka, 10)) . ' puluh ' . self::convert($angka % 10);
         } else if ($angka < 200) {
-            $temp = ' seratus' . self::convert($angka - 100);
+            $temp = ' seratus ' . self::convert($angka - 100);
         } else if ($angka < 1000) {
-            $temp = self::convert($angka / 100) . ' ratus' . self::convert($angka % 100);
+            $temp = self::convert(intdiv($angka, 100)) . ' ratus ' . self::convert($angka % 100);
         } else if ($angka < 2000) {
-            $temp = ' seribu' . self::convert($angka - 1000);
+            $temp = ' seribu ' . self::convert($angka - 1000);
         } else if ($angka < 1000000) {
-            $temp = self::convert($angka / 1000) . ' ribu' . self::convert($angka % 1000);
+            $temp = self::convert(intdiv($angka, 1000)) . ' ribu ' . self::convert($angka % 1000);
         } else if ($angka < 1000000000) {
-            $temp = self::convert($angka / 1000000) . ' juta' . self::convert($angka % 1000000);
+            $temp = self::convert(intdiv($angka, 1000000)) . ' juta ' . self::convert($angka % 1000000);
+        } else if ($angka < 1000000000000) {
+            $temp = self::convert(intdiv($angka, 1000000000)) . ' milyar ' . self::convert(fmod($angka, 1000000000));
         }
 
-        return trim($temp);
+        return trim(preg_replace('/\s+/', ' ', $temp));
     }
 }

@@ -589,31 +589,29 @@
                                     Berangkat dari: {{ $travelOrder->departure_place }}<br />
                                     (Tempat Kedudukan)<br />
                                     Ke: {{ $travelOrder->departure_to }}<br />
-                                    <u>Pada Tanggal:
-                                    {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->isoFormat('D MMMM YYYY') }}</u>
+                                    Pada Tanggal: {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->isoFormat('D MMMM YYYY') }}
                                 </td>
                             </tr>
                             <tr>
                                 <td>II.</td>
-                                <td>Tiba di:<br /><u>Pada Tanggal:</u><br /><br /><br /><br /></td>
-                                <td>Berangkat dari:<br />Ke:<br /><u>Pada Tanggal:</u><br /><br /><br /><br /></td>
+                                <td>Tiba di:<br />Pada Tanggal:<br /><br /><br /><br /></td>
+                                <td>Berangkat dari:<br />Ke:<br />Pada Tanggal:<br /><br /><br /><br /></td>
                             </tr>
                             <tr>
                                 <td>III.</td>
-                                <td>Tiba di:<br /><u>Pada Tanggal:</u><br /><br /><br /><br /></td>
-                                <td>Berangkat dari:<br />Ke:<br /><u>Pada Tanggal:</u><br /><br /><br /><br /></td>
+                                <td>Tiba di:<br />Pada Tanggal:<br /><br /><br /><br /></td>
+                                <td>Berangkat dari:<br />Ke:<br />Pada Tanggal:<br /><br /><br /><br /></td>
                             </tr>
                             <tr>
                                 <td>IV.</td>
-                                <td>Tiba di:<br /><u>Pada Tanggal:</u><br /><br /><br /><br /></td>
+                                <td>Tiba di:<br />Pada Tanggal:<br /><br /><br /><br /></td>
                                 <td>Berangkat dari:<br />Ke:<br /><br /><br /><br /></td>
                             </tr>
                             <tr>
                                 <td>V.</td>
                                 <td colspan="2">
                                     Tiba di : {{ $travelOrder->departure_place }}<br />
-                                    <u>Pada Tanggal :
-                                    {{ \Carbon\Carbon::parse($travelOrder->return_date)->locale('id')->isoFormat('D MMMM YYYY') }}</u><br /><br />
+                                    Pada Tanggal : {{ \Carbon\Carbon::parse($travelOrder->return_date)->locale('id')->isoFormat('D MMMM YYYY') }}<br /><br />
                                     <div style="text-align:justify;">
                                         Telah diperiksa dengan keterangan bahwa perjalanan tersebut atas perintahnya
                                         dan semata-mata untuk kepentingan jabatan dalam waktu yang sesingkat-singkatnya.

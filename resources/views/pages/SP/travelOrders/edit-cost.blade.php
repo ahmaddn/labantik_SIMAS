@@ -30,6 +30,14 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="ri-error-warning-line me-1"></i>
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         {{-- Info Surat Perintah --}}
         <div class="card bg-white border border-white rounded-10 mb-4">
             <div class="card-body p-20">
@@ -76,7 +84,7 @@
                     <div class="row g-3">
 
                         {{-- Kepala Sekolah — readonly, otomatis --}}
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <label class="label fs-16">Kepala Sekolah <span
                                     class="text-muted fs-13">(otomatis)</span></label>
                             <div class="form-group position-relative">
@@ -94,14 +102,14 @@
                         </div>
 
                         {{-- Bendahara — select --}}
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <label class="label fs-16">Bendahara <span class="text-danger">*</span></label>
                             <div class="form-group position-relative">
                                 <select name="treasurer_id"
-                                    class="form-select text-dark ps-5 h-55 @error('treasurer_id') is-invalid @enderror">
+                                    class="form-select text-dark ps-5 h-55 @error('treasurer_id') is-invalid @enderror" required>
                                     <option value="">-- Pilih Bendahara --</option>
                                     @foreach ($treasurers as $treasurer)
-                                        <option value="{{ $treasurer->id }}" {{-- Untuk edit: cek apakah ini bendahara yang sudah dipilih --}}
+                                        <option value="{{ $treasurer->id }}"
                                             {{ old('treasurer_id', $travelOrder->treasurer_id ?? '') == $treasurer->id ? 'selected' : '' }}>
                                             {{ $treasurer->employee?->full_name ?? $treasurer->name }}
                                             @if ($treasurer->employee?->nip)
@@ -114,6 +122,31 @@
                                     style="pointer-events:none;"></i>
                             </div>
                             @error('treasurer_id')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        {{-- Yang Menerima — select dari pegawai yang ditugaskan --}}
+                        <div class="col-lg-4">
+                            <label class="label fs-16">Yang Menerima Uang <span class="text-danger">*</span></label>
+                            <div class="form-group position-relative">
+                                <select name="recipient_employee_id"
+                                    class="form-select text-dark ps-5 h-55 @error('recipient_employee_id') is-invalid @enderror" required>
+                                    <option value="">-- Pilih Yang Menerima --</option>
+                                    @foreach ($travelOrder->employees as $emp)
+                                        <option value="{{ $emp->employee_id }}"
+                                            {{ old('recipient_employee_id', $travelOrder->recipient_employee_id ?? '') == $emp->employee_id ? 'selected' : ($loop->first && !$travelOrder->recipient_employee_id ? 'selected' : '') }}>
+                                            {{ $emp->employee?->full_name ?? '-' }}
+                                            @if ($emp->employee?->nip)
+                                                — NIP {{ $emp->employee->nip }}
+                                            @endif
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <i class="ri-hand-coin-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"
+                                    style="pointer-events:none;"></i>
+                            </div>
+                            @error('recipient_employee_id')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
