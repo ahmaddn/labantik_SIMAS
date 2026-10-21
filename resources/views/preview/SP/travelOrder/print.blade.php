@@ -280,7 +280,21 @@
 
     @php
         $headmaster = $travelOrder->headmaster?->employee;
-        $headmasterName = $headmaster?->full_name ?? 'Kepala Sekolah';
+        if (!$headmaster || empty($headmaster->nip)) {
+            $activeHeadmaster = \App\Models\User::whereHas('roles', function ($query) {
+                    $query->where('name', 'Kepala Sekolah')
+                        ->orWhere('code', 'kepala-sekolah');
+                })
+                ->whereHas('employee', function ($query) {
+                    $query->whereNotNull('nip')->where('nip', '!=', '');
+                })
+                ->with('employee')
+                ->first();
+            if ($activeHeadmaster && $activeHeadmaster->employee) {
+                $headmaster = $activeHeadmaster->employee;
+            }
+        }
+        $headmasterName = $headmaster?->full_name ?? ($travelOrder->headmaster?->name ?? 'Kepala Sekolah');
         $headmasterNip = $headmaster?->nip ?? '-';
     @endphp
 
@@ -349,8 +363,7 @@
                             <td style="text-align:center;">{{ $loop->iteration }}</td>
                             <td>{{ $employ->employee->full_name }}</td>
                             <td>{{ $employ->employee->nip ?? '-' }}</td>
-                            <td>{{ $employ->employee->pns_position ?? ($employ->employee->functional_position ?? ($employ->employee->tmt_position ?? '-')) }}
-                            </td>
+                            <td>{{ $employ->position ?: ($employ->employee->pns_position ?: ($employ->employee->functional_position ?: ($employ->employee->job_name ?: 'Guru'))) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -368,7 +381,7 @@
                                 <td style="width:70px; padding:1px 0;">Hari</td>
                                 <td style="width:10px; padding:1px 5px;">:</td>
                                 <td style="padding:1px 0;">
-                                    {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->isoFormat('dddd') }}
+                                    {{ \App\Helpers\DateRangeHelper::formatDay($travelOrder->departure_date, $travelOrder->return_date, 'id') }}
                                 </td>
                             </tr>
                             <tr>
@@ -387,7 +400,7 @@
                             <tr>
                                 <td style="padding:1px 0;">Tempat</td>
                                 <td style="padding:1px 5px;">:</td>
-                                <td style="padding:1px 0;">{{ $travelOrder->departure_place }}</td>
+                                <td style="padding:1px 0;">{{ $travelOrder->departure_to }}</td>
                             </tr>
                         </table>
                     </td>
@@ -400,8 +413,8 @@
             <div style="text-align:right; margin-top:30px;">
                 <div style="display:inline-block; text-align:left; width:220px;">
                     Dikeluarkan di : {{ $travelOrder->departure_from }}<br />
-                    Pada Tanggal :
-                    {{ \Carbon\Carbon::parse($travelOrder->issue_date)->locale('id')->isoFormat('D MMMM YYYY') }}<br />
+                    <u>Pada Tanggal :
+                    {{ \Carbon\Carbon::parse($travelOrder->issue_date)->locale('id')->isoFormat('D MMMM YYYY') }}</u><br />
                     Kepala Sekolah<br /><br /><br /><br />
                     <div style="font-weight:bold; text-decoration:underline;">{{ $headmasterName }}</div>
                     <div>NIP. {{ $headmasterNip }}</div>
@@ -460,7 +473,7 @@
                             </tr>
                             <tr>
                                 <td style="padding:0;">Nomor</td>
-                                <td style="padding:0;">: {{ $travelOrder->number }}</td>
+                                <td style="padding:0;">: {{ $travelOrder->letter_number }}</td>
                             </tr>
                         </table>
 
@@ -486,9 +499,8 @@
                                 <td>a. Pangkat dan Golongan<br>b. Jabatan/Instansi<br>c. Tingkat Biaya Perjalanan Dinas
                                 </td>
                                 <td colspan="2">
-                                    a. {{ $employ->employee->pns_type ?? '-' }},
-                                    {{ $employ->employee->job_position ?? '-' }}<br>
-                                    b. {{ $employ->employee->position->name ?? '-' }} / SMKN 1 Talaga<br>
+                                    a. {{ $employ->employee->functional_position ?: ($employ->employee->rank_end ?: ($employ->employee->pns_type ?: '-')) }}<br>
+                                    b. {{ $employ->position ?: ($employ->employee->pns_position ?: ($employ->employee->job_name ?: 'Guru')) }} / SMKN 1 Talaga<br>
                                     c. -
                                 </td>
                             </tr>
@@ -505,7 +517,7 @@
                             <tr>
                                 <td align="center">6</td>
                                 <td>a. Tempat Berangkat<br>b. Tempat Tujuan</td>
-                                <td colspan="2">a. SMKN 1 Talaga<br>b. {{ $travelOrder->destination }}</td>
+                                <td colspan="2">a. {{ $travelOrder->departure_place ?? 'SMKN 1 Talaga' }}<br>b. {{ $travelOrder->departure_to }}</td>
                             </tr>
                             <tr>
                                 <td align="center">7</td>
@@ -514,9 +526,9 @@
                                 <td colspan="2">
                                     a. {{ $travelOrder->duration_days }} Hari<br>
                                     b.
-                                    {{ \Carbon\Carbon::parse($travelOrder->start_date)->locale('id')->isoFormat('D MMMM YYYY') }}<br>
+                                    {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->isoFormat('D MMMM YYYY') }}<br>
                                     c.
-                                    {{ \Carbon\Carbon::parse($travelOrder->end_date)->locale('id')->isoFormat('D MMMM YYYY') }}
+                                    {{ \Carbon\Carbon::parse($travelOrder->return_date)->locale('id')->isoFormat('D MMMM YYYY') }}
                                 </td>
                             </tr>
                             <tr>
@@ -559,8 +571,8 @@
 
                         <div style="text-align:left; margin-left:55%; font-size:8pt; margin-top:10px;">
                             Dikeluarkan di : Talaga<br>
-                            Pada Tanggal :
-                            {{ \Carbon\Carbon::parse($travelOrder->issue_date ?? $travelOrder->departure_date)->locale('id')->isoFormat('D MMMM YYYY') }}<br>
+                            <u>Pada Tanggal :
+                            {{ \Carbon\Carbon::parse($travelOrder->issue_date ?? $travelOrder->departure_date)->locale('id')->isoFormat('D MMMM YYYY') }}</u><br>
                             Kuasa Pengguna Anggaran<br><br><br><br>
                             <strong><u>{{ $headmasterName }}</u></strong><br>
                             NIP. {{ $headmasterNip }}
@@ -577,31 +589,31 @@
                                     Berangkat dari: {{ $travelOrder->departure_place }}<br />
                                     (Tempat Kedudukan)<br />
                                     Ke: {{ $travelOrder->departure_to }}<br />
-                                    Pada Tanggal:
-                                    {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->isoFormat('D MMMM YYYY') }}
+                                    <u>Pada Tanggal:
+                                    {{ \Carbon\Carbon::parse($travelOrder->departure_date)->locale('id')->isoFormat('D MMMM YYYY') }}</u>
                                 </td>
                             </tr>
                             <tr>
                                 <td>II.</td>
-                                <td>Tiba di:<br />Pada Tanggal:<br /><br /><br /><br /></td>
-                                <td>Berangkat dari:<br />Ke:<br />Pada Tanggal:<br /><br /><br /><br /></td>
+                                <td>Tiba di:<br /><u>Pada Tanggal:</u><br /><br /><br /><br /></td>
+                                <td>Berangkat dari:<br />Ke:<br /><u>Pada Tanggal:</u><br /><br /><br /><br /></td>
                             </tr>
                             <tr>
                                 <td>III.</td>
-                                <td>Tiba di:<br />Pada Tanggal:<br /><br /><br /><br /></td>
-                                <td>Berangkat dari:<br />Ke:<br />Pada Tanggal:<br /><br /><br /><br /></td>
+                                <td>Tiba di:<br /><u>Pada Tanggal:</u><br /><br /><br /><br /></td>
+                                <td>Berangkat dari:<br />Ke:<br /><u>Pada Tanggal:</u><br /><br /><br /><br /></td>
                             </tr>
                             <tr>
                                 <td>IV.</td>
-                                <td>Tiba di:<br />Pada Tanggal:<br /><br /><br /><br /></td>
+                                <td>Tiba di:<br /><u>Pada Tanggal:</u><br /><br /><br /><br /></td>
                                 <td>Berangkat dari:<br />Ke:<br /><br /><br /><br /></td>
                             </tr>
                             <tr>
                                 <td>V.</td>
                                 <td colspan="2">
                                     Tiba di : {{ $travelOrder->departure_place }}<br />
-                                    Pada Tanggal :
-                                    {{ \Carbon\Carbon::parse($travelOrder->return_date)->locale('id')->isoFormat('D MMMM YYYY') }}<br /><br />
+                                    <u>Pada Tanggal :
+                                    {{ \Carbon\Carbon::parse($travelOrder->return_date)->locale('id')->isoFormat('D MMMM YYYY') }}</u><br /><br />
                                     <div style="text-align:justify;">
                                         Telah diperiksa dengan keterangan bahwa perjalanan tersebut atas perintahnya
                                         dan semata-mata untuk kepentingan jabatan dalam waktu yang sesingkat-singkatnya.
@@ -633,128 +645,150 @@
 
     {{-- ═══════════════════════════════════════════════════════════════
      HALAMAN LAPORAN - LAPORAN HASIL PERJALANAN DINAS (Portrait)
-     Di-loop per pegawai
+     Hanya 1 halaman dengan tanda tangan menyesuaikan jumlah petugas
 ═════════════════════════════════════════════════════════════════════ --}}
-    @foreach ($travelOrder->employees as $index => $employ)
-        <div class="page-portrait laporan-page">
+    <div class="page-portrait laporan-page">
 
-            {{-- KOP SURAT --}}
-            <div class="header">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Coat_of_arms_of_West_Java.svg/500px-Coat_of_arms_of_West_Java.svg.png"
-                    alt="Logo" />
-                <h4>PEMERINTAH DAERAH PROVINSI JAWA BARAT</h4>
-                <h2>CABANG DINAS PENDIDIKAN WILAYAH IX</h2>
-                <h4>SEKOLAH MENENGAH KEJURUAN NEGERI 1 TALAGA</h4>
-                <div class="address">
-                    Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen<br />
-                    Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br />
-                    Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br />
-                    Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;
-                    FAX <i class="fa-solid fa-fax"></i> (0233) 319238 &nbsp;
-                    POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp; NPSN: 20213872<br />
-                    Website <i class="fa-solid fa-globe"></i>
-                    <a href="http://www.smkn1talaga.sch.id">www.smkn1talaga.sch.id</a>
-                    &nbsp;&#8211;&nbsp; Email <i class="fa-solid fa-envelope"></i>
-                    <a href="mailto:admin@smkn1talaga.sch.id">admin@smkn1talaga.sch.id</a>
-                </div>
+        {{-- KOP SURAT --}}
+        <div class="header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Coat_of_arms_of_West_Java.svg/500px-Coat_of_arms_of_West_Java.svg.png"
+                alt="Logo" />
+            <h4>PEMERINTAH DAERAH PROVINSI JAWA BARAT</h4>
+            <h2>CABANG DINAS PENDIDIKAN WILAYAH IX</h2>
+            <h4>SEKOLAH MENENGAH KEJURUAN NEGERI 1 TALAGA</h4>
+            <div class="address">
+                Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen<br />
+                Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br />
+                Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br />
+                Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;
+                FAX <i class="fa-solid fa-fax"></i> (0233) 319238 &nbsp;
+                POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp; NPSN: 20213872<br />
+                Website <i class="fa-solid fa-globe"></i>
+                <a href="http://www.smkn1talaga.sch.id">www.smkn1talaga.sch.id</a>
+                &nbsp;&#8211;&nbsp; Email <i class="fa-solid fa-envelope"></i>
+                <a href="mailto:admin@smkn1talaga.sch.id">admin@smkn1talaga.sch.id</a>
             </div>
-
-            {{-- JUDUL --}}
-            <div
-                style="text-align:center; font-weight:bold; text-decoration:underline; font-size:12pt;
-            font-family:Arial,sans-serif; margin-bottom:16px;">
-                LAPORAN HASIL PERJALANAN DINAS
-            </div>
-
-            {{-- ISI LAPORAN --}}
-            <div style="font-family:Arial,sans-serif; font-size:11pt; line-height:1.6;">
-
-                {{-- 1. Dasar --}}
-                <div style="display:flex; align-items:baseline; margin-bottom:4px;">
-                    <span style="display:inline-block; width:24px; flex-shrink:0;">1.</span>
-                    <span style="display:inline-block; width:180px; flex-shrink:0;">Dasar</span>
-                    <span style="display:inline-block; width:16px; flex-shrink:0;">:</span>
-                    <span style="flex:1;">{{ $travelOrder->base }}</span>
-                </div>
-
-                {{-- 2. Maksud dan Tujuan --}}
-                <div style="display:flex; align-items:baseline; margin-bottom:4px;">
-                    <span style="display:inline-block; width:24px; flex-shrink:0;">2.</span>
-                    <span style="display:inline-block; width:180px; flex-shrink:0;">Maksud dan Tujuan</span>
-                    <span style="display:inline-block; width:16px; flex-shrink:0;">:</span>
-                    <span style="flex:1;">{{ $travelOrder->purpose }}</span>
-                </div>
-
-                {{-- 3. Isi Laporan --}}
-                <div style="display:flex; align-items:baseline;">
-                    <span style="display:inline-block; width:24px; flex-shrink:0;">3.</span>
-                    <span>Isi Laporan</span>
-                </div>
-
-                {{-- 3a. Waktu Pelaksanaan --}}
-                <div style="display:flex; align-items:baseline; padding-left:24px; margin-bottom:4px;">
-                    <span style="display:inline-block; width:22px; flex-shrink:0;">a.</span>
-                    <span style="display:inline-block; width:230px; flex-shrink:0;">Waktu Pelaksanaan,
-                        Hari/Tanggal</span>
-                    <span style="display:inline-block; width:16px; flex-shrink:0;">:</span>
-                    {{-- Waktu Pelaksanaan di Laporan --}}
-                    <span style="flex:1;">
-                        {{ \App\Helpers\DateRangeHelper::format($travelOrder->departure_date, $travelOrder->return_date) }}
-                        ({{ $travelOrder->duration_days }} Hari)
-                    </span>
-                </div>
-
-                {{-- 3b. Instansi Penyelenggara --}}
-                <div style="display:flex; align-items:baseline; padding-left:24px; margin-bottom:4px;">
-                    <span style="display:inline-block; width:22px; flex-shrink:0;">b.</span>
-                    <span style="display:inline-block; width:230px; flex-shrink:0;">Instansi/Perusahaan Penyelenggara
-                        Kegiatan</span>
-                    <span style="display:inline-block; width:16px; flex-shrink:0;">:</span>
-                    <span style="flex:1;">{{ $travelOrder->departure_to ?? '-' }}</span>
-                </div>
-
-                {{-- 3c. Hasil Pelaksanaan Tugas --}}
-                <div style="display:flex; align-items:baseline; padding-left:24px; margin-bottom:4px;">
-                    <span style="display:inline-block; width:22px; flex-shrink:0;">c.</span>
-                    <span>Hasil Pelaksanaan Tugas :</span>
-                </div>
-
-                {{-- 13 garis kosong --}}
-                @for ($i = 0; $i < 13; $i++)
-                    <div style="border-bottom:1px dotted #000; height:22px; width:100%;"></div>
-                @endfor
-
-            </div>{{-- end isi laporan --}}
-
-            {{-- TANDA TANGAN --}}
-            <div
-                style="width:80%; margin:24px auto 0 auto;
-        display:flex; gap:60px;
-        font-family:Arial; font-size:11pt;">
-
-                <div style="flex:1; text-align:left;">
-                    Mengetahui,<br>
-                    Kepala Sekolah,
-                    <div style="height:65px;"></div>
-                    <div style="font-weight:bold; text-decoration:underline;">{{ $headmasterName }}</div>
-                    <div>NIP. {{ $headmasterNip }}</div>
-                </div>
-
-                <div style="flex:1; text-align:left; margin-left: 50px;">
-                    Talaga,
-                    {{ \Carbon\Carbon::parse($travelOrder->return_date ?? now())->locale('id')->isoFormat('D MMMM YYYY') }}<br>
-                    Yang Membuat Laporan,
-                    <div style="height:65px;"></div>
-                    <div style="font-weight:bold; text-decoration:underline;">
-                        {{ $employ->employee->full_name }}
-                    </div>
-                    <div>NIP. {{ $employ->employee->nip ?? '-' }}</div>
-                </div>
-
-            </div>
-
         </div>
-    @endforeach
+
+        {{-- JUDUL --}}
+        <div style="text-align:center; font-weight:bold; text-decoration:underline; font-size:12pt; font-family:Arial,sans-serif; margin-bottom:14px;">
+            LAPORAN HASIL PERJALANAN DINAS
+        </div>
+
+        {{-- ISI LAPORAN SESUAI FORMAT FOTO --}}
+        <div style="font-family:Arial,sans-serif; font-size:10pt; line-height:1.5;">
+
+            {{-- 1. Dasar --}}
+            <table class="no-border" style="width:100%; border-collapse:collapse; margin-bottom:4px;">
+                <tr>
+                    <td style="width:18px; vertical-align:top; padding:1px 0;">1.</td>
+                    <td style="width:90px; vertical-align:top; padding:1px 0;">Dasar</td>
+                    <td style="width:14px; vertical-align:top; padding:1px 0;">:</td>
+                    <td style="padding:1px 0;">{{ $travelOrder->base ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td style="padding:1px 0;"></td>
+                    <td style="padding:1px 0;">a. Nomor</td>
+                    <td style="padding:1px 0;">:</td>
+                    <td style="padding:1px 0;">{{ $travelOrder->letter_number }}</td>
+                </tr>
+                <tr>
+                    <td style="padding:1px 0;"></td>
+                    <td style="padding:1px 0;">b. Tanggal</td>
+                    <td style="padding:1px 0;">:</td>
+                    <td style="padding:1px 0;">{{ \Carbon\Carbon::parse($travelOrder->issue_date)->locale('id')->isoFormat('D MMMM YYYY') }}</td>
+                </tr>
+            </table>
+
+            {{-- 2. Maksud dari Tujuan --}}
+            <table class="no-border" style="width:100%; border-collapse:collapse; margin-bottom:4px;">
+                <tr>
+                    <td style="width:18px; vertical-align:top; padding:1px 0;">2.</td>
+                    <td style="width:150px; vertical-align:top; padding:1px 0;">Maksud dari Tujuan</td>
+                    <td style="width:14px; vertical-align:top; padding:1px 0;">:</td>
+                    <td style="padding:1px 0;">{{ $travelOrder->purpose }}</td>
+                </tr>
+            </table>
+
+            {{-- 3. Isi Laporan --}}
+            <table class="no-border" style="width:100%; border-collapse:collapse; margin-bottom:2px;">
+                <tr>
+                    <td style="width:18px; vertical-align:top; padding:1px 0;">3.</td>
+                    <td colspan="3" style="padding:1px 0;">Isi Laporan</td>
+                </tr>
+                <tr>
+                    <td style="padding:1px 0;"></td>
+                    <td style="width:260px; vertical-align:top; padding:1px 0;">a. Waktu Pelaksanaan, Hari/Tanggal</td>
+                    <td style="width:14px; vertical-align:top; padding:1px 0;">:</td>
+                    <td style="padding:1px 0;">
+                        {{ \App\Helpers\DateRangeHelper::formatDay($travelOrder->departure_date, $travelOrder->return_date, 'id') }},
+                        {{ \App\Helpers\DateRangeHelper::format($travelOrder->departure_date, $travelOrder->return_date, 'id', false) }}
+                        ({{ $travelOrder->duration_days }} Hari)
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:1px 0;"></td>
+                    <td style="vertical-align:top; padding:1px 0;">b. Instansi/Perusahaan Penyelenggara Kegiatan</td>
+                    <td style="vertical-align:top; padding:1px 0;">:</td>
+                    <td style="padding:1px 0;">{{ $travelOrder->departure_to ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td style="padding:1px 0;"></td>
+                    <td colspan="3" style="padding:2px 0 0 0;">c. Hasil Pelaksanaan :</td>
+                </tr>
+            </table>
+
+            {{-- Titik-titik baris hasil pelaksanaan --}}
+            @php
+                $employeeCount = $travelOrder->employees->count();
+                // Hitung jumlah baris titik-titik secara presisi agar tidak tumpah ke halaman berikutnya
+                $dottedLines = $employeeCount > 3 ? 3 : ($employeeCount > 1 ? 5 : 7);
+                $sigSpace = $employeeCount > 2 ? '50px' : '65px';
+            @endphp
+            <div style="margin-top:2px; margin-bottom:12px;">
+                @for ($i = 0; $i < $dottedLines; $i++)
+                    <div style="border-bottom:1px dotted #000; height:18px; width:100%;"></div>
+                @endfor
+            </div>
+
+        </div>{{-- end isi laporan --}}
+
+        {{-- TANDA TANGAN SESUAI FORMAT FOTO KEDUA --}}
+        <div style="width:100%; font-family:Arial,sans-serif; font-size:10pt;">
+            <table class="no-border" style="width:100%; border-collapse:collapse;">
+                <tr>
+                    {{-- KOLOM KIRI: MENGETAHUI KEPALA SEKOLAH --}}
+                    <td style="width:48%; vertical-align:top;">
+                        Mengetahui,<br>
+                        Kepala Sekolah ,<br><br><br><br><br><br>
+                        <div style="font-weight:bold; text-decoration:underline;">{{ $headmasterName }}</div>
+                        <div>NIP.{{ $headmasterNip }}</div>
+                    </td>
+
+                    <td style="width:4%;"></td>
+
+                    {{-- KOLOM KANAN: YANG MEMBUAT LAPORAN --}}
+                    <td style="width:48%; vertical-align:top;">
+                        Talaga, {{ \Carbon\Carbon::parse($travelOrder->return_date ?? now())->locale('id')->isoFormat('D MMMM YYYY') }}<br>
+                        Yang Membuat Laporan
+                        <div style="margin-top:10px;">
+                            @foreach ($travelOrder->employees as $emp)
+                                <div style="margin-top:{{ $sigSpace }};">
+                                    <div style="font-weight:bold; text-decoration:underline;">
+                                        {{ $loop->iteration }}. {{ $emp->employee->full_name }}
+                                    </div>
+                                    <div style="margin-top:2px;">
+                                        NIP. {{ $emp->employee->nip ?? '-' }}
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
 
     <script>
         function handlePrint() {

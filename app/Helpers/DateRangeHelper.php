@@ -37,4 +37,22 @@ class DateRangeHelper
 
         return $start->isoFormat('D MMMM YYYY') . ' - ' . $end->isoFormat('D MMMM YYYY');
     }
+
+    public static function formatDay(string|Carbon|null $start, string|Carbon|null $end, string $locale = 'id'): string
+    {
+        if (!$start && !$end) return '-';
+        if (!$end || !$start) {
+            $date = Carbon::parse($start ?? $end)->locale($locale);
+            return $date->isoFormat('dddd');
+        }
+
+        $startDate = Carbon::parse($start)->locale($locale);
+        $endDate   = Carbon::parse($end)->locale($locale);
+
+        if ($startDate->isSameDay($endDate)) {
+            return $startDate->isoFormat('dddd');
+        }
+
+        return $startDate->isoFormat('dddd') . ' - ' . $endDate->isoFormat('dddd');
+    }
 }

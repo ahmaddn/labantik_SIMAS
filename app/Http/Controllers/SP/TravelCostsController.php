@@ -29,11 +29,27 @@ class TravelCostsController extends Controller
         $accommodationCategories = M_TravelCostCategory::accommodation()->active()->ordered()->get();
         $transportCategories     = M_TravelCostCategory::transport()->active()->ordered()->get();
 
-        // Ambil user bendahara dari role
-        $treasurers = User::withRole('Bendahara')->with('employee')->get();
+        // Ambil bendahara dari Master Bendahara (M_Treasurer), jika belum ada ambil dari User role bendahara
+        $treasurers = \App\Models\M_Treasurer::active()->with('employee')->get();
+        if ($treasurers->isEmpty()) {
+            $treasurers = User::withRole('Bendahara')->with('employee')->get();
+        }
 
-        // Ambil kepala sekolah otomatis dari role
-        $headmaster = User::withRole('Kepala sekolah')->first();
+        // Ambil kepala sekolah yang aktif dan ada NIP-nya
+        $headmaster = User::whereHas('roles', function ($query) {
+                $query->where('name', 'Kepala Sekolah')
+                    ->orWhere('code', 'kepala-sekolah');
+            })
+            ->whereHas('employee', function ($query) {
+                $query->whereNotNull('nip')->where('nip', '!=', '');
+            })
+            ->with('employee')
+            ->first();
+
+        // Fallback jika tidak ditemukan yang ber-NIP
+        if (!$headmaster) {
+            $headmaster = User::withRole('Kepala sekolah')->with('employee')->first();
+        }
 
         // Simpan headmaster_id otomatis ke travel order jika belum ada
         if ($headmaster && !$travelOrder->headmaster_id) {
@@ -57,7 +73,7 @@ class TravelCostsController extends Controller
     {
         $request->validate([
             'travel_order_id' => 'required|exists:m_official_travel_orders,id',
-            'treasurer_id'    => 'required|exists:core_users,id',
+            'treasurer_id'    => 'required|string',
             'daily'                            => 'nullable|array',
             'daily.*.employee_name'            => 'nullable|string|max:255',
             'daily.*.amount_per_day'           => 'nullable|numeric|min:0',
@@ -186,8 +202,24 @@ class TravelCostsController extends Controller
         $accommodationCategories = M_TravelCostCategory::accommodation()->active()->ordered()->get();
         $transportCategories     = M_TravelCostCategory::transport()->active()->ordered()->get();
 
-        $treasurers = User::withRole('bendahara')->with('employee')->get();
-        $headmaster = User::withRole('kepala sekolah')->first();
+        $treasurers = \App\Models\M_Treasurer::active()->with('employee')->get();
+        if ($treasurers->isEmpty()) {
+            $treasurers = User::withRole('bendahara')->with('employee')->get();
+        }
+
+        $headmaster = User::whereHas('roles', function ($query) {
+                $query->where('name', 'Kepala Sekolah')
+                    ->orWhere('code', 'kepala-sekolah');
+            })
+            ->whereHas('employee', function ($query) {
+                $query->whereNotNull('nip')->where('nip', '!=', '');
+            })
+            ->with('employee')
+            ->first();
+
+        if (!$headmaster) {
+            $headmaster = User::withRole('kepala sekolah')->with('employee')->first();
+        }
 
         return view('pages.SP.travelOrders.edit-cost', compact(
             'travelOrder',
@@ -206,7 +238,7 @@ class TravelCostsController extends Controller
         M_Official_Travel_Orders::findOrFail($travelOrderId);
 
         $request->validate([
-            'treasurer_id' => 'required|exists:core_users,id',
+            'treasurer_id' => 'required|string',
             'daily'                            => 'nullable|array',
             'daily.*.employee_name'            => 'nullable|string|max:255',
             'daily.*.amount_per_day'           => 'nullable|numeric|min:0',

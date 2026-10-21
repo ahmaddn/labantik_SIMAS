@@ -17,6 +17,7 @@ class M_Travel_Order_Participans extends Model
         'id',
         'travel_order_id',
         'employee_id',
+        'position',
     ];
 
     protected static function boot()
