@@ -284,7 +284,8 @@
             </a>
         </div>
 
-        <div style="display: flex; gap: 10px">
+        <div style="display: flex; gap: 10px; align-items: center;">
+            @include('preview.components.margin-settings')
             <a href="{{ route('sk.generalLetters.edit', $letter->id) }}" class="btn btn-edit">
                 <i class="fa-solid fa-pen-to-square"></i> Edit Data
             </a>
@@ -309,14 +310,14 @@
                     Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen<br />
                     Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br />
                     Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br />
-                    Telpon <i class="fa-solid fa-phone"></i> (0233) 319238
-                    &nbsp; FAX <i class="fa-solid fa-fax"></i> (0233) 319238
-                    &nbsp; POS <i class="fa-solid fa-envelope"></i> 45463
+                    Telpon (0233) 319238
+                    &nbsp; FAX (0233) 319238
+                    &nbsp; POS 45463
                     &nbsp; NPSN: 20213872<br />
                     Website <i class="fa-solid fa-globe"></i>
                     <a href="http://www.smkn1talaga.sch.id" target="_blank">www.smkn1talaga.sch.id</a>
                     &nbsp;–&nbsp; Email <i class="fa-solid fa-envelope"></i>
-                    <a href="mailto:admin@smkn1talaga.sch.id">admin@smkn1talaga.sch.id</a>
+                    <a href="mailto:mail@smkn1talaga.sch.id">mail@smkn1talaga.sch.id</a>
                 </div>
             </div>
         </div>

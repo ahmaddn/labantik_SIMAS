@@ -17,6 +17,7 @@
             font-size: 10pt;
             line-height: 1.3;
             margin: 0;
+            padding: 20px;
             background-color: #f0f0f0;
         }
 
@@ -244,13 +245,21 @@
         .ttd-container {
             display: flex;
             justify-content: space-between;
-            margin-top: 5px;
+            align-items: stretch;
+            margin-top: 15px;
             page-break-inside: avoid;
         }
 
         .ttd-box {
-            width: 45%;
+            width: 48%;
             text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .ttd-box-header {
+            min-height: 48px;
         }
 
         .ttd-space {
@@ -311,12 +320,15 @@
         <a href="{{ route('sp.travelOrders.index') }}" class="btn btn-back">
             <i class="fa-solid fa-arrow-left"></i> Kembali
         </a>
-        <a href="{{ route('sp.travelCosts.edit', $travelOrder->id) }}" class="btn btn-edit">
-            <i class="fa-solid fa-edit"></i> Edit
-        </a>
-        <button onclick="window.print()" class="btn btn-print">
-            <i class="fa-solid fa-print"></i> Print
-        </button>
+        <div style="display: inline-flex; align-items: center; gap: 8px;">
+            @include('preview.components.margin-settings')
+            <a href="{{ route('sp.travelCosts.edit', $travelOrder->id) }}" class="btn btn-edit">
+                <i class="fa-solid fa-edit"></i> Edit
+            </a>
+            <button onclick="window.print()" class="btn btn-print">
+                <i class="fa-solid fa-print"></i> Print
+            </button>
+        </div>
     </div>
 
     {{-- ======================================================= --}}
@@ -333,14 +345,14 @@
                 Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen<br />
                 Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br />
                 Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br />
-                Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;
-                FAX <i class="fa-solid fa-fax"></i> (0233) 319238 &nbsp;
-                POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp;
+                Telpon (0233) 319238 &nbsp;
+                FAX (0233) 319238 &nbsp;
+                POS 45463 &nbsp;
                 NPSN: 20213872<br />
                 Website <i class="fa-solid fa-globe"></i>
                 <a href="http://www.smkn1talaga.sch.id">www.smkn1talaga.sch.id</a>
-                &nbsp;–&nbsp; Email <i class="fa-solid fa-envelope"></i>
-                <a href="mailto:admin@smkn1talaga.sch.id">admin@smkn1talaga.sch.id</a>
+                &nbsp;&#8211;&nbsp; Email <i class="fa-solid fa-envelope"></i>
+                <a href="mailto:mail@smkn1talaga.sch.id">mail@smkn1talaga.sch.id</a>
             </div>
         </div>
 
@@ -376,6 +388,7 @@
                             <table class="no-border" style="width:100%; margin:0;">
                                 @forelse($travelOrder->dailyAllowances as $daily)
                                     <tr>
+                                        <td style="width: 25px; vertical-align: top;">{{ $loop->iteration }}.</td>
                                         <td>{{ $daily->employee_name }}</td>
                                         <td style="text-align:right;">
                                             {{ $daily->days }} hari x
@@ -384,7 +397,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="2">&nbsp;</td>
+                                        <td colspan="3">&nbsp;</td>
                                     </tr>
                                 @endforelse
                             </table>
@@ -433,15 +446,18 @@
                     <tr>
                         <td></td>
                         <td>
+                            @php $itemNumber = 1; @endphp
                             @foreach ($travelOrder->transports as $transport)
-                                {{ $transport->category?->name ?? 'Transport' }}
-                                <span
-                                    style="float:right;">{{ number_format($transport->amount, 0, ',', '.') }},-</span><br>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                    <span>{{ $itemNumber++ }}. {{ $transport->category?->name ?? 'Transport' }}</span>
+                                    <span>{{ number_format($transport->amount, 0, ',', '.') }},-</span>
+                                </div>
                             @endforeach
                             @foreach ($travelOrder->accommodations as $accommodation)
-                                {{ $accommodation->category?->name ?? 'Penginapan' }}
-                                <span
-                                    style="float:right;">{{ number_format($accommodation->total_amount, 0, ',', '.') }},-</span><br>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                                    <span>{{ $itemNumber++ }}. {{ $accommodation->category?->name ?? 'Penginapan' }}</span>
+                                    <span>{{ number_format($accommodation->total_amount, 0, ',', '.') }},-</span>
+                                </div>
                             @endforeach
                             @if ($travelOrder->transports->isEmpty() && $travelOrder->accommodations->isEmpty())
                                 &nbsp;
@@ -482,7 +498,7 @@
                     </tr>
                     <tr>
                         <td colspan="3" class="italic bold">
-                            Terbilang: {{ ucfirst(\App\Helpers\Terbilang::convert($travelOrder->grand_total)) }} Rupiah
+                            Terbilang : {{ \App\Helpers\Terbilang::convert($travelOrder->grand_total) }} Rupiah
                         </td>
                     </tr>
 
@@ -492,24 +508,35 @@
             {{-- TTD Rincian Biaya --}}
             <div class="ttd-container">
                 <div class="ttd-box">
-                    <p>Telah dibayar, sejumlah<br>
-                        Rp {{ number_format($travelOrder->grand_total, 0, ',', '.') }},-<br>
-                        Bendahara</p>
+                    <div class="ttd-box-header">
+                        <p style="margin: 0; line-height: 1.4;">
+                            Telah dibayar, sejumlah<br>
+                            Rp {{ number_format($travelOrder->grand_total, 0, ',', '.') }},-<br>
+                            Bendahara
+                        </p>
+                    </div>
                     <div class="ttd-space"></div>
-                    @php $bendahara = $travelOrder->employees->first(fn($e) => optional($e->employee)->job_position === 'Bendahara') ?? $travelOrder->employees->skip(1)->first(); @endphp
-                    <p class="bold">
-                        {{ $travelOrder->treasurer?->employee?->full_name ?? ($travelOrder->treasurer?->name ?? '-') }}
-                    </p>
-                    <p>NIP {{ $travelOrder->treasurer?->employee?->nip ?? '-' }}</p>
+                    <div>
+                        <p class="bold" style="margin: 0;">
+                            {{ $travelOrder->treasurer?->employee?->full_name ?? ($travelOrder->treasurer?->name ?? '-') }}
+                        </p>
+                        <p style="margin: 0;">NIP {{ $travelOrder->treasurer?->employee?->nip ?? '-' }}</p>
+                    </div>
                 </div>
                 <div class="ttd-box">
-                    <p>{{ $travelOrder->issue_date?->translatedFormat('d F Y') ?? '-' }}<br>
-                        Telah menerima jumlah uang sebesar<br>
-                        Rp {{ number_format($travelOrder->grand_total, 0, ',', '.') }},-<br>
-                        Yang Menerima,</p>
+                    <div class="ttd-box-header">
+                        <p style="margin: 0; line-height: 1.4;">
+                            Talaga, {{ ($travelOrder->return_date ?? $travelOrder->departure_date)?->translatedFormat('d F Y') ?? '-' }}<br>
+                            Telah menerima jumlah uang sebesar<br>
+                            Rp {{ number_format($travelOrder->grand_total, 0, ',', '.') }},-<br>
+                            Yang Menerima,
+                        </p>
+                    </div>
                     <div class="ttd-space"></div>
-                    <p class="bold">{{ $recipientName }}</p>
-                    <p>NIP {{ $recipientNip }}</p>
+                    <div>
+                        <p class="bold" style="margin: 0;">{{ $recipientName }}</p>
+                        <p style="margin: 0;">NIP {{ $recipientNip }}</p>
+                    </div>
                 </div>
             </div>
 
@@ -534,14 +561,17 @@
                 </div>
 
                 <div class="ttd-container" style="margin-top: 10px; justify-content: flex-end;">
-                    <div class="ttd-box">
-                        <p>{{ $travelOrder->issue_date?->translatedFormat('d F Y') ?? '-' }}<br>Kuasa Pengguna
-                            Anggaran,</p>
-                        <div class="ttd-space"></div>
-                        <p class="bold">
-                            {{ $headmasterName }}
+                    <div class="ttd-box" style="width: 48%;">
+                        <p style="margin: 0; line-height: 1.4;">
+                            Talaga, {{ ($travelOrder->return_date ?? $travelOrder->departure_date)?->translatedFormat('d F Y') ?? '-' }}<br>Kuasa Pengguna Anggaran,
                         </p>
-                        <p>NIP: {{ $headmasterNip }}</p>
+                        <div class="ttd-space"></div>
+                        <div>
+                            <p class="bold" style="margin: 0;">
+                                {{ $headmasterName }}
+                            </p>
+                            <p style="margin: 0;">NIP: {{ $headmasterNip }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -556,20 +586,20 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Coat_of_arms_of_West_Java.svg/500px-Coat_of_arms_of_West_Java.svg.png"
                 alt="Logo" />
             <h4>PEMERINTAH DAERAH PROVINSI JAWA BARAT</h4>
-            <h4>CABANG DINAS PENDIDIKAN WILAYAH IX</h4>
-            <h2>SEKOLAH MENENGAH KEJURUAN NEGERI 1 TALAGA</h2>
+            <h2>CABANG DINAS PENDIDIKAN WILAYAH IX</h2>
+            <h4>SEKOLAH MENENGAH KEJURUAN NEGERI 1 TALAGA</h4>
             <div class="address">
                 Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen<br />
                 Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br />
                 Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br />
-                Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;
-                FAX <i class="fa-solid fa-fax"></i> (0233) 319238 &nbsp;
-                POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp;
+                Telpon (0233) 319238 &nbsp;
+                FAX (0233) 319238 &nbsp;
+                POS 45463 &nbsp;
                 NPSN: 20213872<br />
                 Website <i class="fa-solid fa-globe"></i>
                 <a href="http://www.smkn1talaga.sch.id">www.smkn1talaga.sch.id</a>
-                &nbsp;–&nbsp; Email <i class="fa-solid fa-envelope"></i>
-                <a href="mailto:admin@smkn1talaga.sch.id">admin@smkn1talaga.sch.id</a>
+                &nbsp;&#8211;&nbsp; Email <i class="fa-solid fa-envelope"></i>
+                <a href="mailto:mail@smkn1talaga.sch.id">mail@smkn1talaga.sch.id</a>
             </div>
         </div>
 
@@ -650,20 +680,30 @@
 
             <div class="ttd-container">
                 <div class="ttd-box">
-                    <p>Kuasa Pengguna Anggaran,</p>
+                    <div class="ttd-box-header">
+                        <p style="margin: 0; line-height: 1.4;">Kuasa Pengguna Anggaran,</p>
+                    </div>
                     <div class="ttd-space"></div>
-                    <p class="bold">
-                        {{ $headmasterName }}
-                    </p>
-                    <p>NIP: {{ $headmasterNip }}</p>
+                    <div>
+                        <p class="bold" style="margin: 0;">
+                            {{ $headmasterName }}
+                        </p>
+                        <p style="margin: 0;">NIP: {{ $headmasterNip }}</p>
+                    </div>
                 </div>
                 <div class="ttd-box">
-                    <p>{{ $travelOrder->issue_date?->translatedFormat('d F Y') ?? '-' }}<br>Bendahara</p>
+                    <div class="ttd-box-header">
+                        <p style="margin: 0; line-height: 1.4;">
+                            Talaga, {{ ($travelOrder->return_date ?? $travelOrder->departure_date)?->translatedFormat('d F Y') ?? '-' }}<br>Bendahara
+                        </p>
+                    </div>
                     <div class="ttd-space"></div>
-                    <p class="bold">
-                        {{ $travelOrder->treasurer?->employee?->full_name ?? ($travelOrder->treasurer?->name ?? '-') }}
-                    </p>
-                    <p>NIP {{ $travelOrder->treasurer?->employee?->nip ?? '-' }}</p>
+                    <div>
+                        <p class="bold" style="margin: 0;">
+                            {{ $travelOrder->treasurer?->employee?->full_name ?? ($travelOrder->treasurer?->name ?? '-') }}
+                        </p>
+                        <p style="margin: 0;">NIP {{ $travelOrder->treasurer?->employee?->nip ?? '-' }}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -680,8 +720,8 @@
                     <td style="width: 50%;"></td>
                     <td>
                         Nomor : {{ $travelOrder->letter_number ?? '...' }}
-                        CADISDIKWIL.IX/{{ $travelOrder->issue_date?->format('Y') ?? date('Y') }}<br>
-                        Kodering : 5.1.02.04.01.0001
+                        CADISDIKWIL.IX/{{ ($travelOrder->return_date ?? $travelOrder->issue_date)?->format('Y') ?? date('Y') }}<br>
+                        Kodering : {{ $travelOrder->kodering ?? '5.1.02.04.01.0001' }}
                     </td>
                 </tr>
             </table>
@@ -700,7 +740,7 @@
                     <td>:
                         <div class="parallelogram">
                             <span class="parallelogram-content">===
-                                {{ ucfirst(\App\Helpers\Terbilang::convert($travelOrder->grand_total)) }} Rupiah
+                                {{ \App\Helpers\Terbilang::convert($travelOrder->grand_total) }} Rupiah
                                 ===</span>
                         </div>
                     </td>
@@ -718,7 +758,7 @@
                     <td>Yaitu</td>
                     <td>: {{ $travelOrder->purpose }}
                         An {{ $recipientName }}
-                        tgl {{ $travelOrder->departure_date?->translatedFormat('d F Y') ?? '-' }}
+                        tgl {{ ($travelOrder->return_date ?? $travelOrder->departure_date)?->translatedFormat('d F Y') ?? '-' }}
                     </td>
                 </tr>
             </table>
@@ -763,7 +803,7 @@
                 <div style="padding: 12px 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 190px;">
                     <div>
                         <p style="margin: 0 0 8px 0; font-size: 10px;">
-                            {{ $travelOrder->issue_date?->translatedFormat('d F Y') ?? '-' }}<br>Yang menerima
+                            Talaga, {{ ($travelOrder->return_date ?? $travelOrder->departure_date)?->translatedFormat('d F Y') ?? '-' }}<br>Yang menerima
                         </p>
                         <table style="width: 100%; margin: 0; border: none; border-collapse: collapse;">
                             <tr>

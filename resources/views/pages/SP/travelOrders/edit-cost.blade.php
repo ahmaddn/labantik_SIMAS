@@ -151,6 +151,22 @@
                             @enderror
                         </div>
 
+                        {{-- Kodering --}}
+                        <div class="col-lg-12">
+                            <label class="label fs-16">Kodering Rekening Belanja</label>
+                            <div class="form-group position-relative">
+                                <input type="text" name="kodering"
+                                    class="form-control text-dark ps-5 h-55 @error('kodering') is-invalid @enderror"
+                                    placeholder="Contoh: 5.1.02.04.01.0001"
+                                    value="{{ old('kodering', $travelOrder->kodering ?? '5.1.02.04.01.0001') }}">
+                                <i class="ri-barcode-line position-absolute top-50 start-0 translate-middle-y fs-20 text-gray-light ps-20"></i>
+                            </div>
+                            <small class="text-muted">Kode rekening yang tercetak pada kuitansi tanda pembayaran.</small>
+                            @error('kodering')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                     </div>
                 </div>
             </div>

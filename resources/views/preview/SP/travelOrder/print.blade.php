@@ -270,12 +270,15 @@
         <a href="{{ route('sp.travelOrders.index') }}" class="btn btn-back">
             <i class="fa-solid fa-arrow-left"></i> Kembali
         </a>
-        <a href="{{ route('sp.travelOrders.edit', $travelOrder->id) }}" class="btn btn-edit">
-            <i class="fa-solid fa-edit"></i> Edit
-        </a>
-        <button onclick="handlePrint()" class="btn btn-print">
-            <i class="fa-solid fa-print"></i> Print
-        </button>
+        <div style="display: inline-flex; align-items: center; gap: 8px;">
+            @include('preview.components.margin-settings')
+            <a href="{{ route('sp.travelOrders.edit', $travelOrder->id) }}" class="btn btn-edit">
+                <i class="fa-solid fa-edit"></i> Edit
+            </a>
+            <button onclick="handlePrint()" class="btn btn-print">
+                <i class="fa-solid fa-print"></i> Print
+            </button>
+        </div>
     </div>
 
     @php
@@ -312,13 +315,13 @@
                 Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen<br />
                 Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br />
                 Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br />
-                Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;
-                FAX <i class="fa-solid fa-fax"></i> (0233) 319238 &nbsp;
-                POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp; NPSN: 20213872<br />
+                Telpon (0233) 319238 &nbsp;
+                FAX (0233) 319238 &nbsp;
+                POS 45463 &nbsp; NPSN: 20213872<br />
                 Website <i class="fa-solid fa-globe"></i>
                 <a href="http://www.smkn1talaga.sch.id">www.smkn1talaga.sch.id</a>
                 &nbsp;&#8211;&nbsp; Email <i class="fa-solid fa-envelope"></i>
-                <a href="mailto:admin@smkn1talaga.sch.id">admin@smkn1talaga.sch.id</a>
+                <a href="mailto:mail@smkn1talaga.sch.id">mail@smkn1talaga.sch.id</a>
             </div>
         </div>
 
@@ -448,15 +451,15 @@
                                     Majalengka<br />
                                     Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten
                                     Majalengka<br />
-                                    Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;
-                                    FAX <i class="fa-solid fa-fax"></i> (0233) 319238 &nbsp;
-                                    POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp; NPSN: 20213872<br />
+                                    Telpon (0233) 319238 &nbsp;
+                                    FAX (0233) 319238 &nbsp;
+                                    POS 45463 &nbsp; NPSN: 20213872<br />
                                     Website <i class="fa-solid fa-globe"></i>
                                     <a href="http://www.smkn1talaga.sch.id"
                                         style="text-decoration:none; color:black;">www.smkn1talaga.sch.id</a>
                                     &#8211; Email <i class="fa-solid fa-envelope"></i>
-                                    <a href="mailto:admin@smkn1talaga.sch.id"
-                                        style="text-decoration:none; color:black;">admin@smkn1talaga.sch.id</a>
+                                    <a href="mailto:mail@smkn1talaga.sch.id"
+                                        style="text-decoration:none; color:black;">mail@smkn1talaga.sch.id</a>
                                 </div>
                             </div>
                         </div>
@@ -658,13 +661,13 @@
                 Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen<br />
                 Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br />
                 Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br />
-                Telpon <i class="fa-solid fa-phone"></i> (0233) 319238 &nbsp;
-                FAX <i class="fa-solid fa-fax"></i> (0233) 319238 &nbsp;
-                POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp; NPSN: 20213872<br />
+                Telpon (0233) 319238 &nbsp;
+                FAX (0233) 319238 &nbsp;
+                POS 45463 &nbsp; NPSN: 20213872<br />
                 Website <i class="fa-solid fa-globe"></i>
                 <a href="http://www.smkn1talaga.sch.id">www.smkn1talaga.sch.id</a>
                 &nbsp;&#8211;&nbsp; Email <i class="fa-solid fa-envelope"></i>
-                <a href="mailto:admin@smkn1talaga.sch.id">admin@smkn1talaga.sch.id</a>
+                <a href="mailto:mail@smkn1talaga.sch.id">mail@smkn1talaga.sch.id</a>
             </div>
         </div>
 
@@ -739,13 +742,13 @@
             {{-- Titik-titik baris hasil pelaksanaan --}}
             @php
                 $employeeCount = $travelOrder->employees->count();
-                // Hitung jumlah baris titik-titik secara presisi agar tidak tumpah ke halaman berikutnya
-                $dottedLines = $employeeCount > 3 ? 3 : ($employeeCount > 1 ? 5 : 7);
-                $sigSpace = $employeeCount > 2 ? '50px' : '65px';
+                // Hitung jumlah baris titik-titik secara proporsional agar lebih banyak & panjang ruang menulisnya
+                $dottedLines = $employeeCount > 3 ? 6 : ($employeeCount > 1 ? 8 : 11);
+                $sigSpace = $employeeCount > 2 ? '40px' : '55px';
             @endphp
-            <div style="margin-top:2px; margin-bottom:12px;">
+            <div style="margin-top:6px; margin-bottom:12px;">
                 @for ($i = 0; $i < $dottedLines; $i++)
-                    <div style="border-bottom:1px dotted #000; height:18px; width:100%;"></div>
+                    <div style="border-bottom:1px dotted #000; height:24px; width:100%;"></div>
                 @endfor
             </div>
 

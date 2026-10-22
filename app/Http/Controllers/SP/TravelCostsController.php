@@ -75,6 +75,7 @@ class TravelCostsController extends Controller
             'travel_order_id'       => 'required|exists:m_official_travel_orders,id',
             'treasurer_id'          => 'required|string',
             'recipient_employee_id' => 'required|string',
+            'kodering'              => 'nullable|string|max:255',
             'daily'                            => 'nullable|array',
             'daily.*.employee_name'            => 'nullable|string|max:255',
             'daily.*.amount_per_day'           => 'nullable|numeric|min:0',
@@ -107,11 +108,12 @@ class TravelCostsController extends Controller
         try {
             $travelOrderId = $request->travel_order_id;
 
-            // Simpan treasurer_id dan recipient_employee_id ke travel order
+            // Simpan treasurer_id, recipient_employee_id, dan kodering ke travel order
             $travelOrder = M_Official_Travel_Orders::findOrFail($travelOrderId);
             $travelOrder->update([
                 'treasurer_id'          => $request->treasurer_id,
                 'recipient_employee_id' => $request->recipient_employee_id,
+                'kodering'              => $request->kodering,
             ]);
 
             // 1. Uang Harian
@@ -245,6 +247,7 @@ class TravelCostsController extends Controller
         $request->validate([
             'treasurer_id'          => 'required|string',
             'recipient_employee_id' => 'required|string',
+            'kodering'              => 'nullable|string|max:255',
             'daily'                            => 'nullable|array',
             'daily.*.employee_name'            => 'nullable|string|max:255',
             'daily.*.amount_per_day'           => 'nullable|numeric|min:0',
@@ -277,6 +280,7 @@ class TravelCostsController extends Controller
             $travelOrder->update([
                 'treasurer_id'          => $request->treasurer_id,
                 'recipient_employee_id' => $request->recipient_employee_id,
+                'kodering'              => $request->kodering,
             ]);
             // Hapus semua data biaya lama
             M_TravelDailyAllowance::where('travel_order_id', $travelOrderId)->delete();

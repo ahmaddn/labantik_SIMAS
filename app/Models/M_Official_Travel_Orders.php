@@ -18,6 +18,7 @@ class M_Official_Travel_Orders extends Model
         'headmaster_id',
         'treasurer_id',
         'recipient_employee_id',
+        'kodering',
         'letter_number',
         'base',
         'purpose',

@@ -312,17 +312,19 @@
 </head>
 
 <body>
-    <!-- TOMBOL AKSI -->
     <div class="action-buttons">
         <a href="{{ route('s_peng.schoolTransfers.index') }}" class="btn btn-back">
             <i class="fa-solid fa-arrow-left"></i> Kembali
         </a>
-        <a href="{{ route('s_peng.schoolTransfers.edit', $schoolTransfers->id) }}" class="btn btn-edit">
-            <i class="fa-solid fa-edit"></i> Edit
-        </a>
-        <button onclick="handlePrint()" class="btn btn-print">
-            <i class="fa-solid fa-print"></i> Print
-        </button>
+        <div style="display: inline-flex; align-items: center; gap: 8px;">
+            @include('preview.components.margin-settings')
+            <a href="{{ route('s_peng.schoolTransfers.edit', $schoolTransfers->id) }}" class="btn btn-edit">
+                <i class="fa-solid fa-edit"></i> Edit
+            </a>
+            <button onclick="handlePrint()" class="btn btn-print">
+                <i class="fa-solid fa-print"></i> Print
+            </button>
+        </div>
     </div>
 
     <div class="page">
@@ -338,14 +340,14 @@
                     Bidang Keahlian: Teknologi dan Rekayasa, Teknologi Informasi Komunikasi, Bisnis dan Manajemen<br>
                     Kampus 1: Jalan Sekolah Nomor 20 Desa Talagakulon Kecamatan Talaga Kabupaten Majalengka<br>
                     Kampus 2: Jalan Talaga-Bantarujeg Desa Mekarraharja Kecamatan Talaga Kabupaten Majalengka<br>
-                    Telpon <i class="fa-solid fa-phone"></i> (0233) 319236 &nbsp;
-                    FAX <i class="fa-solid fa-fax"></i> (0233) 319236 &nbsp;
-                    POS <i class="fa-solid fa-envelope"></i> 45463 &nbsp;
+                    Telpon (0233) 319236 &nbsp;
+                    FAX (0233) 319236 &nbsp;
+                    POS 45463 &nbsp;
                     NPSN: 20213872<br>
                     Website <i class="fa-solid fa-globe"></i>
                     <a href="http://www.smkn1talaga.sch.id">www.smkn1talaga.sch.id</a>
                     &nbsp;–&nbsp; Email <i class="fa-solid fa-envelope"></i>
-                    <a href="mailto:admin@smkn1talaga.sch.id">admin@smkn1talaga.sch.id</a>
+                    <a href="mailto:mail@smkn1talaga.sch.id">mail@smkn1talaga.sch.id</a>
                 </div>
             </div>
         </div>
