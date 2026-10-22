@@ -44,6 +44,6 @@ class Terbilang
             $temp = self::convert(intdiv($angka, 1000000000)) . ' milyar ' . self::convert(fmod($angka, 1000000000));
         }
 
-        return trim(preg_replace('/\s+/', ' ', $temp));
+        return ucwords(trim(preg_replace('/\s+/', ' ', $temp)));
     }
 }
